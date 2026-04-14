@@ -1,12 +1,12 @@
 const CACHE_NAME = 'mi-app-v1.5';
 const URLS_A_CACHEAR = [
-  '/',
-  '/index.html',
-  '/anexo16.html',
-  '/anexo17.html',
-  '/manifest.webmanifest',
-  '/logo192.jpg',
-  '/logo512.jpg'
+  './',
+  './index.html',
+  './anexo16.html',
+  './anexo17.html',
+  './manifest.webmanifest',
+  './logo192.jpg',
+  './logo512.jpg'
 ];
 
 self.addEventListener('install', (event) => {
