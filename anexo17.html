@@ -1,0 +1,2712 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ANEXO 17 – RET/UNICEF</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* ===================== RESET & BASE ===================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --verde: #1a5c3a;
+      --verde-medio: #2e7d52;
+      --verde-claro: #4caf80;
+      --verde-bg: #e8f5ee;
+      --naranja: #e07b2a;
+      --naranja-claro: #f5a35a;
+      --naranja-bg: #fdf0e5;
+      --azul: #1565c0;
+      --azul-claro: #4a90d9;
+      --azul-bg: #e8f0fb;
+      --rojo: #c62828;
+      --rojo-bg: #fdecea;
+      --gris-oscuro: #2c2c2c;
+      --gris: #5a5a5a;
+      --gris-claro: #9e9e9e;
+      --gris-borde: #d0d0d0;
+      --gris-bg: #f5f5f5;
+      --blanco: #ffffff;
+      --sombra: 0 2px 12px rgba(0, 0, 0, 0.12);
+      --sombra-fuerte: 0 4px 24px rgba(0, 0, 0, 0.2);
+      --radio: 12px;
+      --radio-btn: 8px;
+      --font-titulo: 'Georgia', serif;
+      --font-cuerpo: 'Sora', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --transicion: 0.2s ease;
+    }
+
+    html,
+    body {
+      font-family: var(--font-cuerpo);
+      background: #f0f4f0;
+      color: var(--gris-oscuro);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===================== HEADER ===================== */
+    #header {
+      background: var(--verde);
+      color: white;
+      padding: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    #header-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
+      padding: 14px 20px;
+    }
+
+    #header-logo {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #header-logo .badge {
+      background: white;
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--verde);
+      font-family: var(--font-mono);
+    }
+
+    #header-title {
+      flex: 1;
+    }
+
+    #header-title h1 {
+      font-family: var(--font-cuerpo);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    #header-title p {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 2px;
+      font-weight: 300;
+    }
+
+    #header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    #header-actions .btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    #header-actions .btn:hover {
+      background: white;
+      color: var(--verde);
+    }
+
+    /* ===================== NAV TABS ===================== */
+    #main-nav {
+      display: flex;
+      background: rgba(255, 255, 255, 0.12);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    #main-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-tab {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      border-bottom: 3px solid transparent;
+      transition: var(--transicion);
+      white-space: nowrap;
+      font-family: var(--font-cuerpo);
+    }
+
+    .nav-tab:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-tab.active {
+      color: white;
+      border-bottom-color: var(--naranja-claro);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* ===================== MAIN LAYOUT ===================== */
+    #app-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px 16px 60px;
+    }
+
+    /* ===================== VIEWS ===================== */
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    /* ===================== CARDS ===================== */
+    .card {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(90deg, var(--verde) 0%, var(--verde-medio) 100%);
+      color: white;
+      padding: 14px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-header .icon {
+      font-size: 18px;
+    }
+
+    .card-header.naranja {
+      background: linear-gradient(90deg, #b85a00, var(--naranja));
+    }
+
+    .card-header.azul {
+      background: linear-gradient(90deg, #0d47a1, var(--azul));
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    /* ===================== FORM ELEMENTS ===================== */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--verde);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-label.naranja {
+      color: var(--naranja);
+    }
+
+    .form-label.azul {
+      color: var(--azul);
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radio-btn);
+      padding: 12px 14px;
+      font-size: 15px;
+      font-family: var(--font-cuerpo);
+      background: var(--blanco);
+      color: var(--gris-oscuro);
+      transition: var(--transicion);
+      -webkit-appearance: none;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--verde-claro);
+      box-shadow: 0 0 0 3px rgba(76, 175, 128, 0.15);
+    }
+
+    .form-textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%235a5a5a' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 40px;
+    }
+
+    /* Radio/Checkbox grande para tablet */
+    .radio-group,
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .radio-option,
+    .checkbox-option {
+      position: relative;
+    }
+
+    .radio-option input,
+    .checkbox-option input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .radio-option label,
+    .checkbox-option label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border: 2px solid var(--gris-borde);
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      transition: var(--transicion);
+      user-select: none;
+      background: var(--gris-bg);
+    }
+
+    .radio-option input:checked+label {
+      border-color: #0d47a1;
+      outline: 3px solid rgba(13, 71, 161, 0.35);
+      outline-offset: 2px;
+      box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.25), 0 8px 18px rgba(0, 0, 0, 0.2);
+      background-image: linear-gradient(0deg, rgba(13, 71, 161, 0.14), rgba(13, 71, 161, 0.14));
+      filter: saturate(1.6) brightness(0.92);
+      color: #0d47a1;
+      transform: translateY(-1px);
+    }
+
+    .radio-option label:active {
+      transform: scale(0.97);
+    }
+
+    /* ===================== BUTTONS ===================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border: none;
+      border-radius: var(--radio-btn);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transicion);
+      font-family: var(--font-cuerpo);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: var(--verde);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--verde-medio);
+    }
+
+    .btn-secondary {
+      background: var(--gris-bg);
+      color: var(--gris-oscuro);
+      border: 2px solid var(--gris-borde);
+    }
+
+    .btn-naranja {
+      background: var(--naranja);
+      color: white;
+    }
+
+    .btn-naranja:hover {
+      background: #c86800;
+    }
+
+    .btn-azul {
+      background: var(--azul);
+      color: white;
+    }
+
+    .btn-azul:hover {
+      background: #0d47a1;
+    }
+
+    .btn-rojo {
+      background: var(--rojo);
+      color: white;
+    }
+
+    .btn-rojo:hover {
+      background: #b71c1c;
+    }
+
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 12px;
+    }
+
+    .btn-lg {
+      padding: 16px 32px;
+      font-size: 16px;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ===================== FORM SECTIONS ===================== */
+    .seccion-titulo {
+      font-family: var(--font-titulo);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--verde);
+      border-bottom: 2px solid var(--verde-bg);
+      padding-bottom: 8px;
+      margin: 24px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .seccion-numero {
+      background: var(--verde);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .seccion-numero.naranja {
+      background: var(--naranja);
+    }
+
+    .seccion-numero.azul {
+      background: var(--azul);
+    }
+
+    /* Sub-sección */
+    .subseccion {
+      background: var(--gris-bg);
+      border-left: 4px solid var(--verde-claro);
+      border-radius: 0 var(--radio-btn) var(--radio-btn) 0;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .subseccion-titulo {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--verde);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .subseccion.naranja {
+      border-left-color: var(--naranja-claro);
+    }
+
+    .subseccion-titulo.naranja {
+      color: var(--naranja);
+    }
+
+    /* ===================== CATEGORY TABLE ===================== */
+    .categoria-tabla {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .categoria-tabla th {
+      background: var(--verde);
+      color: white;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .categoria-tabla td {
+      border: 1px solid var(--gris-borde);
+      padding: 10px 12px;
+      vertical-align: top;
+    }
+
+    .categoria-tabla tr:nth-child(even) td {
+      background: var(--gris-bg);
+    }
+
+    .nivel-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .nivel-inicial {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .nivel-intermedio {
+      background: #cce5ff;
+      color: #004085;
+    }
+
+    .nivel-avanzado {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    /* ===================== PHOTO SECTION ===================== */
+    .foto-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .foto-item {
+      position: relative;
+      border-radius: var(--radio-btn);
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: var(--gris-bg);
+      border: 2px solid var(--gris-borde);
+    }
+
+    .foto-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .foto-delete {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--rojo);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .foto-btn-area {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    #camera-preview-container {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      z-index: 2000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    #camera-preview-container.visible {
+      display: flex;
+    }
+
+    #camera-video {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: var(--radio);
+      border: 3px solid var(--verde-claro);
+    }
+
+    #camera-controls {
+      display: flex;
+      gap: 16px;
+    }
+
+    /* ===================== DYNAMIC TABLE (Apéndice A) ===================== */
+    .dynamic-table-container {
+      overflow-x: auto;
+      margin-top: 12px;
+    }
+
+    .dynamic-table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .dynamic-table th {
+      background: #eef2f4;
+      color: var(--gris-oscuro);
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 12px;
+      position: sticky;
+      top: 0;
+      border-bottom: 2px solid var(--gris-borde);
+    }
+
+    .dynamic-table thead tr:first-child th {
+      background: linear-gradient(135deg, #1a5c3a, #2e7d52);
+      color: #ffffff;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+    }
+
+    .dynamic-table th.section-header {
+      background: linear-gradient(135deg, #f1e7da, #f8f3ea);
+      color: #6a4a2c;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+
+    .dynamic-table td {
+      border: 1px solid var(--gris-borde);
+      padding: 6px 6px;
+      vertical-align: middle;
+      background: #ffffff;
+    }
+
+    .dynamic-table .row-num {
+      background: var(--gris-bg);
+      text-align: center;
+      font-weight: 700;
+      color: var(--gris);
+      width: 36px;
+      font-size: 11px;
+    }
+
+    .dynamic-table th.name-col,
+    .dynamic-table td.name-col {
+      min-width: 240px;
+    }
+
+    .dynamic-table input[type="text"] {
+      width: 100%;
+      border: none;
+      padding: 8px 6px;
+      font-size: 13px;
+      background: transparent;
+      font-family: var(--font-cuerpo);
+    }
+
+    .dynamic-table input[type="text"]:focus {
+      outline: none;
+      background: var(--verde-bg);
+      border-radius: 4px;
+    }
+
+    .dynamic-table .si-no {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .dynamic-table .si-no label {
+      padding: 4px 10px;
+      border: 1.5px solid var(--gris-borde);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .dynamic-table .si-no input:checked+label {
+      border-color: #1a5c3a;
+      background: #e8f5ee;
+      color: #1a5c3a;
+    }
+
+    .dynamic-table .si-no input {
+      display: none;
+    }
+
+    .btn-delete-row {
+      background: var(--rojo-bg);
+      color: var(--rojo);
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* ===================== SURVEY LIST ===================== */
+    .survey-item {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: var(--transicion);
+      border: 2px solid transparent;
+    }
+
+    .survey-item:hover {
+      border-color: var(--verde-claro);
+    }
+
+    .survey-item.enviado {
+      border-left: 5px solid var(--verde-claro);
+    }
+
+    .survey-item.eliminado {
+      opacity: 0.4;
+      background: var(--gris-bg);
+    }
+
+    .survey-checkbox {
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      accent-color: var(--verde);
+    }
+
+    .survey-info {
+      flex: 1;
+    }
+
+    .survey-info h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gris-oscuro);
+    }
+
+    .survey-info p {
+      font-size: 12px;
+      color: var(--gris-claro);
+      margin-top: 3px;
+    }
+
+    .survey-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .badge {
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-verde {
+      background: var(--verde-bg);
+      color: var(--verde);
+    }
+
+    .badge-naranja {
+      background: var(--naranja-bg);
+      color: var(--naranja);
+    }
+
+    .badge-azul {
+      background: var(--azul-bg);
+      color: var(--azul);
+    }
+
+    .badge-rojo {
+      background: var(--rojo-bg);
+      color: var(--rojo);
+    }
+
+    .badge-gris {
+      background: var(--gris-bg);
+      color: var(--gris);
+      border: 1px solid var(--gris-borde);
+    }
+
+    .survey-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* ===================== MODAL ===================== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.visible {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: var(--radio);
+      box-shadow: var(--sombra-fuerte);
+      max-width: 500px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      background: var(--verde);
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-footer {
+      padding: 16px 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      background: var(--gris-bg);
+    }
+
+    /* ===================== TOAST ===================== */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      padding: 14px 20px;
+      border-radius: var(--radio-btn);
+      box-shadow: var(--sombra-fuerte);
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      animation: slideIn 0.3s ease;
+      max-width: 320px;
+    }
+
+    .toast-success {
+      background: var(--verde);
+    }
+
+    .toast-error {
+      background: var(--rojo);
+    }
+
+    .toast-info {
+      background: var(--azul);
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* ===================== SPINNER ===================== */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ===================== EMPTY STATE ===================== */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gris-claro);
+    }
+
+    .empty-state .icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+    }
+
+    .empty-state h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gris);
+      margin-bottom: 8px;
+    }
+
+    /* ===================== HOME SCREEN ===================== */
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .home-card {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 28px 24px;
+      cursor: pointer;
+      transition: var(--transicion);
+      border: 3px solid transparent;
+      text-align: center;
+    }
+
+    .home-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--sombra-fuerte);
+    }
+
+    .home-card.verde:hover {
+      border-color: var(--verde);
+    }
+
+    .home-card.naranja:hover {
+      border-color: var(--naranja);
+    }
+
+    .home-card.azul:hover {
+      border-color: var(--azul);
+    }
+
+    .home-card .card-icon {
+      font-size: 48px;
+      margin-bottom: 14px;
+    }
+
+    .home-card h2 {
+      font-family: var(--font-titulo);
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .home-card p {
+      font-size: 13px;
+      color: var(--gris);
+      line-height: 1.5;
+    }
+
+    .home-card .card-count {
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 12px;
+    }
+
+    .home-card.verde .card-count {
+      color: var(--verde);
+    }
+
+    .home-card.naranja .card-count {
+      color: var(--naranja);
+    }
+
+    .home-card.azul .card-count {
+      color: var(--azul);
+    }
+
+    .stats-bar {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 16px 20px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      text-align: center;
+      flex: 1;
+      min-width: 80px;
+    }
+
+    .stat-num {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--verde);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--gris-claro);
+      margin-top: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ===================== APEND SELECTION ===================== */
+    .apend-tabs {
+      display: flex;
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .apend-tab {
+      flex: 1;
+      padding: 14px;
+      background: transparent;
+      border: none;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--gris);
+      border-bottom: 3px solid transparent;
+      transition: var(--transicion);
+      font-family: var(--font-cuerpo);
+      text-align: center;
+    }
+
+    .apend-tab.active {
+      color: var(--verde);
+      border-bottom-color: var(--verde);
+      background: var(--verde-bg);
+    }
+
+    .apend-content {
+      display: none;
+    }
+
+    .apend-content.active {
+      display: block;
+    }
+
+    /* ===================== PROGRESS BAR ===================== */
+    .progress-bar-container {
+      background: var(--gris-borde);
+      border-radius: 50px;
+      height: 6px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--verde), var(--verde-claro));
+      border-radius: 50px;
+      transition: width 0.4s ease;
+    }
+
+    /* ===================== IMPORT AREA ===================== */
+    .import-drop {
+      border: 3px dashed var(--gris-borde);
+      border-radius: var(--radio);
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transicion);
+      color: var(--gris);
+    }
+
+    .import-drop:hover,
+    .import-drop.dragover {
+      border-color: var(--verde);
+      background: var(--verde-bg);
+      color: var(--verde);
+    }
+
+    .import-drop .icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    /* ===================== TOOLBAR ===================== */
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .toolbar-spacer {
+      flex: 1;
+    }
+
+    /* Responsive adjustments for tablet landscape */
+    @media (min-width: 768px) {
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .form-row-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div id="header">
+    <div id="header-top">
+      <div id="header-logo">
+        <div class="badge">RET · UNICEF</div>
+      </div>
+      <div id="header-title">
+        <h1>ANEXO 17</h1>
+        <p>Sistema de Seguimiento a la Implementación</p>
+      </div>
+      <div id="header-actions">
+        <!-- <button class="btn btn-secondary btn-sm" onclick="showImport()">📥 Importar</button> -->
+        <button class="btn btn-secondary btn-sm" onclick="location.href='index.html'">↩︎ Menú</button>
+      </div>
+    </div>
+    <div id="main-nav">
+      <button class="nav-tab active" onclick="showView('home')">🏠 Inicio</button>
+      <button class="nav-tab" onclick="showView('nueva')">➕ Nueva Encuesta</button>
+      <button class="nav-tab" onclick="showView('lista')">📋 Encuestas</button>
+    </div>
+  </div>
+
+  <div id="app-content">
+
+    <!-- ===== VIEW: HOME ===== -->
+    <div id="view-home" class="view active">
+      <div class="stats-bar" id="stats-bar">
+        <div class="stat">
+          <div class="stat-num" id="stat-total">0</div>
+          <div class="stat-label">Total</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" id="stat-p1" style="color:var(--verde)">0</div>
+          <div class="stat-label">Apéndice 1</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" id="stat-pa" style="color:var(--naranja)">0</div>
+          <div class="stat-label">Apéndice A</div>
+        </div>
+      </div>
+      <div class="home-grid">
+        <div class="home-card verde" onclick="startNuevaEncuesta('apendice1')">
+          <div class="card-icon">📝</div>
+          <h2>APÉNDICE 1</h2>
+          <p>Instrumento de Seguimiento a la Implementación<br>(Parte 1 y Parte 2)</p>
+          <div class="card-count" id="count-ap1">0</div>
+        </div>
+        <div class="home-card naranja" onclick="startNuevaEncuesta('apendiceA')">
+          <div class="card-icon">🗂️</div>
+          <h2>APÉNDICE A</h2>
+          <p>Seguimiento al Modelamiento</p>
+          <div class="card-count" id="count-apA">0</div>
+        </div>
+        <div class="home-card azul" onclick="showView('lista')">
+          <div class="card-icon">📊</div>
+          <h2>Ver Encuestas</h2>
+          <p>Revisar, editar y exportar encuestas registradas</p>
+          <div class="card-count" id="count-all">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== VIEW: NUEVA ENCUESTA ===== -->
+    <div id="view-nueva" class="view">
+      <div class="apend-tabs" id="apend-selector">
+        <button class="apend-tab active" onclick="selectApendice('apendice1')" id="tab-ap1">📝 Apéndice 1 (Parte 1 y
+          2)</button>
+        <button class="apend-tab" onclick="selectApendice('apendiceA')" id="tab-apA">🗂️ Apéndice A</button>
+      </div>
+      <div id="apend-ap1" class="apend-content active">
+        <!-- PARTE 1 -->
+        <div class="card">
+          <div class="card-header"><span class="icon">📋</span> APÉNDICE 1 – PARTE 1: SEGUIMIENTO A LA IMPLEMENTACIÓN
+          </div>
+          <div class="card-body">
+            <div class="seccion-titulo"><span class="seccion-numero">1</span> DATOS GENERALES</div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">NOMBRE DE PROMOTORA COMUNITARIA (PCPI)</label><input
+                  type="text" class="form-input" id="p1_nombre_pcpi" placeholder="Nombre completo..."></div>
+              <div class="form-group"><label class="form-label">FECHA</label><input type="date" class="form-input"
+                  id="p1_fecha"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">GRUPO DE NIÑOS</label><input type="text"
+                  class="form-input" id="p1_grupo_ninos" placeholder="Identificación del grupo..."></div>
+              <div class="form-group"><label class="form-label">COMUNIDAD</label><input type="text" class="form-input"
+                  id="p1_comunidad" placeholder="Nombre de la comunidad..."></div>
+            </div>
+
+            <div class="seccion-titulo"><span class="seccion-numero">2</span> PLANEACIÓN PEDAGÓGICA</div>
+            <div class="form-group"><label class="form-label">NOMBRE DEL ENCUENTRO</label><input type="text"
+                class="form-input" id="p1_nombre_encuentro" placeholder="Nombre del encuentro..."></div>
+            <div class="form-group"><label class="form-label">DIMENSIÓN</label><input type="text" class="form-input"
+                id="p1_dimension" placeholder="Dimensión..."></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">SUBDIMENSIÓN – OBJETIVO DE APRENDIZAJE</label><input
+                  type="text" class="form-input" id="p1_subdimension_aprendizaje"
+                  placeholder="Objetivo de aprendizaje..."></div>
+              <div class="form-group"><label class="form-label">SUBDIMENSIÓN – OBJETIVO DE OBSERVACIÓN</label><input
+                  type="text" class="form-input" id="p1_subdimension_observacion"
+                  placeholder="Objetivo de observación..."></div>
+            </div>
+
+            <div class="seccion-titulo"><span class="seccion-numero">3</span> OBSERVACIÓN DETALLADA</div>
+            <div class="form-group"><label class="form-label">Breve descripción del espacio, mobiliario y
+                ambientación</label><textarea class="form-textarea" id="p1_descripcion_espacio"
+                placeholder="Describa el espacio donde se realizó el encuentro..."></textarea></div>
+
+            <div class="subseccion">
+              <div class="subseccion-titulo">🧑 SUJETO 1 – Agente Comunitaria<br><small
+                  style="font-weight:400;font-size:11px;color:var(--gris)">¿Cómo cree usted que se vivió el vínculo
+                  entre padres e hijos?</small></div>
+              <div class="form-group"><label class="form-label">¿Qué Hace?</label><textarea class="form-textarea"
+                  id="p1_s1_hace" placeholder="Describa las acciones observadas..."></textarea></div>
+              <div class="form-group"><label class="form-label">¿Qué Dice?</label><textarea class="form-textarea"
+                  id="p1_s1_dice" placeholder="Registre lo expresado verbalmente..."></textarea></div>
+            </div>
+
+            <div class="subseccion">
+              <div class="subseccion-titulo">👨‍👩‍👧 SUJETO 2 – Niños, Madres, Padres y/o Cuidadores Principales</div>
+              <div class="form-group"><label class="form-label">¿Qué Hace?</label><textarea class="form-textarea"
+                  id="p1_s2_hace" placeholder="Describa las acciones observadas..."></textarea></div>
+              <div class="form-group"><label class="form-label">¿Qué Dice?</label><textarea class="form-textarea"
+                  id="p1_s2_dice" placeholder="Registre lo expresado verbalmente..."></textarea></div>
+            </div>
+
+            <div class="subseccion">
+              <div class="subseccion-titulo">👁️ SUJETO 3 – Supervisor/a</div>
+              <div class="form-group">
+                <label class="form-label">¿Cree usted que todos los niños y niñas pudieron participar con los mismos
+                  apoyos?</label>
+                <div class="radio-group">
+                  <div class="radio-option"><input type="radio" name="p1_s3_participa" id="p1_s3_si" value="Si"><label
+                      for="p1_s3_si">✅ Sí</label></div>
+                  <div class="radio-option"><input type="radio" name="p1_s3_participa" id="p1_s3_no" value="No"><label
+                      for="p1_s3_no">❌ No</label></div>
+                </div>
+              </div>
+              <div class="form-group"><label class="form-label">¿Qué Hace?</label><textarea class="form-textarea"
+                  id="p1_s3_hace" placeholder="Describa las acciones del supervisor..."></textarea></div>
+              <div class="form-group"><label class="form-label">¿Qué Dice?</label><textarea class="form-textarea"
+                  id="p1_s3_dice" placeholder="Registre lo expresado por el supervisor..."></textarea></div>
+            </div>
+
+            <div class="seccion-titulo"><span class="seccion-numero">4</span> REGISTRO FOTOGRÁFICO</div>
+            <div class="foto-btn-area">
+              <button class="btn btn-primary" type="button" onclick="openCamera('p1')">📷 Tomar Foto</button>
+              <button class="btn btn-secondary" type="button"
+                onclick="document.getElementById('p1_file_input').click()">🖼️ Seleccionar del Dispositivo</button>
+              <input type="file" id="p1_file_input" accept="image/*" multiple style="display:none"
+                onchange="handleFileSelect(event,'p1')">
+            </div>
+            <div class="foto-grid" id="p1_fotos_grid"></div>
+
+            <div class="seccion-titulo"><span class="seccion-numero">5</span> QUIEN REALIZA EL SEGUIMIENTO (Coordinadora
+              o Supervisora)</div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">NOMBRE</label><input type="text" class="form-input"
+                  id="p1_seguimiento_nombre" placeholder="Nombre completo..."></div>
+              <div class="form-group"><label class="form-label">NÚMERO DE CÉDULA</label><input type="text"
+                  class="form-input" id="p1_seguimiento_cedula" placeholder="Número de cédula..."></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PARTE 2 -->
+        <div class="card">
+          <div class="card-header naranja"><span class="icon">📊</span> APÉNDICE 1 – PARTE 2: SEGUIMIENTO A LA
+            IMPLEMENTACIÓN</div>
+          <div class="card-body">
+            <div class="seccion-titulo"><span class="seccion-numero naranja">1</span> DATOS GENERALES</div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label naranja">NOMBRE DE PROMOTORA COMUNITARIA
+                  (PCPI)</label><input type="text" class="form-input" id="p2_nombre_pcpi"
+                  placeholder="Nombre completo..."></div>
+              <div class="form-group"><label class="form-label naranja">FECHA</label><input type="date"
+                  class="form-input" id="p2_fecha"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label naranja">GRUPO DE NIÑOS</label><input type="text"
+                  class="form-input" id="p2_grupo_ninos" placeholder="Identificación del grupo..."></div>
+              <div class="form-group"><label class="form-label naranja">COMUNIDAD</label><input type="text"
+                  class="form-input" id="p2_comunidad" placeholder="Nombre de la comunidad..."></div>
+            </div>
+
+            <div class="seccion-titulo"><span class="seccion-numero naranja">2</span> CATEGORÍA (Evaluación por niveles)
+            </div>
+            <p style="font-size:13px;color:var(--gris);margin-bottom:16px;">Para cada categoría, seleccione el nivel
+              alcanzado y justifique con argumentos y citas textuales del registro de encuentros.</p>
+
+            <!-- CATEGORÍA 1 -->
+            <div class="subseccion naranja" style="margin-bottom:20px">
+              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 1: PLANEACIÓN E IMPLEMENTACIÓN DEL
+                ENCUENTRO COMUNITARIO</div>
+              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Evalúa la capacidad de la agente
+                comunitaria para planificar y ejecutar los encuentros con la familia y los niños.</p>
+              <table class="categoria-tabla">
+                <thead>
+                  <tr>
+                    <th>Nivel</th>
+                    <th>Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="nivel-badge nivel-inicial">Inicial</span></td>
+                    <td>La agente sigue el plan de encuentro de manera literal, sin adaptaciones. El encuentro presenta
+                      dificultades en el manejo del tiempo o la secuencia de actividades.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="nivel-badge nivel-intermedio">Intermedio</span></td>
+                    <td>La agente implementa el plan con algunas adaptaciones pertinentes al contexto. Maneja
+                      adecuadamente el tiempo y la secuencia.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="nivel-badge nivel-avanzado">Avanzado</span></td>
+                    <td>La agente implementa el plan con adaptaciones contextuales pertinentes, enriquece las
+                      actividades y gestiona con fluidez el tiempo y la participación.</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="form-group" style="margin-top:12px">
+                <label class="form-label naranja">NIVEL SELECCIONADO</label>
+                <div class="radio-group">
+                  <div class="radio-option"><input type="radio" name="cat1_nivel" id="cat1_ini" value="Inicial"><label
+                      for="cat1_ini" style="background:#fff3cd;border-color:#ffc107">🟡 Inicial</label></div>
+                  <div class="radio-option"><input type="radio" name="cat1_nivel" id="cat1_int"
+                      value="Intermedio"><label for="cat1_int" style="background:#cce5ff;border-color:#0066cc">🔵
+                      Intermedio</label></div>
+                  <div class="radio-option"><input type="radio" name="cat1_nivel" id="cat1_ava" value="Avanzado"><label
+                      for="cat1_ava" style="background:#d4edda;border-color:#28a745">🟢 Avanzado</label></div>
+                </div>
+              </div>
+              <div class="form-group"><label class="form-label naranja">Argumentar por qué se ubica en ese
+                  nivel</label><textarea class="form-textarea" id="cat1_argumento"
+                  placeholder="Escriba su argumentación..."></textarea></div>
+              <div class="form-group"><label class="form-label naranja">Ejemplos / Citas textuales del registro de
+                  encuentros</label><textarea class="form-textarea" id="cat1_citas"
+                  placeholder="Citas textuales que ilustren el argumento..."></textarea></div>
+            </div>
+
+            <!-- CATEGORÍA 2 -->
+            <div class="subseccion naranja" style="margin-bottom:20px">
+              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 2: VÍNCULO Y RELACIONES CON LAS
+                FAMILIAS</div>
+              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Evalúa la calidad de las relaciones que
+                establece la agente comunitaria con las familias participantes.</p>
+              <table class="categoria-tabla">
+                <thead>
+                  <tr>
+                    <th>Nivel</th>
+                    <th>Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="nivel-badge nivel-inicial">Inicial</span></td>
+                    <td>La agente mantiene una relación distante o formal con las familias. La interacción se limita al
+                      desarrollo de las actividades planificadas.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="nivel-badge nivel-intermedio">Intermedio</span></td>
+                    <td>La agente muestra disposición para conectar con las familias, reconoce sus particularidades y
+                      establece vínculos de confianza básicos.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="nivel-badge nivel-avanzado">Avanzado</span></td>
+                    <td>La agente construye relaciones genuinas basadas en la confianza y el reconocimiento mutuo.
+                      Adapta su comunicación a las necesidades de cada familia.</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="form-group" style="margin-top:12px">
+                <label class="form-label naranja">NIVEL SELECCIONADO</label>
+                <div class="radio-group">
+                  <div class="radio-option"><input type="radio" name="cat2_nivel" id="cat2_ini" value="Inicial"><label
+                      for="cat2_ini" style="background:#fff3cd;border-color:#ffc107">🟡 Inicial</label></div>
+                  <div class="radio-option"><input type="radio" name="cat2_nivel" id="cat2_int"
+                      value="Intermedio"><label for="cat2_int" style="background:#cce5ff;border-color:#0066cc">🔵
+                      Intermedio</label></div>
+                  <div class="radio-option"><input type="radio" name="cat2_nivel" id="cat2_ava" value="Avanzado"><label
+                      for="cat2_ava" style="background:#d4edda;border-color:#28a745">🟢 Avanzado</label></div>
+                </div>
+              </div>
+              <div class="form-group"><label class="form-label naranja">Argumentar por qué se ubica en ese
+                  nivel</label><textarea class="form-textarea" id="cat2_argumento"
+                  placeholder="Escriba su argumentación..."></textarea></div>
+              <div class="form-group"><label class="form-label naranja">Ejemplos / Citas textuales del registro de
+                  encuentros</label><textarea class="form-textarea" id="cat2_citas"
+                  placeholder="Citas textuales que ilustren el argumento..."></textarea></div>
+            </div>
+
+            <!-- CATEGORÍA 3 -->
+            <div class="subseccion naranja" style="margin-bottom:20px">
+              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 3: ACOMPAÑAMIENTO AL DESARROLLO
+                INFANTIL</div>
+              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Evalúa la capacidad de la agente para
+                observar, registrar y responder a las necesidades de desarrollo de los niños y niñas.</p>
+              <table class="categoria-tabla">
+                <thead>
+                  <tr>
+                    <th>Nivel</th>
+                    <th>Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="nivel-badge nivel-inicial">Inicial</span></td>
+                    <td>La agente identifica de manera general el desarrollo de los niños pero sin especificidad. No
+                      diferencia entre niños o necesidades particulares.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="nivel-badge nivel-intermedio">Intermedio</span></td>
+                    <td>La agente observa y registra con cierta especificidad el desarrollo de los niños. Identifica
+                      algunas particularidades y necesidades individuales.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="nivel-badge nivel-avanzado">Avanzado</span></td>
+                    <td>La agente realiza observaciones precisas sobre el desarrollo de cada niño, registra con detalle
+                      y adapta sus estrategias para responder a necesidades específicas.</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="form-group" style="margin-top:12px">
+                <label class="form-label naranja">NIVEL SELECCIONADO</label>
+                <div class="radio-group">
+                  <div class="radio-option"><input type="radio" name="cat3_nivel" id="cat3_ini" value="Inicial"><label
+                      for="cat3_ini" style="background:#fff3cd;border-color:#ffc107">🟡 Inicial</label></div>
+                  <div class="radio-option"><input type="radio" name="cat3_nivel" id="cat3_int"
+                      value="Intermedio"><label for="cat3_int" style="background:#cce5ff;border-color:#0066cc">🔵
+                      Intermedio</label></div>
+                  <div class="radio-option"><input type="radio" name="cat3_nivel" id="cat3_ava" value="Avanzado"><label
+                      for="cat3_ava" style="background:#d4edda;border-color:#28a745">🟢 Avanzado</label></div>
+                </div>
+              </div>
+              <div class="form-group"><label class="form-label naranja">Argumentar por qué se ubica en ese
+                  nivel</label><textarea class="form-textarea" id="cat3_argumento"
+                  placeholder="Escriba su argumentación..."></textarea></div>
+              <div class="form-group"><label class="form-label naranja">Ejemplos / Citas textuales del registro de
+                  encuentros</label><textarea class="form-textarea" id="cat3_citas"
+                  placeholder="Citas textuales que ilustren el argumento..."></textarea></div>
+            </div>
+
+            <!-- CATEGORÍA 4 -->
+            <div class="subseccion naranja" style="margin-bottom:20px">
+              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 4: REFLEXIÓN Y APRENDIZAJE
+                CONTINUO</div>
+              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Evalúa la capacidad de la agente para
+                reflexionar sobre su propia práctica y mejorar continuamente.</p>
+              <table class="categoria-tabla">
+                <thead>
+                  <tr>
+                    <th>Nivel</th>
+                    <th>Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="nivel-badge nivel-inicial">Inicial</span></td>
+                    <td>La agente describe lo que hizo durante el encuentro sin reflexión crítica. No identifica
+                      aspectos de mejora o los reconoce de manera muy general.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="nivel-badge nivel-intermedio">Intermedio</span></td>
+                    <td>La agente identifica aciertos y aspectos de mejora en su práctica. Reflexiona sobre situaciones
+                      específicas y propone algunas estrategias de cambio.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="nivel-badge nivel-avanzado">Avanzado</span></td>
+                    <td>La agente realiza una reflexión profunda sobre su práctica, identifica patrones, propone
+                      estrategias de mejora concretas y las implementa en encuentros posteriores.</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="form-group" style="margin-top:12px">
+                <label class="form-label naranja">NIVEL SELECCIONADO</label>
+                <div class="radio-group">
+                  <div class="radio-option"><input type="radio" name="cat4_nivel" id="cat4_ini" value="Inicial"><label
+                      for="cat4_ini" style="background:#fff3cd;border-color:#ffc107">🟡 Inicial</label></div>
+                  <div class="radio-option"><input type="radio" name="cat4_nivel" id="cat4_int"
+                      value="Intermedio"><label for="cat4_int" style="background:#cce5ff;border-color:#0066cc">🔵
+                      Intermedio</label></div>
+                  <div class="radio-option"><input type="radio" name="cat4_nivel" id="cat4_ava" value="Avanzado"><label
+                      for="cat4_ava" style="background:#d4edda;border-color:#28a745">🟢 Avanzado</label></div>
+                </div>
+              </div>
+              <div class="form-group"><label class="form-label naranja">Argumentar por qué se ubica en ese
+                  nivel</label><textarea class="form-textarea" id="cat4_argumento"
+                  placeholder="Escriba su argumentación..."></textarea></div>
+              <div class="form-group"><label class="form-label naranja">Ejemplos / Citas textuales del registro de
+                  encuentros</label><textarea class="form-textarea" id="cat4_citas"
+                  placeholder="Citas textuales que ilustren el argumento..."></textarea></div>
+            </div>
+
+            <!-- CATEGORÍA 5 -->
+            <div class="subseccion naranja" style="margin-bottom:20px">
+              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 5: ARTICULACIÓN CON LA COMUNIDAD Y
+                LAS FAMILIAS</div>
+              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Evalúa la capacidad de la agente para
+                movilizar recursos comunitarios y fortalecer las redes de apoyo familiar.</p>
+              <table class="categoria-tabla">
+                <thead>
+                  <tr>
+                    <th>Nivel</th>
+                    <th>Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="nivel-badge nivel-inicial">Inicial</span></td>
+                    <td>La agente trabaja de manera aislada. No gestiona vínculos entre las familias ni con la comunidad
+                      más amplia.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="nivel-badge nivel-intermedio">Intermedio</span></td>
+                    <td>La agente identifica recursos comunitarios y ocasionalmente los moviliza. Propicia algunos
+                      vínculos entre las familias participantes.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="nivel-badge nivel-avanzado">Avanzado</span></td>
+                    <td>La agente gestiona activamente vínculos con la comunidad, moviliza recursos de manera
+                      sistemática y promueve redes de apoyo sólidas entre las familias.</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="form-group" style="margin-top:12px">
+                <label class="form-label naranja">NIVEL SELECCIONADO</label>
+                <div class="radio-group">
+                  <div class="radio-option"><input type="radio" name="cat5_nivel" id="cat5_ini" value="Inicial"><label
+                      for="cat5_ini" style="background:#fff3cd;border-color:#ffc107">🟡 Inicial</label></div>
+                  <div class="radio-option"><input type="radio" name="cat5_nivel" id="cat5_int"
+                      value="Intermedio"><label for="cat5_int" style="background:#cce5ff;border-color:#0066cc">🔵
+                      Intermedio</label></div>
+                  <div class="radio-option"><input type="radio" name="cat5_nivel" id="cat5_ava" value="Avanzado"><label
+                      for="cat5_ava" style="background:#d4edda;border-color:#28a745">🟢 Avanzado</label></div>
+                </div>
+              </div>
+              <div class="form-group"><label class="form-label naranja">Argumentar por qué se ubica en ese
+                  nivel</label><textarea class="form-textarea" id="cat5_argumento"
+                  placeholder="Escriba su argumentación..."></textarea></div>
+              <div class="form-group"><label class="form-label naranja">Ejemplos / Citas textuales del registro de
+                  encuentros</label><textarea class="form-textarea" id="cat5_citas"
+                  placeholder="Citas textuales que ilustren el argumento..."></textarea></div>
+            </div>
+
+            <div class="seccion-titulo"><span class="seccion-numero naranja">3</span> REGISTRO DE LECCIONES APRENDIDAS Y
+              BUENAS PRÁCTICAS</div>
+            <div class="subseccion naranja">
+              <div class="form-group">
+                <label class="form-label naranja">LECCIONES APRENDIDAS</label>
+                <textarea class="form-textarea" id="p2_lecciones"
+                  placeholder="Describa las lecciones aprendidas..."></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label naranja">Lecciones Aprendidas</label>
+                <div class="radio-group">
+                  <div class="radio-option"><input type="radio" name="p2_lecciones_cumple" id="lec_cumple"
+                      value="Cumple"><label for="lec_cumple">✅ Cumple</label></div>
+                  <div class="radio-option"><input type="radio" name="p2_lecciones_cumple" id="lec_nocumple"
+                      value="No Cumple"><label for="lec_nocumple">❌ No Cumple</label></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label naranja">BUENAS PRÁCTICAS</label>
+                <textarea class="form-textarea" id="p2_buenas_practicas"
+                  placeholder="Describa las buenas prácticas observadas..."></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label naranja">Buenas Prácticas</label>
+                <div class="radio-group">
+                  <div class="radio-option"><input type="radio" name="p2_practicas_cumple" id="prac_cumple"
+                      value="Cumple"><label for="prac_cumple">✅ Cumple</label></div>
+                  <div class="radio-option"><input type="radio" name="p2_practicas_cumple" id="prac_nocumple"
+                      value="No Cumple"><label for="prac_nocumple">❌ No Cumple</label></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="seccion-titulo"><span class="seccion-numero naranja">4</span> QUIEN REALIZA EL SEGUIMIENTO
+              (Coordinadora o Supervisora)</div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label naranja">NOMBRE</label><input type="text"
+                  class="form-input" id="p2_seguimiento_nombre" placeholder="Nombre completo..."></div>
+              <div class="form-group"><label class="form-label naranja">NÚMERO DE CÉDULA</label><input type="text"
+                  class="form-input" id="p2_seguimiento_cedula" placeholder="Número de cédula..."></div>
+            </div>
+            <div class="form-group"><label class="form-label naranja">FECHA DE HOY</label><input type="date"
+                class="form-input" id="p2_fecha_hoy" readonly style="background:var(--gris-bg)"></div>
+          </div>
+        </div>
+      </div><!-- end apend-ap1 -->
+
+      <!-- APÉNDICE A -->
+      <div id="apend-apA" class="apend-content">
+        <div class="card">
+          <div class="card-header azul"><span class="icon">🗂️</span> APÉNDICE A – SEGUIMIENTO AL MODELAMIENTO</div>
+          <div class="card-body">
+            <div class="seccion-titulo"><span class="seccion-numero azul">1</span> DATOS GENERALES</div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label azul">FECHA DE LA SESIÓN</label><input type="date"
+                  class="form-input" id="pa_fecha_sesion"></div>
+              <div class="form-group"><label class="form-label azul">NODO COMUNITARIO</label><input type="text"
+                  class="form-input" id="pa_nodo" placeholder="Nombre del nodo comunitario..."></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label azul">NOMBRE DE QUIEN MODELA (ACOMPAÑA)</label><input
+                  type="text" class="form-input" id="pa_nombre_modela" placeholder="Nombre completo..."></div>
+              <div class="form-group"><label class="form-label azul">TIEMPO ESTIMADO DE MODELAMIENTO</label><input
+                  type="text" class="form-input" id="pa_tiempo" placeholder="Ej: 2 horas..."></div>
+            </div>
+
+            <div class="seccion-titulo"><span class="seccion-numero azul">2</span> REVISIÓN MODELAMIENTO</div>
+            <p style="font-size:13px;color:var(--gris);margin-bottom:12px">Agregue una fila por cada agente comunitaria
+              evaluada.</p>
+
+            <div class="dynamic-table-container">
+              <table class="dynamic-table" id="model-table">
+                <thead>
+                  <tr>
+                    <th rowspan="2" style="width:36px">#</th>
+                    <th rowspan="2" class="name-col">Nombre de la Agente</th>
+                    <th colspan="4" class="section-header">2. Observación Inicial</th>
+                    <th colspan="3" class="section-header">3. Momentos Modelados</th>
+                    <th rowspan="2" style="width:50px">Acción</th>
+                  </tr>
+                  <tr>
+                    <th style="min-width:90px">2.1 Comprendió la Planeación</th>
+                    <th style="min-width:90px">2.2 Preparación de materiales y espacio</th>
+                    <th style="min-width:90px">2.3 Seguridad y disposición emocional</th>
+                    <th style="min-width:90px">2.4 Conocimiento del propósito</th>
+                    <th style="min-width:90px">3.1 Bienvenida y vínculo inicial</th>
+                    <th style="min-width:90px">3.2 Actividad pedagógica central</th>
+                    <th style="min-width:90px">3.3 Cierre del encuentro</th>
+                  </tr>
+                </thead>
+                <tbody id="model-table-body">
+                  <!-- rows added dynamically -->
+                </tbody>
+              </table>
+            </div>
+            <div class="toolbar">
+              <button class="btn btn-azul" type="button" onclick="addModelRow()">➕ Agregar Agente</button>
+            </div>
+
+            <div class="seccion-titulo"><span class="seccion-numero azul">3</span> ¿QUÉ ELEMENTOS LE RESULTARON MÁS
+              ÚTILES A LAS AGENTES EN GENERAL?</div>
+            <div class="form-group"><textarea class="form-textarea" id="pa_elementos_utiles"
+                placeholder="Comentario general sobre los elementos más útiles..."></textarea></div>
+
+            <div class="seccion-titulo"><span class="seccion-numero azul">4</span> ¿QUÉ NECESITA REFORZAR O SEGUIR
+              PRACTICANDO?</div>
+            <div class="form-group"><textarea class="form-textarea" id="pa_reforzar"
+                placeholder="Comentario general sobre lo que necesita refuerzo..."></textarea></div>
+          </div>
+        </div>
+      </div><!-- end apend-apA -->
+
+      <!-- SAVE BUTTON -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px">
+        <button class="btn btn-secondary btn-lg" onclick="resetForm()">🗑️ Limpiar</button>
+        <button class="btn btn-primary btn-lg" onclick="guardarEncuesta()" id="btn-guardar">💾 Guardar Encuesta</button>
+      </div>
+      <input type="hidden" id="editing-id" value="">
+    </div>
+
+    <!-- ===== VIEW: LISTA ===== -->
+    <div id="view-lista" class="view">
+      <div class="toolbar">
+        <button class="btn btn-primary" onclick="startNuevaEncuesta('apendice1')">➕ Nueva</button>
+        <div class="toolbar-spacer"></div>
+        <button class="btn btn-secondary btn-sm" onclick="toggleSelectAll()">☑️ Seleccionar Todo</button>
+        <button class="btn btn-naranja btn-sm" onclick="downloadSelected()">⬇️ Descargar JSON</button>
+        <button class="btn btn-rojo btn-sm" onclick="deleteSelected()">🗑️ Eliminar</button>
+        <button class="btn btn-rojo btn-sm" onclick="deleteAllSurveys()">🧹 Borrar todas</button>
+      </div>
+
+      <!-- Filtros -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center">
+        <select class="form-select" style="max-width:180px" onchange="filterList()" id="filter-tipo">
+          <option value="">Todos los tipos</option>
+          <option value="apendice1">Apéndice 1</option>
+          <option value="apendiceA">Apéndice A</option>
+        </select>
+        <input type="text" class="form-input" style="max-width:220px" placeholder="🔍 Buscar..." oninput="filterList()"
+          id="filter-search">
+        <button class="btn btn-secondary btn-sm" onclick="downloadAll()">⬇️ Descargar Todas</button>
+        <span class="badge badge-gris" id="status-exportacion">Ultima exportacion: —</span>
+      </div>
+
+      <div id="survey-list-container">
+        <div class="empty-state">
+          <div class="icon">📋</div>
+          <h3>No hay encuestas registradas</h3>
+          <p>Comience creando una nueva encuesta.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end app-content -->
+
+  <!-- CAMERA OVERLAY -->
+  <div id="camera-preview-container">
+    <video id="camera-video" autoplay playsinline></video>
+    <div id="camera-controls">
+      <button class="btn btn-primary btn-lg" onclick="capturePhoto()">📷 Capturar</button>
+      <button class="btn btn-rojo" onclick="closeCamera()">✖ Cancelar</button>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIRM -->
+  <div class="modal-overlay" id="modal-confirm">
+    <div class="modal">
+      <div class="modal-header" id="modal-confirm-title">Confirmar</div>
+      <div class="modal-body" id="modal-confirm-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-confirm')">Cancelar</button>
+        <button class="btn btn-rojo" id="modal-confirm-ok" onclick="">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL VIEW SURVEY -->
+  <div class="modal-overlay" id="modal-view" style="padding:0;overflow:auto">
+    <div class="modal" style="max-width:800px;max-height:95vh;overflow-y:auto;margin:20px auto">
+      <div class="modal-header" id="modal-view-title">Ver Encuesta</div>
+      <div class="modal-body" id="modal-view-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-view')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL IMPORT -->
+  <div class="modal-overlay" id="modal-import">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-header">📥 Importar Encuesta(s) desde JSON</div>
+      <div class="modal-body">
+        <div class="import-drop" id="import-drop" onclick="document.getElementById('import-file').click()">
+          <div class="icon">📂</div>
+          <p style="font-size:15px;font-weight:600">Toque para seleccionar archivo JSON</p>
+          <p style="font-size:12px;margin-top:6px;color:var(--gris-claro)">Formato: JSON exportado desde esta app</p>
+        </div>
+        <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
+        <div id="import-preview" style="margin-top:16px;display:none"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-import')">Cancelar</button>
+        <button class="btn btn-primary" id="btn-import-confirm" style="display:none" onclick="confirmImport()">✅
+          Importar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container"></div>
+
+  <script>
+    // =====================================================
+    // DB CONFIG
+    // =====================================================
+    const DB_NAME = 'Anexo17DB';
+    const DB_VERSION = 1;
+    const STORE = 'encuestas';
+    let db;
+    let currentCamera = null;
+    let currentCameraTarget = null;
+    let editingId = null;
+    let currentApendice = 'apendice1';
+    let modelRowCount = 0;
+    let importData = null;
+
+    const EXPORT_STATUS_KEY = 'anexo17_last_export_all';
+
+    // =====================================================
+    // DB INIT
+    // =====================================================
+    function initDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = e => {
+          const d = e.target.result;
+          if (!d.objectStoreNames.contains(STORE)) {
+            const store = d.createObjectStore(STORE, { keyPath: 'id' });
+            store.createIndex('tipo', 'tipo', { unique: false });
+            store.createIndex('fecha_creacion', 'fecha_creacion', { unique: false });
+            store.createIndex('eliminado', 'eliminado', { unique: false });
+          }
+        };
+        req.onsuccess = e => { db = e.target.result; resolve(db); };
+        req.onerror = e => reject(e);
+      });
+    }
+
+    function dbPut(record) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, 'readwrite');
+        tx.objectStore(STORE).put(record).onsuccess = () => resolve();
+        tx.onerror = e => reject(e);
+      });
+    }
+
+    function dbGetAll() {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, 'readonly');
+        tx.objectStore(STORE).getAll().onsuccess = e => resolve(e.target.result);
+        tx.onerror = e => reject(e);
+      });
+    }
+
+    function dbGet(id) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, 'readonly');
+        tx.objectStore(STORE).get(id).onsuccess = e => resolve(e.target.result);
+        tx.onerror = e => reject(e);
+      });
+    }
+
+    // =====================================================
+    // ID GENERATOR
+    // =====================================================
+    function generateUUID() {
+      const ts = Date.now().toString(36).toUpperCase();
+      const rand = Math.random().toString(36).substr(2, 8).toUpperCase();
+      return `A17-${ts}-${rand}`;
+    }
+
+    // =====================================================
+    // NAVIGATION
+    // =====================================================
+    function showView(v) {
+      document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+      document.getElementById('view-' + v).classList.add('active');
+      const tabs = document.querySelectorAll('.nav-tab');
+      const map = { home: 0, nueva: 1, lista: 2 };
+      if (map[v] !== undefined) tabs[map[v]].classList.add('active');
+      if (v === 'lista') loadSurveyList();
+      if (v === 'home') loadStats();
+    }
+
+    function selectApendice(ap) {
+      currentApendice = ap;
+      document.querySelectorAll('.apend-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.apend-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('tab-' + (ap === 'apendice1' ? 'ap1' : 'apA')).classList.add('active');
+      document.getElementById('apend-' + (ap === 'apendice1' ? 'ap1' : 'apA')).classList.add('active');
+    }
+
+    function startNuevaEncuesta(tipo) {
+      editingId = null;
+      document.getElementById('editing-id').value = '';
+      resetForm();
+      selectApendice(tipo);
+      showView('nueva');
+      setDefaultFechas();
+    }
+
+    // =====================================================
+    // FORM DATA COLLECTION
+    // =====================================================
+    function getFormData() {
+      const getVal = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+      const getRadio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; };
+      const getPhotos = prefix => Array.from(document.querySelectorAll(`#${prefix}_fotos_grid img`)).map(img => img.src);
+
+      if (currentApendice === 'apendice1') {
+        return {
+          tipo: 'apendice1',
+          tipo_etiqueta: 'Apéndice 1 (Parte 1 y 2)',
+          // PARTE 1
+          parte_1: {
+            datos_generales: {
+              nombre_promotora_pcpi: getVal('p1_nombre_pcpi'),
+              fecha: getVal('p1_fecha'),
+              grupo_ninos: getVal('p1_grupo_ninos'),
+              comunidad: getVal('p1_comunidad')
+            },
+            planeacion_pedagogica: {
+              nombre_encuentro: getVal('p1_nombre_encuentro'),
+              dimension: getVal('p1_dimension'),
+              subdimension_objetivo_aprendizaje: getVal('p1_subdimension_aprendizaje'),
+              subdimension_objetivo_observacion: getVal('p1_subdimension_observacion')
+            },
+            observacion_detallada: {
+              descripcion_espacio_mobiliario_ambientacion: getVal('p1_descripcion_espacio'),
+              sujeto_1_agente_comunitaria: {
+                que_hace: getVal('p1_s1_hace'),
+                que_dice: getVal('p1_s1_dice')
+              },
+              sujeto_2_ninos_madres_padres_cuidadores: {
+                que_hace: getVal('p1_s2_hace'),
+                que_dice: getVal('p1_s2_dice')
+              },
+              sujeto_3_supervisor: {
+                ninos_participaron_mismos_apoyos: getRadio('p1_s3_participa'),
+                que_hace: getVal('p1_s3_hace'),
+                que_dice: getVal('p1_s3_dice')
+              }
+            },
+            registro_fotografico: getPhotos('p1'),
+            quien_realiza_seguimiento: {
+              nombre: getVal('p1_seguimiento_nombre'),
+              cedula: getVal('p1_seguimiento_cedula')
+            }
+          },
+          // PARTE 2
+          parte_2: {
+            datos_generales: {
+              nombre_promotora_pcpi: getVal('p2_nombre_pcpi'),
+              fecha: getVal('p2_fecha'),
+              grupo_ninos: getVal('p2_grupo_ninos'),
+              comunidad: getVal('p2_comunidad')
+            },
+            categorias: {
+              categoria_1_planeacion_implementacion: {
+                nivel: getRadio('cat1_nivel'),
+                argumentacion: getVal('cat1_argumento'),
+                citas_textuales_registro: getVal('cat1_citas')
+              },
+              categoria_2_vinculo_relaciones_familias: {
+                nivel: getRadio('cat2_nivel'),
+                argumentacion: getVal('cat2_argumento'),
+                citas_textuales_registro: getVal('cat2_citas')
+              },
+              categoria_3_acompanamiento_desarrollo_infantil: {
+                nivel: getRadio('cat3_nivel'),
+                argumentacion: getVal('cat3_argumento'),
+                citas_textuales_registro: getVal('cat3_citas')
+              },
+              categoria_4_reflexion_aprendizaje_continuo: {
+                nivel: getRadio('cat4_nivel'),
+                argumentacion: getVal('cat4_argumento'),
+                citas_textuales_registro: getVal('cat4_citas')
+              },
+              categoria_5_articulacion_comunidad_familias: {
+                nivel: getRadio('cat5_nivel'),
+                argumentacion: getVal('cat5_argumento'),
+                citas_textuales_registro: getVal('cat5_citas')
+              }
+            },
+            lecciones_aprendidas_buenas_practicas: {
+              lecciones_aprendidas_descripcion: getVal('p2_lecciones'),
+              lecciones_aprendidas_cumplimiento: getRadio('p2_lecciones_cumple'),
+              buenas_practicas_descripcion: getVal('p2_buenas_practicas'),
+              buenas_practicas_cumplimiento: getRadio('p2_practicas_cumple')
+            },
+            quien_realiza_seguimiento: {
+              nombre: getVal('p2_seguimiento_nombre'),
+              cedula: getVal('p2_seguimiento_cedula'),
+              fecha: getVal('p2_fecha_hoy')
+            }
+          }
+        };
+      } else {
+        // Apéndice A
+        const rows = [];
+        document.querySelectorAll('#model-table-body tr').forEach(tr => {
+          const inputs = tr.querySelectorAll('input[type="text"]');
+          const getCheck = name => { const el = tr.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; };
+          rows.push({
+            nombre_agente: inputs[0] ? inputs[0].value.trim() : '',
+            observacion_inicial: {
+              comprendio_planeacion: getCheck('obs_21_' + tr.dataset.row),
+              preparacion_materiales_espacio: getCheck('obs_22_' + tr.dataset.row),
+              seguridad_disposicion_emocional: getCheck('obs_23_' + tr.dataset.row),
+              conocimiento_proposito_encuentros: getCheck('obs_24_' + tr.dataset.row)
+            },
+            momentos_modelados: {
+              bienvenida_vinculo_inicial: getCheck('mom_31_' + tr.dataset.row),
+              actividad_pedagogica_central: getCheck('mom_32_' + tr.dataset.row),
+              cierre_encuentro: getCheck('mom_33_' + tr.dataset.row)
+            }
+          });
+        });
+        return {
+          tipo: 'apendiceA',
+          tipo_etiqueta: 'Apéndice A – Seguimiento al Modelamiento',
+          datos_generales: {
+            fecha_sesion: getVal('pa_fecha_sesion'),
+            nodo_comunitario: getVal('pa_nodo'),
+            nombre_quien_modela: getVal('pa_nombre_modela'),
+            tiempo_estimado_modelamiento: getVal('pa_tiempo')
+          },
+          revision_modelamiento_agentes: rows,
+          elementos_utiles_agentes: getVal('pa_elementos_utiles'),
+          que_necesita_reforzar: getVal('pa_reforzar')
+        };
+      }
+    }
+
+    function getDisplayTitle(data) {
+      if (data.tipo === 'apendice1') {
+        const nombre = data.parte_1?.datos_generales?.nombre_promotora_pcpi || 'Sin nombre';
+        const comunidad = data.parte_1?.datos_generales?.comunidad || '';
+        return `${nombre}${comunidad ? ' — ' + comunidad : ''}`;
+      } else {
+        const nombre = data.datos_generales?.nombre_quien_modela || 'Sin nombre';
+        const nodo = data.datos_generales?.nodo_comunitario || '';
+        return `${nombre}${nodo ? ' — ' + nodo : ''}`;
+      }
+    }
+
+    function getDisplayDate(data) {
+      if (data.tipo === 'apendice1') return data.parte_1?.datos_generales?.fecha || '';
+      return data.datos_generales?.fecha_sesion || '';
+    }
+
+    // =====================================================
+    // SAVE / EDIT
+    // =====================================================
+    async function guardarEncuesta() {
+      const formData = getFormData();
+      const now = new Date().toISOString();
+      let record;
+
+      if (editingId) {
+        const existing = await dbGet(editingId);
+        record = {
+          ...existing,
+          ...formData,
+          id: editingId,
+          fecha_modificacion: now,
+          titulo_display: getDisplayTitle(formData),
+          fecha_display: getDisplayDate(formData)
+        };
+        showToast('Encuesta actualizada correctamente ✅', 'success');
+      } else {
+        record = {
+          id: generateUUID(),
+          fecha_creacion: now,
+          fecha_modificacion: now,
+          eliminado: false,
+          titulo_display: getDisplayTitle(formData),
+          fecha_display: getDisplayDate(formData),
+          ...formData
+        };
+        showToast('Encuesta guardada correctamente 💾', 'success');
+      }
+
+      await dbPut(record);
+      // Auto-download JSON
+      downloadJSON(record);
+      loadStats();
+      editingId = null;
+      document.getElementById('editing-id').value = '';
+      resetForm();
+    }
+
+    // =====================================================
+    // FORM FILL (for editing)
+    // =====================================================
+    function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val || ''; }
+    function setRadio(name, val) {
+      const el = document.querySelector(`input[name="${name}"][value="${val}"]`);
+      if (el) el.checked = true;
+    }
+
+    async function editarEncuesta(id) {
+      const rec = await dbGet(id);
+      if (!rec) return;
+      editingId = id;
+      document.getElementById('editing-id').value = id;
+
+      showView('nueva');
+
+      if (rec.tipo === 'apendice1') {
+        selectApendice('apendice1');
+        const p1 = rec.parte_1 || {};
+        const dg = p1.datos_generales || {};
+        const pp = p1.planeacion_pedagogica || {};
+        const od = p1.observacion_detallada || {};
+        const qs = rec.quien_realiza_seguimiento || p1.quien_realiza_seguimiento || {};
+
+        setVal('p1_nombre_pcpi', dg.nombre_promotora_pcpi);
+        setVal('p1_fecha', dg.fecha);
+        setVal('p1_grupo_ninos', dg.grupo_ninos);
+        setVal('p1_comunidad', dg.comunidad);
+        setVal('p1_nombre_encuentro', pp.nombre_encuentro);
+        setVal('p1_dimension', pp.dimension);
+        setVal('p1_subdimension_aprendizaje', pp.subdimension_objetivo_aprendizaje);
+        setVal('p1_subdimension_observacion', pp.subdimension_objetivo_observacion);
+        setVal('p1_descripcion_espacio', od.descripcion_espacio_mobiliario_ambientacion);
+        setVal('p1_s1_hace', od.sujeto_1_agente_comunitaria?.que_hace);
+        setVal('p1_s1_dice', od.sujeto_1_agente_comunitaria?.que_dice);
+        setVal('p1_s2_hace', od.sujeto_2_ninos_madres_padres_cuidadores?.que_hace);
+        setVal('p1_s2_dice', od.sujeto_2_ninos_madres_padres_cuidadores?.que_dice);
+        setRadio('p1_s3_participa', od.sujeto_3_supervisor?.ninos_participaron_mismos_apoyos);
+        setVal('p1_s3_hace', od.sujeto_3_supervisor?.que_hace);
+        setVal('p1_s3_dice', od.sujeto_3_supervisor?.que_dice);
+        setVal('p1_seguimiento_nombre', p1.quien_realiza_seguimiento?.nombre);
+        setVal('p1_seguimiento_cedula', p1.quien_realiza_seguimiento?.cedula);
+
+        // Restore photos
+        const grid = document.getElementById('p1_fotos_grid');
+        grid.innerHTML = '';
+        (p1.registro_fotografico || []).forEach(src => addPhotoToGrid(src, 'p1'));
+
+        const p2 = rec.parte_2 || {};
+        const dg2 = p2.datos_generales || {};
+        const cats = p2.categorias || {};
+        const llp = p2.lecciones_aprendidas_buenas_practicas || {};
+        const qs2 = p2.quien_realiza_seguimiento || {};
+
+        setVal('p2_nombre_pcpi', dg2.nombre_promotora_pcpi);
+        setVal('p2_fecha', dg2.fecha);
+        setVal('p2_grupo_ninos', dg2.grupo_ninos);
+        setVal('p2_comunidad', dg2.comunidad);
+
+        for (let i = 1; i <= 5; i++) {
+          const keys = ['categoria_1_planeacion_implementacion', 'categoria_2_vinculo_relaciones_familias', 'categoria_3_acompanamiento_desarrollo_infantil', 'categoria_4_reflexion_aprendizaje_continuo', 'categoria_5_articulacion_comunidad_familias'];
+          const cat = cats[keys[i - 1]] || {};
+          setRadio(`cat${i}_nivel`, cat.nivel);
+          setVal(`cat${i}_argumento`, cat.argumentacion);
+          setVal(`cat${i}_citas`, cat.citas_textuales_registro);
+        }
+
+        setVal('p2_lecciones', llp.lecciones_aprendidas_descripcion);
+        setRadio('p2_lecciones_cumple', llp.lecciones_aprendidas_cumplimiento);
+        setVal('p2_buenas_practicas', llp.buenas_practicas_descripcion);
+        setRadio('p2_practicas_cumple', llp.buenas_practicas_cumplimiento);
+        setVal('p2_seguimiento_nombre', qs2.nombre);
+        setVal('p2_seguimiento_cedula', qs2.cedula);
+        setVal('p2_fecha_hoy', qs2.fecha);
+
+      } else {
+        selectApendice('apendiceA');
+        const dg = rec.datos_generales || {};
+        setVal('pa_fecha_sesion', dg.fecha_sesion);
+        setVal('pa_nodo', dg.nodo_comunitario);
+        setVal('pa_nombre_modela', dg.nombre_quien_modela);
+        setVal('pa_tiempo', dg.tiempo_estimado_modelamiento);
+        setVal('pa_elementos_utiles', rec.elementos_utiles_agentes);
+        setVal('pa_reforzar', rec.que_necesita_reforzar);
+
+        // Restore table rows
+        const tbody = document.getElementById('model-table-body');
+        tbody.innerHTML = '';
+        modelRowCount = 0;
+        (rec.revision_modelamiento_agentes || []).forEach(row => {
+          addModelRow(row);
+        });
+      }
+      showToast('Encuesta cargada para edición ✏️', 'info');
+    }
+
+    // =====================================================
+    // SURVEY LIST
+    // =====================================================
+    async function loadSurveyList() {
+      const all = await dbGetAll();
+      renderList(all);
+    }
+
+    function renderList(records) {
+      const container = document.getElementById('survey-list-container');
+      const visible = records.filter(r => !r.eliminado);
+
+      if (!visible.length) {
+        container.innerHTML = `<div class="empty-state"><div class="icon">📋</div><h3>No hay encuestas</h3><p>Cree una nueva encuesta para comenzar.</p></div>`;
+        return;
+      }
+
+      container.innerHTML = visible.map(r => `
+    <div class="survey-item" id="item-${r.id}">
+      <input type="checkbox" class="survey-checkbox" id="chk-${r.id}" value="${r.id}">
+      <div class="survey-info">
+        <h3>${r.titulo_display || 'Sin título'}</h3>
+        <p>${r.tipo_etiqueta || r.tipo} &nbsp;·&nbsp; ${r.fecha_display || r.fecha_creacion?.split('T')[0] || ''}</p>
+        <div class="survey-badges">
+          <span class="badge ${r.tipo === 'apendice1' ? 'badge-verde' : 'badge-azul'}">${r.tipo === 'apendice1' ? '📝 Apéndice 1' : '🗂️ Apéndice A'}</span>
+          <span class="badge badge-gris" style="font-size:10px" title="${r.id}">ID: ${r.id.slice(0, 8)}…</span>
+        </div>
+      </div>
+      <div class="survey-actions">
+        <button class="btn btn-secondary btn-sm" onclick="verEncuesta('${r.id}')">👁️ Ver</button>
+        <button class="btn btn-primary btn-sm" onclick="editarEncuesta('${r.id}')">✏️ Editar</button>
+        <button class="btn btn-naranja btn-sm" onclick="downloadJSON(null,'${r.id}')">⬇️ JSON</button>
+        <button class="btn btn-rojo btn-sm" onclick="softDelete('${r.id}')">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+    }
+
+    async function filterList() {
+      const tipo = document.getElementById('filter-tipo').value;
+      const search = document.getElementById('filter-search').value.toLowerCase();
+      const all = await dbGetAll();
+      const filtered = all.filter(r => {
+        if (r.eliminado) return false;
+        if (tipo && r.tipo !== tipo) return false;
+        if (search && !`${r.titulo_display} ${r.tipo_etiqueta} ${r.fecha_display}`.toLowerCase().includes(search)) return false;
+        return true;
+      });
+      renderList(filtered);
+    }
+
+    // =====================================================
+    // VIEW MODAL
+    // =====================================================
+    async function verEncuesta(id) {
+      const rec = await dbGet(id);
+      if (!rec) return;
+
+      let html = `<div style="font-size:13px">`;
+      html += `<div style="background:var(--verde-bg);border-radius:8px;padding:12px;margin-bottom:16px">`;
+      html += `<b>ID:</b> <code style="font-size:11px">${rec.id}</code><br>`;
+      html += `<b>Tipo:</b> ${rec.tipo_etiqueta}<br>`;
+      html += `<b>Creado:</b> ${rec.fecha_creacion}<br>`;
+      html += `</div>`;
+      html += `<pre style="white-space:pre-wrap;font-size:11px;background:#f5f5f5;padding:12px;border-radius:8px;overflow:auto;max-height:60vh">${JSON.stringify(rec, null, 2)}</pre>`;
+      html += `</div>`;
+
+      document.getElementById('modal-view-title').textContent = rec.titulo_display || 'Encuesta';
+      document.getElementById('modal-view-body').innerHTML = html;
+      document.getElementById('modal-view').classList.add('visible');
+    }
+
+    // =====================================================
+    // DOWNLOAD JSON
+    // =====================================================
+    async function downloadJSON(record, id) {
+      let rec = record;
+      if (!rec && id) rec = await dbGet(id);
+      if (!rec) return;
+      const blob = new Blob([JSON.stringify(rec, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const safeTitle = (rec.titulo_display || rec.id).replace(/[^a-z0-9_\-]/gi, '_');
+      a.download = `Anexo17_${rec.tipo}_${safeTitle}_${rec.fecha_display || rec.fecha_creacion?.split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+    }
+
+    async function downloadSelected() {
+      const ids = getCheckedIds();
+      if (!ids.length) { showToast('Seleccione al menos una encuesta', 'error'); return; }
+      const records = await Promise.all(ids.map(id => dbGet(id)));
+      if (ids.length === 1) { downloadJSON(records[0]); return; }
+      const blob = new Blob([JSON.stringify(records, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Anexo17_Lote_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+    }
+
+    async function downloadAll() {
+      const all = (await dbGetAll()).filter(r => !r.eliminado);
+      if (!all.length) { showToast('No hay encuestas para descargar', 'error'); return; }
+      const blob = new Blob([JSON.stringify(all, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Anexo17_Todas_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+      localStorage.setItem(EXPORT_STATUS_KEY, new Date().toISOString());
+      updateExportStatus();
+      showToast(`${all.length} encuestas descargadas`, 'success');
+    }
+
+    // =====================================================
+    // DELETE (soft)
+    // =====================================================
+    async function softDelete(id) {
+      confirmAction('¿Eliminar esta encuesta?', 'La encuesta quedará marcada como eliminada.', async () => {
+        const rec = await dbGet(id);
+        rec.eliminado = true;
+        rec.fecha_eliminacion = new Date().toISOString();
+        await dbPut(rec);
+        showToast('Encuesta eliminada', 'success');
+        loadSurveyList();
+        loadStats();
+      });
+    }
+
+    async function deleteSelected() {
+      const ids = getCheckedIds();
+      if (!ids.length) { showToast('Seleccione al menos una encuesta', 'error'); return; }
+      confirmAction(`¿Eliminar ${ids.length} encuesta(s)?`, 'Serán marcadas como eliminadas.', async () => {
+        for (const id of ids) {
+          const rec = await dbGet(id);
+          rec.eliminado = true;
+          rec.fecha_eliminacion = new Date().toISOString();
+          await dbPut(rec);
+        }
+        showToast(`${ids.length} encuestas eliminadas`, 'success');
+        loadSurveyList();
+        loadStats();
+      });
+    }
+
+    async function deleteAllSurveys() {
+      const all = await dbGetAll();
+      const active = all.filter(r => !r.eliminado);
+      if (!active.length) { showToast('No hay encuestas para borrar', 'error'); return; }
+      confirmAction(`¿Eliminar ${active.length} encuesta(s)?`, 'Serán marcadas como eliminadas.', async () => {
+        for (const rec of active) {
+          rec.eliminado = true;
+          rec.fecha_eliminacion = new Date().toISOString();
+          await dbPut(rec);
+        }
+        showToast('Todas las encuestas fueron eliminadas', 'success');
+        loadSurveyList();
+        loadStats();
+      });
+    }
+
+    // =====================================================
+    // STATS
+    // =====================================================
+    async function loadStats() {
+      const all = await dbGetAll();
+      const active = all.filter(r => !r.eliminado);
+      document.getElementById('stat-total').textContent = active.length;
+      document.getElementById('stat-p1').textContent = active.filter(r => r.tipo === 'apendice1').length;
+      document.getElementById('stat-pa').textContent = active.filter(r => r.tipo === 'apendiceA').length;
+      document.getElementById('count-ap1').textContent = active.filter(r => r.tipo === 'apendice1').length;
+      document.getElementById('count-apA').textContent = active.filter(r => r.tipo === 'apendiceA').length;
+      document.getElementById('count-all').textContent = active.length;
+    }
+
+    function updateExportStatus() {
+      const el = document.getElementById('status-exportacion');
+      if (!el) return;
+      const stamp = localStorage.getItem(EXPORT_STATUS_KEY);
+      if (!stamp) {
+        el.textContent = 'Ultima exportacion: —';
+        return;
+      }
+      const fecha = new Date(stamp).toLocaleString('es-CR');
+      el.textContent = `Ultima exportacion: ${fecha}`;
+    }
+
+    // =====================================================
+    // SELECT HELPERS
+    // =====================================================
+    function getCheckedIds() {
+      return Array.from(document.querySelectorAll('.survey-checkbox:checked')).map(el => el.value);
+    }
+
+    function toggleSelectAll() {
+      const checkboxes = document.querySelectorAll('.survey-checkbox');
+      const allChecked = Array.from(checkboxes).every(c => c.checked);
+      checkboxes.forEach(c => c.checked = !allChecked);
+    }
+
+    // =====================================================
+    // RESET FORM
+    // =====================================================
+    function resetForm() {
+      // Reset all inputs, textareas, selects
+      document.querySelectorAll('#view-nueva input[type="text"], #view-nueva input[type="date"], #view-nueva textarea').forEach(el => el.value = '');
+      document.querySelectorAll('#view-nueva input[type="radio"]').forEach(el => el.checked = false);
+      document.getElementById('p1_fotos_grid').innerHTML = '';
+      document.getElementById('model-table-body').innerHTML = '';
+      modelRowCount = 0;
+      editingId = null;
+      setDefaultFechas();
+    }
+
+    // =====================================================
+    // MODEL TABLE (Apéndice A)
+    // =====================================================
+    function addModelRow(data) {
+      modelRowCount++;
+      const n = modelRowCount;
+      const d = data || {};
+      const obs = d.observacion_inicial || {};
+      const mom = d.momentos_modelados || {};
+
+      const normalizeStatus = val => {
+        if (val === 'Sí') return 'Logrado';
+        if (val === 'No') return 'No Logrado';
+        return val || '';
+      };
+
+      const makeCheck = (name, val) => {
+        const current = normalizeStatus(val);
+        return `
+      <div class="si-no">
+        <input type="radio" name="${name}" id="${name}_log_${n}" value="Logrado" ${current === 'Logrado' ? 'checked' : ''}>
+        <label for="${name}_log_${n}">Logrado</label>
+        <input type="radio" name="${name}" id="${name}_nop_${n}" value="No Logrado" ${current === 'No Logrado' ? 'checked' : ''}>
+        <label for="${name}_nop_${n}">No Logrado</label>
+        <input type="radio" name="${name}" id="${name}_pro_${n}" value="En Proceso" ${current === 'En Proceso' ? 'checked' : ''}>
+        <label for="${name}_pro_${n}">En Proceso</label>
+      </div>`;
+      };
+
+      const tr = document.createElement('tr');
+      tr.dataset.row = n;
+      tr.innerHTML = `
+    <td class="row-num">${n}</td>
+    <td class="name-col"><input type="text" value="${d.nombre_agente || ''}" placeholder="Nombre..."></td>
+    <td>${makeCheck('obs_21_' + n, obs.comprendio_planeacion)}</td>
+    <td>${makeCheck('obs_22_' + n, obs.preparacion_materiales_espacio)}</td>
+    <td>${makeCheck('obs_23_' + n, obs.seguridad_disposicion_emocional)}</td>
+    <td>${makeCheck('obs_24_' + n, obs.conocimiento_proposito_encuentros)}</td>
+    <td>${makeCheck('mom_31_' + n, mom.bienvenida_vinculo_inicial)}</td>
+    <td>${makeCheck('mom_32_' + n, mom.actividad_pedagogica_central)}</td>
+    <td>${makeCheck('mom_33_' + n, mom.cierre_encuentro)}</td>
+    <td><button class="btn-delete-row" onclick="this.closest('tr').remove()">🗑️</button></td>
+  `;
+      document.getElementById('model-table-body').appendChild(tr);
+    }
+
+    // =====================================================
+    // CAMERA / PHOTOS
+    // =====================================================
+    function openCamera(prefix) {
+      currentCameraTarget = prefix;
+      const container = document.getElementById('camera-preview-container');
+      const video = document.getElementById('camera-video');
+      container.classList.add('visible');
+
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } })
+        .then(stream => {
+          currentCamera = stream;
+          video.srcObject = stream;
+        })
+        .catch(err => {
+          showToast('No se pudo acceder a la cámara: ' + err.message, 'error');
+          closeCamera();
+        });
+    }
+
+    function closeCamera() {
+      if (currentCamera) { currentCamera.getTracks().forEach(t => t.stop()); currentCamera = null; }
+      document.getElementById('camera-preview-container').classList.remove('visible');
+    }
+
+    function capturePhoto() {
+      const video = document.getElementById('camera-video');
+      const canvas = document.createElement('canvas');
+      // Reduce size while keeping quality
+      const maxW = 800;
+      const scale = Math.min(1, maxW / video.videoWidth);
+      canvas.width = video.videoWidth * scale;
+      canvas.height = video.videoHeight * scale;
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+      addPhotoToGrid(dataUrl, currentCameraTarget);
+      showToast('📷 Foto capturada', 'success');
+    }
+
+    function handleFileSelect(event, prefix) {
+      const files = Array.from(event.target.files);
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          // Resize
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxW = 800;
+            const scale = Math.min(1, maxW / img.width);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            addPhotoToGrid(canvas.toDataURL('image/jpeg', 0.75), prefix);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+      event.target.value = '';
+    }
+
+    function addPhotoToGrid(src, prefix) {
+      const grid = document.getElementById(prefix + '_fotos_grid');
+      const div = document.createElement('div');
+      div.className = 'foto-item';
+      div.innerHTML = `<img src="${src}"><button class="foto-delete" onclick="this.parentElement.remove()">✕</button>`;
+      grid.appendChild(div);
+    }
+
+    // =====================================================
+    // IMPORT
+    // =====================================================
+    function showImport() {
+      importData = null;
+      document.getElementById('import-preview').style.display = 'none';
+      document.getElementById('btn-import-confirm').style.display = 'none';
+      document.getElementById('import-file').value = '';
+      document.getElementById('modal-import').classList.add('visible');
+    }
+
+    function handleImport(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const data = JSON.parse(e.target.result);
+          const records = Array.isArray(data) ? data : [data];
+          importData = records;
+          const preview = document.getElementById('import-preview');
+          preview.style.display = 'block';
+          preview.innerHTML = `<div style="background:var(--verde-bg);border-radius:8px;padding:12px">
+        <b>✅ Archivo válido</b><br>
+        Se encontraron <b>${records.length}</b> encuesta(s):<br><br>
+        ${records.map(r => `<div style="font-size:12px">• ${r.titulo_display || r.id} (${r.tipo_etiqueta || r.tipo})</div>`).join('')}
+      </div>`;
+          document.getElementById('btn-import-confirm').style.display = 'inline-flex';
+        } catch {
+          document.getElementById('import-preview').style.display = 'block';
+          document.getElementById('import-preview').innerHTML = `<div style="background:var(--rojo-bg);border-radius:8px;padding:12px;color:var(--rojo)">❌ Archivo JSON inválido</div>`;
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    async function confirmImport() {
+      if (!importData) return;
+      let count = 0;
+      for (const rec of importData) {
+        // Give new ID if duplicate
+        const existing = await dbGet(rec.id).catch(() => null);
+        if (existing) rec.id = generateUUID();
+        rec.fecha_importacion = new Date().toISOString();
+        await dbPut(rec);
+        count++;
+      }
+      showToast(`✅ ${count} encuesta(s) importadas`, 'success');
+      closeModal('modal-import');
+      loadStats();
+    }
+
+    // =====================================================
+    // MODAL HELPERS
+    // =====================================================
+    function confirmAction(title, body, onOk) {
+      document.getElementById('modal-confirm-title').textContent = title;
+      document.getElementById('modal-confirm-body').innerHTML = body;
+      document.getElementById('modal-confirm-ok').onclick = () => { onOk(); closeModal('modal-confirm'); };
+      document.getElementById('modal-confirm').classList.add('visible');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('visible');
+    }
+
+    // =====================================================
+    // TOAST
+    // =====================================================
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = msg;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
+    }
+
+    // =====================================================
+    // DEFAULT DATES
+    // =====================================================
+    function setDefaultFechas() {
+      const today = new Date().toISOString().split('T')[0];
+      const ids = ['p1_fecha', 'p2_fecha', 'p2_fecha_hoy', 'pa_fecha_sesion'];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = today;
+      });
+    }
+
+    // =====================================================
+    // APÉNDICE 1: MIRROR DATOS GENERALES (PARTE 1 <-> PARTE 2)
+    // =====================================================
+    function setupApendice1Mirroring() {
+      const pairs = [
+        ['p1_nombre_pcpi', 'p2_nombre_pcpi'],
+        ['p1_fecha', 'p2_fecha'],
+        ['p1_grupo_ninos', 'p2_grupo_ninos'],
+        ['p1_comunidad', 'p2_comunidad']
+      ];
+
+      const bindPair = (aId, bId) => {
+        const a = document.getElementById(aId);
+        const b = document.getElementById(bId);
+        if (!a || !b) return;
+
+        const sync = (src, dst) => {
+          if (dst.value !== src.value) dst.value = src.value;
+        };
+
+        // One-time harmonize when one side is empty
+        if (a.value && !b.value) sync(a, b);
+        else if (b.value && !a.value) sync(b, a);
+
+        ['input', 'change'].forEach(evt => {
+          a.addEventListener(evt, () => sync(a, b));
+          b.addEventListener(evt, () => sync(b, a));
+        });
+      };
+
+      pairs.forEach(([aId, bId]) => bindPair(aId, bId));
+    }
+
+    // =====================================================
+    // INIT
+    // =====================================================
+    initDB().then(() => {
+      loadStats();
+      setDefaultFechas();
+      setupApendice1Mirroring();
+      updateExportStatus();
+    });
+
+    // Close overlays on outside click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) overlay.classList.remove('visible');
+      });
+    });
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        let updatePrompted = false;
+
+        function promptUserToRefresh(registration) {
+          if (updatePrompted) return;
+          updatePrompted = true;
+          const aceptar = confirm('Hay una nueva version disponible. Deseas actualizar ahora?');
+          if (aceptar && registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+        }
+
+        navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+          if (registration.waiting) {
+            promptUserToRefresh(registration);
+          }
+
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (!newWorker) return;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                promptUserToRefresh(registration);
+              }
+            });
+          });
+        });
+
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          window.location.reload();
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>

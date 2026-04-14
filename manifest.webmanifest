@@ -1,0 +1,20 @@
+{
+  "name": "RET - Provision de Servicios de Primera Infrancia",
+  "short_name": "RET - Encuestas",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/logo192.jpg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo512.jpg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

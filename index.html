@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú - RET</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --verde: #1a6b4a;
+            --verde-oscuro: #0f4a30;
+            --azul: #1a4a8a;
+            --naranja: #d4611a;
+            --crema: #f6efe7;
+            --gris: #2c2c2c;
+            --blanco: #ffffff;
+            --sombra: 0 12px 30px rgba(0,0,0,0.12);
+            --sombra-suave: 0 6px 18px rgba(0,0,0,0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Trebuchet MS", "Gill Sans", "Verdana", sans-serif;
+            background: radial-gradient(900px 600px at 15% 10%, #e6f4ec 0%, transparent 60%),
+                        radial-gradient(700px 500px at 85% 20%, #f9e6d2 0%, transparent 55%),
+                        linear-gradient(135deg, #f7f5f2 0%, #eef3f0 100%);
+            color: var(--gris);
+            min-height: 100vh;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: min(720px, 100%);
+            background: var(--blanco);
+            padding: 36px;
+            border-radius: 18px;
+            box-shadow: var(--sombra);
+            border: 1px solid rgba(0,0,0,0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -120px;
+            right: -140px;
+            width: 280px;
+            height: 280px;
+            background: conic-gradient(from 180deg, #f8e3cf, #e7f2ea, #f8e3cf);
+            border-radius: 50%;
+            opacity: 0.55;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .badge {
+            background: var(--verde);
+            color: var(--blanco);
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        
+        h1 {
+            font-family: "Georgia", "Times New Roman", serif;
+            font-size: 26px;
+            color: var(--verde-oscuro);
+        }
+
+        .subtitle {
+            margin-top: 6px;
+            color: #556060;
+            font-size: 14px;
+        }
+        
+        .menu {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .menu button {
+            width: 100%;
+            text-align: left;
+            padding: 16px 18px;
+            font-size: 15px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            display: grid;
+            grid-template-columns: 40px 1fr;
+            align-items: center;
+            gap: 12px;
+            min-height: 84px;
+        }
+
+        .menu button .icon {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.2);
+            font-size: 20px;
+        }
+
+        .menu button:disabled .icon {
+            background: rgba(0,0,0,0.06);
+        }
+        
+        .menu button:enabled {
+            background: linear-gradient(135deg, #1a6b4a, #2a9d6f);
+            color: white;
+            box-shadow: var(--sombra-suave);
+        }
+
+        .menu button:enabled:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--sombra);
+        }
+
+        .menu button:disabled {
+            background: #ececec;
+            color: #8b8b8b;
+            cursor: not-allowed;
+        }
+
+        .menu button:nth-child(2):enabled {
+            background: linear-gradient(135deg, #1a4a8a, #3d6cc3);
+        }
+
+        .menu button:nth-child(3):enabled {
+            background: linear-gradient(135deg, #d4611a, #f08b3c);
+        }
+
+        .menu button span {
+            display: block;
+            font-size: 12px;
+            opacity: 0.85;
+            margin-top: 2px;
+        }
+
+        @media (max-width: 980px) {
+            .menu { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 640px) {
+            .menu { grid-template-columns: 1fr; }
+            .container { padding: 28px; }
+            h1 { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">RET</div>
+            <div>
+                <h1>Menú RET</h1>
+                <div class="subtitle">Acceso rápido a los anexos y formularios principales</div>
+            </div>
+        </div>
+        <div class="menu">
+            <button disabled><span class="icon">🧾</span><span><strong>Caracterización</strong><span>Anexo 8 • Próximamente disponible</span></span></button>
+            <button onclick="location.href='/anexo16.html'"><span class="icon">📘</span><span><strong>Cuaderno viajero</strong><span>Anexo 16 • Registro y seguimiento de encuentros</span></span></button>
+            <button onclick="location.href='/anexo17.html'"><span class="icon">📊</span><span><strong>Seguimiento al modelamiento</strong><span>Anexo 17 • Instrumento de evaluación y mejora</span></span></button>
+            <button disabled><span class="icon">🧩</span><span><strong>Cuestionario de ASQ3 compartiles</strong><span>Anexo 19 • Próximamente disponible</span></span></button>
+            <button disabled><span class="icon">👪</span><span><strong>Escala de parentalidad</strong><span>Anexo 20 • Próximamente disponible</span></span></button>
+            <button disabled><span class="icon">✅</span><span><strong>Encuesta de Satisfacción</strong><span>Anexo 21 • Próximamente disponible</span></span></button>
+        </div>
+    </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+            let updatePrompted = false;
+
+            function promptUserToRefresh(registration) {
+            if (updatePrompted) return;
+            updatePrompted = true;
+            const aceptar = confirm('Hay una nueva version disponible. Deseas actualizar ahora?');
+            if (aceptar && registration.waiting) {
+                registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+            }
+
+            navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+            if (registration.waiting) {
+                promptUserToRefresh(registration);
+            }
+
+            registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                if (!newWorker) return;
+                newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    promptUserToRefresh(registration);
+                }
+                });
+            });
+            });
+
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+            window.location.reload();
+            });
+        });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>ANEXO 16 — Cuaderno Viajero | RET-UNICEF</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --verde: #1a6b4a;
+      --verde-claro: #2a9d6f;
+      --verde-bg: #e8f5ee;
+      --verde-borde: #b2d8c4;
+      --naranja: #d4611a;
+      --naranja-bg: #fdf0e8;
+      --azul: #1a4a8a;
+      --azul-bg: #e8eef8;
+      --gris-bg: #f4f6f4;
+      --gris-borde: #d0d8d4;
+      --gris-texto: #556060;
+      --texto: #1a2a22;
+      --blanco: #ffffff;
+      --rojo: #c0392b;
+      --rojo-bg: #fdecea;
+      --sombra: 0 2px 12px rgba(26, 107, 74, 0.10);
+      --radio: 12px;
+      --radio-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--gris-bg);
+      color: var(--texto);
+      min-height: 100vh;
+      font-size: 15px;
+    }
+
+    /* ---- HEADER ---- */
+    header {
+      background: var(--verde);
+      color: white;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-badge {
+      background: white;
+      color: var(--verde);
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+
+    header h1 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      line-height: 1.2;
+    }
+
+    header p {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 2px;
+      font-weight: 300;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      background: white;
+      color: var(--verde);
+    }
+
+    /* ---- PAGES ---- */
+    .page {
+      display: none;
+      padding: 28px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* ---- TIPO SELECTOR ---- */
+    .tipo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .tipo-card {
+      background: white;
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radio);
+      padding: 24px 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .tipo-card:hover {
+      border-color: var(--verde-claro);
+      background: var(--verde-bg);
+    }
+
+    .tipo-card.selected {
+      border-color: var(--verde);
+      background: var(--verde-bg);
+      box-shadow: 0 0 0 3px rgba(26, 107, 74, 0.15);
+    }
+
+    .tipo-icon {
+      font-size: 36px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .tipo-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--verde);
+      margin-bottom: 5px;
+    }
+
+    .tipo-card p {
+      font-size: 12px;
+      color: var(--gris-texto);
+      line-height: 1.5;
+    }
+
+    /* ---- SECTIONS ---- */
+    .seccion {
+      background: white;
+      border-radius: var(--radio);
+      border: 1px solid var(--gris-borde);
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: var(--sombra);
+    }
+
+    .seccion-header {
+      background: var(--verde);
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .seccion-numero {
+      background: rgba(255, 255, 255, 0.25);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .seccion-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .seccion-body {
+      padding: 20px;
+    }
+
+    /* ---- FORM FIELDS ---- */
+    .campo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .campo-grid.tres {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .campo {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .campo label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gris-texto);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .campo input,
+    .campo select,
+    .campo textarea {
+      border: 1.5px solid var(--gris-borde);
+      border-radius: var(--radio-sm);
+      padding: 10px 12px;
+      font-family: 'Sora', sans-serif;
+      font-size: 15px;
+      color: var(--texto);
+      background: white;
+      width: 100%;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .campo input:focus,
+    .campo select:focus,
+    .campo textarea:focus {
+      outline: none;
+      border-color: var(--verde);
+      box-shadow: 0 0 0 3px rgba(26, 107, 74, 0.12);
+    }
+
+    .campo input[type="number"] {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .campo textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* ---- NUMBER STEPPER ---- */
+    .stepper-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1.5px solid var(--gris-borde);
+      border-radius: var(--radio-sm);
+      overflow: hidden;
+    }
+
+    .stepper-wrap input {
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      flex: 1;
+      padding: 10px 4px;
+    }
+
+    .stepper-btn {
+      background: var(--gris-bg);
+      border: none;
+      padding: 0 16px;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--verde);
+      height: 100%;
+      min-height: 44px;
+      font-weight: 700;
+      transition: background 0.15s;
+    }
+
+    .stepper-btn:hover {
+      background: var(--verde-bg);
+    }
+
+    /* ---- TABLA EVALUACION ---- */
+    .eval-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .eval-table th {
+      background: var(--verde-bg);
+      color: var(--verde);
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 600;
+      border: 1px solid var(--verde-borde);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .eval-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--gris-borde);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .eval-table tr:nth-child(even) td {
+      background: var(--gris-bg);
+    }
+
+    .eval-table .objetivo-cell {
+      font-weight: 600;
+      color: var(--verde);
+      width: 30%;
+    }
+
+    .eval-table .indicador-cell {
+      width: 45%;
+    }
+
+    .eval-table .escala-cell {
+      width: 25%;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+    }
+
+    /* ---- TABLA SEGUIMIENTO ---- */
+    .seguimiento-wrap {
+      overflow-x: auto;
+    }
+
+    .seguimiento-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+
+    .seguimiento-table th {
+      background: var(--azul);
+      color: white;
+      padding: 10px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      letter-spacing: 0.3px;
+    }
+
+    .seguimiento-table td {
+      padding: 6px 6px;
+      border: 1px solid var(--gris-borde);
+      background: white;
+    }
+
+    .seguimiento-table th.age-col,
+    .seguimiento-table td.age-col {
+      min-width: 130px;
+    }
+
+    .seguimiento-table td.age-col .stepper-wrap {
+      min-width: 120px;
+    }
+
+    .seguimiento-table tr:nth-child(even) td {
+      background: var(--azul-bg);
+    }
+
+    .seguimiento-table input,
+    .seguimiento-table select {
+      border: 1px solid var(--gris-borde);
+      border-radius: 6px;
+      padding: 7px 8px;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px;
+      width: 100%;
+      background: white;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .seguimiento-table input[type="number"] {
+      font-family: 'IBM Plex Mono', monospace;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .btn-eliminar {
+      background: var(--rojo-bg);
+      border: 1px solid #f5c6c2;
+      color: var(--rojo);
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-eliminar:hover {
+      background: var(--rojo);
+      color: white;
+    }
+
+    .btn-agregar {
+      margin-top: 12px;
+      background: var(--azul-bg);
+      border: 1.5px dashed #6b9fd4;
+      color: var(--azul);
+      padding: 10px 20px;
+      border-radius: var(--radio-sm);
+      cursor: pointer;
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.15s;
+      width: 100%;
+    }
+
+    .btn-agregar:hover {
+      background: var(--azul);
+      color: white;
+      border-style: solid;
+    }
+
+    /* ---- BOTONES PRINCIPALES ---- */
+    .acciones {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.18s;
+      letter-spacing: 0.2px;
+    }
+
+    .btn-primary {
+      background: var(--verde);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--verde-claro);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--verde);
+      border-color: var(--verde);
+    }
+
+    .btn-secondary:hover {
+      background: var(--verde-bg);
+    }
+
+    .btn-danger {
+      background: white;
+      color: var(--rojo);
+      border-color: var(--rojo);
+    }
+
+    .btn-danger:hover {
+      background: var(--rojo);
+      color: white;
+    }
+
+    .btn-api {
+      background: var(--naranja);
+      color: white;
+      border-color: var(--naranja);
+    }
+
+    .btn-api:hover {
+      background: #bf5515;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ---- HISTORIAL ---- */
+    .historial-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .historial-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--verde);
+    }
+
+    .encuesta-card {
+      background: white;
+      border: 1px solid var(--gris-borde);
+      border-radius: var(--radio);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--sombra);
+      flex-wrap: wrap;
+    }
+
+    .encuesta-info {
+      flex: 1;
+    }
+
+    .encuesta-id {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--gris-texto);
+      margin-bottom: 4px;
+    }
+
+    .encuesta-titulo {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .encuesta-meta {
+      font-size: 13px;
+      color: var(--gris-texto);
+      margin-top: 2px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-pendiente {
+      background: var(--naranja-bg);
+      color: var(--naranja);
+      border: 1px solid #f4c59a;
+    }
+
+    .badge-enviado {
+      background: var(--verde-bg);
+      color: var(--verde);
+      border: 1px solid var(--verde-borde);
+    }
+
+    .encuesta-acciones {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .encuesta-acciones .btn {
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+
+    /* ---- INTRO ---- */
+    .intro-banner {
+      background: linear-gradient(135deg, var(--verde) 0%, #0f4a30 100%);
+      border-radius: var(--radio);
+      padding: 32px 36px;
+      color: white;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-banner::before {
+      content: '';
+      position: absolute;
+      right: -40px;
+      top: -40px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .intro-banner h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .intro-banner p {
+      font-size: 14px;
+      opacity: 0.85;
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    /* ---- TOAST ---- */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--verde);
+      color: white;
+      padding: 14px 22px;
+      border-radius: var(--radio-sm);
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s;
+      max-width: 340px;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.error {
+      background: var(--rojo);
+    }
+
+    /* ---- EMPTY STATE ---- */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gris-texto);
+    }
+
+    .empty-state .icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .empty-state h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+    }
+
+    /* ---- PAGE TITLE ---- */
+    .page-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--verde);
+      margin-bottom: 6px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--gris-texto);
+      margin-bottom: 24px;
+    }
+
+    /* ---- TIPO BADGE TOP ---- */
+    .tipo-seleccionado {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--verde-bg);
+      border: 1.5px solid var(--verde-borde);
+      color: var(--verde);
+      padding: 7px 16px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    .tipo-seleccionado .cambiar {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-left: 4px;
+    }
+
+    /* ---- SEPARADOR ---- */
+    .sep {
+      height: 1px;
+      background: var(--gris-borde);
+      margin: 20px 0;
+    }
+
+    /* ---- FILTROS ---- */
+    .filtros {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filtro-btn {
+      padding: 7px 16px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gris-borde);
+      background: white;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-weight: 500;
+    }
+
+    .filtro-btn:hover,
+    .filtro-btn.active {
+      background: var(--verde);
+      color: white;
+      border-color: var(--verde);
+    }
+
+    .contador {
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--verde-bg);
+      color: var(--verde);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    select option {
+      font-family: 'Sora', sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-logo">
+      <div class="logo-badge">RET · UNICEF</div>
+      <div>
+        <h1>ANEXO 16 — Cuaderno Viajero</h1>
+        <p>Seguimiento de Encuentros</p>
+      </div>
+    </div>
+    <div class="header-nav">
+      <button class="nav-btn active" onclick="showPage('nueva')">+ Nueva Encuesta</button>
+      <button class="nav-btn" onclick="showPage('historial')">Historial</button>
+      <button class="nav-btn" onclick="location.href='index.html'">↩︎ Menú</button>
+    </div>
+  </header>
+
+  <!-- ============================== PAGE: NUEVA ============================== -->
+  <div id="page-nueva" class="page active">
+    <div id="step-tipo">
+      <div class="intro-banner">
+        <h2>Nueva Encuesta</h2>
+        <p>Seleccione el tipo de encuentro comunitario para comenzar el registro.</p>
+      </div>
+      <div class="page-title">Seleccione el tipo de Anexo 16</div>
+      <div class="tipo-grid">
+        <div class="tipo-card" onclick="seleccionarTipo('gestion')" id="tipo-gestion">
+          <span class="tipo-icon">💬</span>
+          <h3>Gestión de Emociones</h3>
+          <p>Encuentros enfocados en el manejo emocional con niños y cuidadores</p>
+        </div>
+        <div class="tipo-card" onclick="seleccionarTipo('resolucion')" id="tipo-resolucion">
+          <span class="tipo-icon">🧩</span>
+          <h3>Resolución de Problemas</h3>
+          <p>Encuentros para desarrollar habilidades de resolución de conflictos</p>
+        </div>
+        <div class="tipo-card" onclick="seleccionarTipo('movimiento1')" id="tipo-movimiento1">
+          <span class="tipo-icon">🏃</span>
+          <h3>Movimiento y Expresión Corporal v1</h3>
+          <p>Primera variante de actividades de movimiento y expresión</p>
+        </div>
+        <div class="tipo-card" onclick="seleccionarTipo('movimiento2')" id="tipo-movimiento2">
+          <span class="tipo-icon">🤸</span>
+          <h3>Movimiento y Expresión Corporal v2</h3>
+          <p>Segunda variante de actividades de movimiento y expresión</p>
+        </div>
+      </div>
+      <div class="acciones" style="margin-top:24px">
+        <button class="btn btn-primary" onclick="iniciarEncuesta()" id="btn-iniciar" disabled>Iniciar Encuesta
+          →</button>
+      </div>
+    </div>
+
+    <div id="step-formulario" style="display:none">
+      <div id="tipo-badge-display"></div>
+
+      <!-- SECCION 1: DATOS GENERALES -->
+      <div class="seccion">
+        <div class="seccion-header">
+          <div class="seccion-numero">1</div>
+          <h2>DATOS GENERALES</h2>
+        </div>
+        <div class="seccion-body">
+          <div class="campo-grid" style="margin-bottom:14px">
+            <div class="campo" style="grid-column:1/-1">
+              <label>Comunidad</label>
+              <input type="text" id="comunidad" placeholder="Nombre de la comunidad" autocomplete="off">
+            </div>
+            <div class="campo">
+              <label>Fecha del Encuentro</label>
+              <input type="date" id="fecha_encuentro">
+            </div>
+          </div>
+          <div class="campo-grid tres">
+            <div class="campo">
+              <label>N° Gateadores (0–18 Meses)</label>
+              <div class="stepper-wrap">
+                <button class="stepper-btn" onclick="stepperChange('gateadores',-1)">−</button>
+                <input type="number" id="gateadores" value="0" min="0">
+                <button class="stepper-btn" onclick="stepperChange('gateadores',1)">+</button>
+              </div>
+            </div>
+            <div class="campo">
+              <label>Total Beneficiarios U.G.</label>
+              <div class="stepper-wrap">
+                <button class="stepper-btn" onclick="stepperChange('total_beneficiarios_ug',-1)">−</button>
+                <input type="number" id="total_beneficiarios_ug" value="0" min="0">
+                <button class="stepper-btn" onclick="stepperChange('total_beneficiarios_ug',1)">+</button>
+              </div>
+            </div>
+            <div class="campo">
+              <label>Beneficiarios Asistentes</label>
+              <div class="stepper-wrap">
+                <button class="stepper-btn" onclick="stepperChange('beneficiarios_asistentes',-1)">−</button>
+                <input type="number" id="beneficiarios_asistentes" value="0" min="0">
+                <button class="stepper-btn" onclick="stepperChange('beneficiarios_asistentes',1)">+</button>
+              </div>
+            </div>
+            <div class="campo" style="grid-column:1/-1; max-width:280px">
+              <label>N° Caminadores (19–48 Meses)</label>
+              <div class="stepper-wrap">
+                <button class="stepper-btn" onclick="stepperChange('caminadores',-1)">−</button>
+                <input type="number" id="caminadores" value="0" min="0">
+                <button class="stepper-btn" onclick="stepperChange('caminadores',1)">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCION 2: EVALUACION -->
+      <div class="seccion">
+        <div class="seccion-header">
+          <div class="seccion-numero">2</div>
+          <h2>EVALUACIÓN DEL ENCUENTRO</h2>
+        </div>
+        <div class="seccion-body">
+          <p style="font-size:13px;color:var(--gris-texto);margin-bottom:14px;">Tabla de referencia según tipo de
+            encuentro seleccionado.</p>
+          <div class="seguimiento-wrap">
+            <table class="eval-table" id="tabla-evaluacion"></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCION 3: SEGUIMIENTO INDIVIDUAL -->
+      <div class="seccion">
+        <div class="seccion-header">
+          <div class="seccion-numero">3</div>
+          <h2>SEGUIMIENTO INDIVIDUAL</h2>
+        </div>
+        <div class="seccion-body">
+          <div class="seguimiento-wrap">
+            <table class="seguimiento-table">
+              <thead>
+                <tr>
+                  <th style="min-width:160px">Nombre del Niño(a)</th>
+                  <th class="age-col">Edad (meses)</th>
+                  <th style="min-width:140px">Obj. 1</th>
+                  <th style="min-width:140px">Obj. 2</th>
+                  <th style="min-width:140px">Obj. 3</th>
+                  <th style="min-width:140px">Obj. 4</th>
+                  <th style="min-width:180px">Objetivo Observación Cuidador</th>
+                  <th style="width:60px">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-seguimiento"></tbody>
+            </table>
+          </div>
+          <button class="btn-agregar" onclick="agregarNino()">+ Agregar niño(a)</button>
+        </div>
+      </div>
+
+      <!-- SECCION 4: OBSERVACIONES -->
+      <div class="seccion">
+        <div class="seccion-header">
+          <div class="seccion-numero">4</div>
+          <h2>OBSERVACIONES CUALITATIVAS — OBJETIVOS FLEXIBLES DISCAPACIDAD E INCLUSIÓN</h2>
+        </div>
+        <div class="seccion-body">
+          <div class="campo">
+            <label>Observaciones</label>
+            <textarea id="observaciones_cualitativas"
+              placeholder="Escriba aquí sus observaciones sobre objetivos flexibles, discapacidad e inclusión..."
+              rows="4"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCION 5: QUIEN REALIZA -->
+      <div class="seccion">
+        <div class="seccion-header">
+          <div class="seccion-numero">5</div>
+          <h2>QUIEN REALIZA EL ENCUENTRO COMUNITARIO PCPI</h2>
+        </div>
+        <div class="seccion-body">
+          <div class="campo-grid">
+            <div class="campo">
+              <label>Nombre Completo</label>
+              <input type="text" id="encuestador_nombre" placeholder="Nombre del agente comunitario" autocomplete="off">
+            </div>
+            <div class="campo">
+              <label>Cédula</label>
+              <input type="text" id="encuestador_cedula" placeholder="Número de cédula" autocomplete="off">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acciones">
+        <button class="btn btn-primary" onclick="guardarEncuesta()">💾 Guardar y Descargar</button>
+        <button class="btn btn-secondary" onclick="resetFormulario()">✕ Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== PAGE: HISTORIAL ============================== -->
+  <div id="page-historial" class="page">
+    <div class="historial-header">
+      <div>
+        <div class="page-title">Historial de Encuestas</div>
+        <div class="page-subtitle">Todas las encuestas guardadas en este dispositivo</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <span class="contador" id="contador-total">0 encuestas</span>
+        <button class="btn btn-secondary" onclick="descargarTodas()" id="btn-dl-todas">↓ Descargar todas (JSON)</button>
+        <button class="btn btn-danger" onclick="borrarTodas()" id="btn-borrar-todas">🗑️ Borrar todas</button>
+        <span class="contador" id="status-exportacion">Ultima exportacion: —</span>
+      </div>
+    </div>
+    <div id="lista-encuestas"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ======================== CONFIG API ========================
+    const EXPORT_STATUS_KEY = "anexo16_last_export_all";
+
+    // ======================== DB ========================
+    let db;
+    const DB_NAME = "anexo16_db";
+    const STORE = "encuestas";
+
+    function initDB() {
+      return new Promise((res, rej) => {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = e => {
+          const d = e.target.result;
+          if (!d.objectStoreNames.contains(STORE)) {
+            const store = d.createObjectStore(STORE, { keyPath: "id" });
+            store.createIndex("fecha", "metadata.fecha_creacion", { unique: false });
+          }
+        };
+        req.onsuccess = e => { db = e.target.result; res(db); };
+        req.onerror = e => rej(e);
+      });
+    }
+
+    function dbGet(id) {
+      return new Promise((res, rej) => {
+        const tx = db.transaction(STORE, "readonly");
+        const req = tx.objectStore(STORE).get(id);
+        req.onsuccess = () => res(req.result);
+        req.onerror = rej;
+      });
+    }
+
+    function dbGetAll() {
+      return new Promise((res, rej) => {
+        const tx = db.transaction(STORE, "readonly");
+        const req = tx.objectStore(STORE).getAll();
+        req.onsuccess = () => res(req.result);
+        req.onerror = rej;
+      });
+    }
+
+    function dbPut(obj) {
+      return new Promise((res, rej) => {
+        const tx = db.transaction(STORE, "readwrite");
+        const req = tx.objectStore(STORE).put(obj);
+        req.onsuccess = () => res();
+        req.onerror = rej;
+      });
+    }
+
+    function dbClearAll() {
+      return new Promise((res, rej) => {
+        const tx = db.transaction(STORE, "readwrite");
+        const req = tx.objectStore(STORE).clear();
+        req.onsuccess = () => res();
+        req.onerror = rej;
+      });
+    }
+
+    // ======================== UUID ========================
+    function generarUID() {
+      const ts = Date.now().toString(36).toUpperCase();
+      const rand = Math.random().toString(36).substr(2, 8).toUpperCase();
+      return `A16-${ts}-${rand}`;
+    }
+
+    // ======================== TIPOS ========================
+    const TIPOS = {
+      gestion: {
+        nombre: "Gestión de Emociones",
+        icono: "💬",
+        evaluacion: [
+          {
+            objetivo: "Reconocimiento emocional",
+            indicador: "El niño(a) identifica y nombra sus emociones básicas (alegría, tristeza, enojo, miedo) durante la actividad.",
+            escala: "1 = No logrado\n2 = En proceso\n3 = Logrado\n4 = Destacado"
+          },
+          {
+            objetivo: "Regulación emocional",
+            indicador: "El niño(a) utiliza al menos una estrategia de autorregulación emocional propuesta durante el encuentro.",
+            escala: "1–4"
+          },
+          {
+            objetivo: "Expresión emocional positiva",
+            indicador: "El niño(a) expresa sus emociones de forma apropiada y segura en el contexto del encuentro comunitario.",
+            escala: "1–4"
+          }
+        ]
+      },
+      resolucion: {
+        nombre: "Resolución de Problemas",
+        icono: "🧩",
+        evaluacion: [
+          {
+            objetivo: "Identificación del problema",
+            indicador: "El niño(a) describe con sus propias palabras la situación problemática presentada en la actividad.",
+            escala: "1 = No logrado\n2 = En proceso\n3 = Logrado\n4 = Destacado"
+          },
+          {
+            objetivo: "Generación de alternativas",
+            indicador: "El niño(a) propone al menos dos soluciones posibles ante el problema planteado.",
+            escala: "1–4"
+          },
+          {
+            objetivo: "Toma de decisiones",
+            indicador: "El niño(a) elige una solución y argumenta brevemente su elección con apoyo del facilitador.",
+            escala: "1–4"
+          }
+        ]
+      },
+      movimiento1: {
+        nombre: "Movimiento y Expresión Corporal v1",
+        icono: "🏃",
+        evaluacion: [
+          {
+            objetivo: "Coordinación motora gruesa",
+            indicador: "El niño(a) ejecuta movimientos corporales coordinados según las consignas de la actividad (saltar, correr, rodar).",
+            escala: "1 = No logrado\n2 = En proceso\n3 = Logrado\n4 = Destacado"
+          },
+          {
+            objetivo: "Conciencia corporal",
+            indicador: "El niño(a) reconoce y nombra partes de su cuerpo mientras realiza la actividad de movimiento.",
+            escala: "1–4"
+          },
+          {
+            objetivo: "Expresión corporal creativa",
+            indicador: "El niño(a) utiliza su cuerpo para expresar ideas, emociones o personajes de forma espontánea durante la sesión.",
+            escala: "1–4"
+          }
+        ]
+      },
+      movimiento2: {
+        nombre: "Movimiento y Expresión Corporal v2",
+        icono: "🤸",
+        evaluacion: [
+          {
+            objetivo: "Equilibrio y postura",
+            indicador: "El niño(a) mantiene equilibrio en posiciones estáticas y dinámicas propuestas en la actividad.",
+            escala: "1 = No logrado\n2 = En proceso\n3 = Logrado\n4 = Destacado"
+          },
+          {
+            objetivo: "Ritmo y coordinación",
+            indicador: "El niño(a) sigue el ritmo propuesto (palmadas, música, consignas) coordinando movimientos de manos y pies.",
+            escala: "1–4"
+          },
+          {
+            objetivo: "Interacción en movimiento",
+            indicador: "El niño(a) participa en actividades de movimiento grupal respetando espacio y turno de sus pares.",
+            escala: "1–4"
+          }
+        ]
+      }
+    };
+
+    // ======================== ESTADO ========================
+    let tipoSeleccionado = null;
+    let filasSeguimiento = [];
+    let filtrActivo = "todas";
+    let editingId = null;
+
+    // ======================== NAV ========================
+    function showPage(p) {
+      document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+      document.getElementById('page-' + p).classList.add('active');
+      setActiveNav(p);
+      if (p === 'historial') cargarHistorial();
+    }
+
+    function setActiveNav(p) {
+      const nav = document.querySelectorAll('.nav-btn');
+      nav.forEach(x => x.classList.remove('active'));
+      if (p === 'nueva' && nav[0]) nav[0].classList.add('active');
+      if (p === 'historial' && nav[1]) nav[1].classList.add('active');
+    }
+
+    // ======================== TIPO ========================
+    function seleccionarTipo(tipo) {
+      tipoSeleccionado = tipo;
+      document.querySelectorAll('.tipo-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById('tipo-' + tipo).classList.add('selected');
+      document.getElementById('btn-iniciar').disabled = false;
+    }
+
+    function iniciarEncuesta() {
+      if (!tipoSeleccionado) return;
+      openFormulario(tipoSeleccionado, true);
+      // Fecha hoy
+      document.getElementById('fecha_encuentro').value = new Date().toISOString().split('T')[0];
+      renderTablaEvaluacion();
+      renderTbodySeguimiento();
+      window.scrollTo(0, 0);
+    }
+
+    function openFormulario(tipo, setToday) {
+      const t = TIPOS[tipo];
+      if (!t) return;
+      tipoSeleccionado = tipo;
+      document.querySelectorAll('.tipo-card').forEach(c => c.classList.remove('selected'));
+      const card = document.getElementById('tipo-' + tipo);
+      if (card) card.classList.add('selected');
+      document.getElementById('btn-iniciar').disabled = false;
+      document.getElementById('step-tipo').style.display = 'none';
+      document.getElementById('step-formulario').style.display = 'block';
+      document.getElementById('tipo-badge-display').innerHTML = `
+    <div class="tipo-seleccionado" onclick="resetFormulario()">
+      ${t.icono} ${t.nombre} <span class="cambiar">(cambiar)</span>
+    </div>`;
+      if (setToday) document.getElementById('fecha_encuentro').value = new Date().toISOString().split('T')[0];
+      renderTablaEvaluacion();
+    }
+
+    function resetFormulario() {
+      tipoSeleccionado = null;
+      filasSeguimiento = [];
+      editingId = null;
+      document.querySelectorAll('.tipo-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById('btn-iniciar').disabled = true;
+      document.getElementById('step-tipo').style.display = 'block';
+      document.getElementById('step-formulario').style.display = 'none';
+      document.getElementById('step-formulario').querySelectorAll('input,select,textarea').forEach(el => {
+        if (el.type === 'number') el.value = 0;
+        else el.value = '';
+      });
+    }
+
+    // ======================== EVALUACION TABLE ========================
+    function renderTablaEvaluacion() {
+      const tipo = TIPOS[tipoSeleccionado];
+      let html = `<thead><tr>
+    <th class="objetivo-cell">Objetivo</th>
+    <th class="indicador-cell">Indicador de Logro</th>
+    <th class="escala-cell">Escala</th>
+  </tr></thead><tbody>`;
+      tipo.evaluacion.forEach(r => {
+        html += `<tr>
+      <td class="objetivo-cell">${r.objetivo}</td>
+      <td class="indicador-cell">${r.indicador}</td>
+      <td class="escala-cell" style="white-space:pre-line">${r.escala}</td>
+    </tr>`;
+      });
+      html += '</tbody>';
+      document.getElementById('tabla-evaluacion').innerHTML = html;
+    }
+
+    // ======================== SEGUIMIENTO ========================
+    function renderTbodySeguimiento() {
+      const tbody = document.getElementById('tbody-seguimiento');
+      if (filasSeguimiento.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--gris-texto);padding:18px;font-size:13px;">No hay niños agregados aún</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = filasSeguimiento.map((f, i) => `
+    <tr data-idx="${i}">
+      <td><input type="text" placeholder="Nombre completo" value="${f.nombre}" oninput="updateFila(${i},'nombre',this.value)"></td>
+      <td class="age-col">
+        <div class="stepper-wrap">
+          <button class="stepper-btn" style="min-height:36px;padding:0 10px" onclick="stepperFila(${i},'edad_meses',-1)">−</button>
+          <input type="number" min="0" max="120" value="${f.edad_meses}" oninput="updateFila(${i},'edad_meses',+this.value)" style="font-size:13px">
+          <button class="stepper-btn" style="min-height:36px;padding:0 10px" onclick="stepperFila(${i},'edad_meses',1)">+</button>
+        </div>
+      </td>
+      <td>
+        <select onchange="updateFila(${i},'obj1',this.value)">
+          <option value="" ${!f.obj1 ? 'selected' : ''}>Seleccionar…</option>
+          <option value="NO" ${f.obj1 === 'NO' ? 'selected' : ''}>No se Observó (N.O)</option>
+          <option value="EP" ${f.obj1 === 'EP' ? 'selected' : ''}>En Proceso (E.P)</option>
+          <option value="LA" ${f.obj1 === 'LA' ? 'selected' : ''}>Logro Alcanzado (L.A)</option>
+        </select>
+      </td>
+      <td>
+        <select onchange="updateFila(${i},'obj2',this.value)">
+          <option value="" ${!f.obj2 ? 'selected' : ''}>Seleccionar…</option>
+          <option value="NO" ${f.obj2 === 'NO' ? 'selected' : ''}>No se Observó (N.O)</option>
+          <option value="EP" ${f.obj2 === 'EP' ? 'selected' : ''}>En Proceso (E.P)</option>
+          <option value="LA" ${f.obj2 === 'LA' ? 'selected' : ''}>Logro Alcanzado (L.A)</option>
+        </select>
+      </td>
+      <td>
+        <select onchange="updateFila(${i},'obj3',this.value)">
+          <option value="" ${!f.obj3 ? 'selected' : ''}>Seleccionar…</option>
+          <option value="NO" ${f.obj3 === 'NO' ? 'selected' : ''}>No se Observó (N.O)</option>
+          <option value="EP" ${f.obj3 === 'EP' ? 'selected' : ''}>En Proceso (E.P)</option>
+          <option value="LA" ${f.obj3 === 'LA' ? 'selected' : ''}>Logro Alcanzado (L.A)</option>
+        </select>
+      </td>
+      <td>
+        <select onchange="updateFila(${i},'obj4',this.value)">
+          <option value="" ${!f.obj4 ? 'selected' : ''}>Seleccionar…</option>
+          <option value="NO" ${f.obj4 === 'NO' ? 'selected' : ''}>No se Observó (N.O)</option>
+          <option value="EP" ${f.obj4 === 'EP' ? 'selected' : ''}>En Proceso (E.P)</option>
+          <option value="LA" ${f.obj4 === 'LA' ? 'selected' : ''}>Logro Alcanzado (L.A)</option>
+        </select>
+      </td>
+      <td>
+        <select onchange="updateFila(${i},'objetivo_observacion_cuidador',this.value)">
+          <option value="" ${!f.objetivo_observacion_cuidador ? 'selected' : ''}>Seleccionar…</option>
+          <option value="constante" ${f.objetivo_observacion_cuidador === 'constante' ? 'selected' : ''}>Constante</option>
+          <option value="intermitente" ${f.objetivo_observacion_cuidador === 'intermitente' ? 'selected' : ''}>Intermitente</option>
+          <option value="no_se_observo" ${f.objetivo_observacion_cuidador === 'no_se_observo' ? 'selected' : ''}>No se Observó</option>
+        </select>
+      </td>
+      <td style="text-align:center">
+        <button class="btn-eliminar" onclick="eliminarFila(${i})">✕</button>
+      </td>
+    </tr>`).join('');
+    }
+
+    function agregarNino() {
+      filasSeguimiento.push({ nombre: '', edad_meses: 0, obj1: '', obj2: '', obj3: '', obj4: '', objetivo_observacion_cuidador: '' });
+      renderTbodySeguimiento();
+    }
+
+    function updateFila(i, campo, val) {
+      filasSeguimiento[i][campo] = val;
+    }
+
+    function stepperFila(i, campo, delta) {
+      filasSeguimiento[i][campo] = Math.max(0, (filasSeguimiento[i][campo] || 0) + delta);
+      renderTbodySeguimiento();
+    }
+
+    function eliminarFila(i) {
+      filasSeguimiento.splice(i, 1);
+      renderTbodySeguimiento();
+    }
+
+    // ======================== STEPPER ========================
+    function stepperChange(id, delta) {
+      const el = document.getElementById(id);
+      el.value = Math.max(0, parseInt(el.value || 0) + delta);
+    }
+
+    // ======================== GUARDAR ========================
+    async function guardarEncuesta() {
+      const comunidad = document.getElementById('comunidad').value.trim();
+      const fecha = document.getElementById('fecha_encuentro').value;
+      const encuestador_nombre = document.getElementById('encuestador_nombre').value.trim();
+
+      if (!comunidad || !fecha || !encuestador_nombre) {
+        showToast('Complete los campos obligatorios: Comunidad, Fecha y Nombre del Encuestador', true);
+        return;
+      }
+
+      const tipo = TIPOS[tipoSeleccionado];
+      const existing = editingId ? await dbGet(editingId) : null;
+      const encuesta = {
+        id: editingId || generarUID(),
+        metadata: {
+          tipo_anexo: tipoSeleccionado,
+          nombre_tipo: tipo.nombre,
+          fecha_creacion: existing?.metadata?.fecha_creacion || new Date().toISOString(),
+          fecha_modificacion: new Date().toISOString(),
+          enviado_api: existing?.metadata?.enviado_api || false,
+          fecha_envio_api: existing?.metadata?.fecha_envio_api || null
+        },
+        datos_generales: {
+          comunidad,
+          fecha_encuentro: fecha,
+          numero_gateadores_0_18_meses: parseInt(document.getElementById('gateadores').value) || 0,
+          total_beneficiarios_ug: parseInt(document.getElementById('total_beneficiarios_ug').value) || 0,
+          beneficiarios_asistentes: parseInt(document.getElementById('beneficiarios_asistentes').value) || 0,
+          numero_caminadores_19_48_meses: parseInt(document.getElementById('caminadores').value) || 0
+        },
+        seguimiento_individual: filasSeguimiento.map(f => ({
+          nombre_nino: f.nombre,
+          edad_meses: f.edad_meses,
+          obj1: f.obj1,
+          obj2: f.obj2,
+          obj3: f.obj3,
+          obj4: f.obj4,
+          objetivo_observacion_cuidador: f.objetivo_observacion_cuidador
+        })),
+        observaciones_cualitativas_discapacidad_inclusion: document.getElementById('observaciones_cualitativas').value.trim(),
+        agente_comunitario: {
+          nombre: encuestador_nombre,
+          cedula: document.getElementById('encuestador_cedula').value.trim()
+        }
+      };
+
+      await dbPut(encuesta);
+      descargarJSON(encuesta, encuesta.id);
+      showToast(editingId ? '✓ Encuesta actualizada correctamente' : '✓ Encuesta guardada y descargada correctamente');
+      resetFormulario();
+    }
+
+    // ======================== DOWNLOAD ========================
+    function descargarJSON(obj, nombre) {
+      const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${nombre}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    async function descargarTodas() {
+      const todas = await dbGetAll();
+      if (!todas.length) { showToast('No hay encuestas guardadas', true); return; }
+      descargarJSON({ total: todas.length, exportado: new Date().toISOString(), encuestas: todas }, `ANEXO16_EXPORTACION_${Date.now()}`);
+      const stamp = new Date().toISOString();
+      localStorage.setItem(EXPORT_STATUS_KEY, stamp);
+      actualizarEstadoExportacion();
+      showToast('✓ Exportacion total realizada');
+    }
+
+    async function descargarUna(id) {
+      const enc = await dbGet(id);
+      if (enc) descargarJSON(enc, enc.id);
+    }
+
+    // ======================== BORRAR TODO ========================
+    async function borrarTodas() {
+      const total = (await dbGetAll()).length;
+      if (!total) { showToast('No hay encuestas para borrar', true); return; }
+      const confirmar = confirm('Esta seguro de borrar todas las encuestas? Esta accion no se puede deshacer.');
+      if (!confirmar) return;
+      await dbClearAll();
+      cargarHistorial();
+      showToast('✓ Todas las encuestas fueron borradas');
+    }
+
+    // ======================== HISTORIAL ========================
+    let _todasEncuestas = [];
+
+    async function cargarHistorial() {
+      _todasEncuestas = await dbGetAll();
+      _todasEncuestas.sort((a, b) => new Date(b.metadata.fecha_creacion) - new Date(a.metadata.fecha_creacion));
+      document.getElementById('contador-total').textContent = `${_todasEncuestas.length} encuesta${_todasEncuestas.length !== 1 ? 's' : ''}`;
+      renderHistorial(_todasEncuestas);
+    }
+
+    function renderHistorial(lista) {
+      const cont = document.getElementById('lista-encuestas');
+      if (!lista.length) {
+        cont.innerHTML = `<div class="empty-state"><div class="icon">📋</div><h3>Sin resultados</h3><p>No hay encuestas para mostrar con este filtro.</p></div>`;
+        return;
+      }
+      cont.innerHTML = lista.map(e => {
+        const fecha = new Date(e.metadata.fecha_creacion).toLocaleDateString('es-CR', { day: '2-digit', month: 'long', year: 'numeric' });
+        const tipo = TIPOS[e.metadata.tipo_anexo];
+        return `
+    <div class="encuesta-card">
+      <div class="encuesta-info">
+        <div class="encuesta-id">${e.id}</div>
+        <div class="encuesta-titulo">${tipo ? tipo.icono : ''} ${e.metadata.nombre_tipo} — ${e.datos_generales.comunidad || 'Sin comunidad'}</div>
+        <div class="encuesta-meta">${fecha} · ${e.datos_generales.beneficiarios_asistentes} asistentes · ${e.seguimiento_individual.length} niños registrados · ${e.agente_comunitario.nombre || '—'}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <div class="encuesta-acciones">
+          <button class="btn btn-primary" onclick="editarEncuesta('${e.id}')">✏️ Editar</button>
+          <button class="btn btn-secondary" onclick="descargarUna('${e.id}')">↓ JSON</button>
+        </div>
+      </div>
+    </div>`;
+      }).join('');
+    }
+
+    function actualizarEstadoExportacion() {
+      const el = document.getElementById('status-exportacion');
+      if (!el) return;
+      const stamp = localStorage.getItem(EXPORT_STATUS_KEY);
+      if (!stamp) {
+        el.textContent = 'Ultima exportacion: —';
+        return;
+      }
+      const fecha = new Date(stamp).toLocaleString('es-CR');
+      el.textContent = `Ultima exportacion: ${fecha}`;
+    }
+
+    async function editarEncuesta(id) {
+      const enc = await dbGet(id);
+      if (!enc) return;
+      editingId = enc.id;
+      showPage('nueva');
+      openFormulario(enc.metadata?.tipo_anexo, false);
+
+      document.getElementById('comunidad').value = enc.datos_generales?.comunidad || '';
+      document.getElementById('fecha_encuentro').value = enc.datos_generales?.fecha_encuentro || '';
+      document.getElementById('gateadores').value = enc.datos_generales?.numero_gateadores_0_18_meses ?? 0;
+      document.getElementById('total_beneficiarios_ug').value = enc.datos_generales?.total_beneficiarios_ug ?? 0;
+      document.getElementById('beneficiarios_asistentes').value = enc.datos_generales?.beneficiarios_asistentes ?? 0;
+      document.getElementById('caminadores').value = enc.datos_generales?.numero_caminadores_19_48_meses ?? 0;
+      document.getElementById('observaciones_cualitativas').value = enc.observaciones_cualitativas_discapacidad_inclusion || '';
+      document.getElementById('encuestador_nombre').value = enc.agente_comunitario?.nombre || '';
+      document.getElementById('encuestador_cedula').value = enc.agente_comunitario?.cedula || '';
+
+      filasSeguimiento = (enc.seguimiento_individual || []).map(f => ({
+        nombre: f.nombre_nino || '',
+        edad_meses: f.edad_meses ?? 0,
+        obj1: f.obj1 || f.objetivo_observacion || '',
+        obj2: f.obj2 || '',
+        obj3: f.obj3 || '',
+        obj4: f.obj4 || '',
+        objetivo_observacion_cuidador: f.objetivo_observacion_cuidador || ''
+      }));
+      renderTbodySeguimiento();
+      window.scrollTo(0, 0);
+    }
+
+    // ======================== TOAST ========================
+    function showToast(msg, error = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show' + (error ? ' error' : '');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => { t.className = 'toast'; }, 3200);
+    }
+
+    // ======================== INIT ========================
+    initDB().then(() => {
+      console.log('IndexedDB lista');
+      actualizarEstadoExportacion();
+    }).catch(e => {
+      showToast('Error al iniciar base de datos', true);
+      console.error(e);
+    });
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        let updatePrompted = false;
+
+        function promptUserToRefresh(registration) {
+          if (updatePrompted) return;
+          updatePrompted = true;
+          const aceptar = confirm('Hay una nueva version disponible. Deseas actualizar ahora?');
+          if (aceptar && registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+        }
+
+        navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+          if (registration.waiting) {
+            promptUserToRefresh(registration);
+          }
+
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (!newWorker) return;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                promptUserToRefresh(registration);
+              }
+            });
+          });
+        });
+
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          window.location.reload();
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>
