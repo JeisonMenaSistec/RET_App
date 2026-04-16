@@ -4,6 +4,9 @@ const URLS_A_CACHEAR = [
   './index.html',
   './anexo16.html',
   './anexo17.html',
+  './anexo8.html',
+  './anexo20.html',
+  './anexo21.html',
   './manifest.webmanifest',
   './logo192.jpg',
   './logo512.jpg'

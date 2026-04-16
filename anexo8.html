@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>ANEXO 8 — RET · UNICEF</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --verde: #1a5c3a;
+      --verde-medio: #2e7d52;
+      --verde-claro: #4caf80;
+      --verde-bg: #e8f5ee;
+      --naranja: #e07b2a;
+      --naranja-claro: #f5a35a;
+      --naranja-bg: #fdf0e5;
+      --azul: #1565c0;
+      --azul-claro: #4a90d9;
+      --azul-bg: #e8f0fb;
+      --rojo: #c62828;
+      --rojo-bg: #fdecea;
+      --gris-oscuro: #2c2c2c;
+      --gris: #5a5a5a;
+      --gris-claro: #9e9e9e;
+      --gris-borde: #d0d0d0;
+      --gris-bg: #f5f5f5;
+      --blanco: #ffffff;
+      --sombra: 0 2px 12px rgba(0, 0, 0, 0.12);
+      --sombra-fuerte: 0 4px 24px rgba(0, 0, 0, 0.2);
+      --radio: 12px;
+      --radio-btn: 8px;
+      --font-titulo: 'Sora', sans-serif;
+      --font-cuerpo: 'Sora', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --transicion: 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-cuerpo);
+      background: var(--verde-bg);
+      color: var(--gris-oscuro);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== HEADER ===== */
+    #app-header {
+      background: var(--verde);
+      color: white;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    #app-header .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-badge {
+      background: white;
+      color: var(--verde);
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+
+    #app-header h1 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      line-height: 1.2;
+    }
+
+    #app-header p {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 2px;
+      font-weight: 300;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-family: var(--font-cuerpo);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: white;
+      color: var(--verde);
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    /* ===== NAV TABS ===== */
+    #nav-tabs {
+      display: flex;
+      background: var(--verde);
+      border-bottom: 3px solid var(--verde-claro);
+    }
+
+    .nav-tab {
+      flex: 1;
+      padding: 13px 8px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: var(--font-cuerpo);
+      transition: var(--transicion);
+      letter-spacing: 0.3px;
+    }
+
+    .nav-tab.active {
+      color: var(--blanco);
+      background: rgba(255, 255, 255, 0.12);
+      border-bottom: 3px solid var(--verde-claro);
+      margin-bottom: -3px;
+    }
+
+    .nav-tab:hover:not(.active) {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* ===== VIEWS ===== */
+    .view {
+      display: none;
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    /* ===== WELCOME SCREEN ===== */
+    #welcome-screen {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      padding: 32px;
+      box-shadow: var(--sombra);
+      margin-bottom: 20px;
+      border-left: 5px solid var(--verde-claro);
+    }
+
+    #welcome-screen .info-banner {
+      background: var(--verde-bg);
+      border: 1.5px solid var(--verde-claro);
+      border-radius: var(--radio);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--verde);
+      font-style: italic;
+    }
+
+    #welcome-screen h2 {
+      font-family: var(--font-titulo);
+      color: var(--verde);
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+
+    #welcome-screen p {
+      color: var(--gris);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--verde-medio), var(--verde));
+      color: var(--blanco);
+      border: none;
+      border-radius: var(--radio-btn);
+      padding: 15px 32px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: var(--font-cuerpo);
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      transition: var(--transicion);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--blanco);
+      color: var(--verde);
+      border: 2px solid var(--verde-claro);
+      border-radius: var(--radio-btn);
+      padding: 13px 28px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: var(--font-cuerpo);
+      cursor: pointer;
+      transition: var(--transicion);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-secondary:hover {
+      background: var(--verde-bg);
+    }
+
+    .btn-danger {
+      background: var(--rojo-bg);
+      color: var(--rojo);
+      border: 2px solid var(--rojo);
+      border-radius: var(--radio-btn);
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: var(--font-cuerpo);
+      cursor: pointer;
+      transition: var(--transicion);
+    }
+
+    .btn-naranja {
+      background: linear-gradient(135deg, var(--naranja-claro), var(--naranja));
+      color: var(--blanco);
+      border: none;
+      border-radius: var(--radio-btn);
+      padding: 13px 26px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: var(--font-cuerpo);
+      cursor: pointer;
+      transition: var(--transicion);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-azul {
+      background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+      color: var(--blanco);
+      border: none;
+      border-radius: var(--radio-btn);
+      padding: 13px 26px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: var(--font-cuerpo);
+      cursor: pointer;
+      transition: var(--transicion);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    #progress-container {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--sombra);
+      display: none;
+    }
+
+    #progress-container.visible {
+      display: block;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+    }
+
+    .progress-info .section-name {
+      font-weight: 600;
+      color: var(--verde);
+    }
+
+    .progress-info .step-count {
+      color: var(--gris);
+      font-family: var(--font-mono);
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background: var(--gris-borde);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--verde-claro), var(--verde-medio));
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    /* ===== FORM CARD ===== */
+    .form-card {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      padding: 28px;
+      margin-bottom: 16px;
+      box-shadow: var(--sombra);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--verde-bg);
+    }
+
+    .section-number {
+      background: var(--verde);
+      color: var(--blanco);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-family: var(--font-titulo);
+      font-size: 1.15rem;
+      color: var(--verde);
+      line-height: 1.3;
+    }
+
+    .subsection-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--verde-medio);
+      background: var(--verde-bg);
+      border-left: 4px solid var(--verde-claro);
+      padding: 10px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0 16px;
+    }
+
+    .subsection-desc {
+      font-size: 0.85rem;
+      color: var(--gris);
+      background: var(--naranja-bg);
+      border-left: 4px solid var(--naranja-claro);
+      padding: 10px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: -8px 0 16px;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    /* ===== QUESTION FIELDS ===== */
+    .field-group {
+      margin-bottom: 20px;
+    }
+
+    .field-label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.93rem;
+      color: var(--gris-oscuro);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .field-label .q-num {
+      color: var(--verde-claro);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      margin-right: 4px;
+    }
+
+    /* text/date/number inputs */
+    .field-input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radio-btn);
+      font-size: 1rem;
+      font-family: var(--font-cuerpo);
+      color: var(--gris-oscuro);
+      background: var(--gris-bg);
+      transition: border-color var(--transicion);
+      -webkit-appearance: none;
+    }
+
+    .field-input:focus {
+      outline: none;
+      border-color: var(--verde-claro);
+      background: var(--blanco);
+    }
+
+    input[type="date"].field-input {
+      font-family: var(--font-mono);
+    }
+
+    /* ===== RADIO / CHECKBOX OPTIONS ===== */
+    .options-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .option-btn {
+      background: var(--gris-bg);
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radio-btn);
+      padding: 12px 18px;
+      font-size: 0.9rem;
+      font-family: var(--font-cuerpo);
+      color: var(--gris-oscuro);
+      cursor: pointer;
+      transition: all var(--transicion);
+      user-select: none;
+      -webkit-user-select: none;
+      min-width: 80px;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .option-btn:hover {
+      border-color: var(--verde-claro);
+      background: var(--verde-bg);
+    }
+
+    .option-btn.selected {
+      background: var(--verde);
+      border-color: var(--verde);
+      color: var(--blanco);
+      font-weight: 600;
+    }
+
+    .option-btn.multi.selected {
+      background: var(--azul);
+      border-color: var(--azul);
+      color: var(--blanco);
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .options-list .option-btn {
+      text-align: left;
+      width: 100%;
+    }
+
+    /* ===== INLINE EXTRA TEXT ===== */
+    .inline-extra {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .inline-extra.visible {
+      display: block;
+    }
+
+    /* ===== NAVIGATION BUTTONS ===== */
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    /* ===== SURVEYS LIST ===== */
+    .surveys-toolbar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      background: var(--blanco);
+      padding: 16px;
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      align-items: center;
+    }
+
+    .surveys-toolbar .spacer {
+      flex: 1;
+    }
+
+    .survey-card {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      box-shadow: var(--sombra);
+      border-left: 5px solid var(--verde-claro);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .survey-card .survey-id {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--gris-claro);
+      margin-top: 4px;
+    }
+
+    .survey-card .survey-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--gris-oscuro);
+    }
+
+    .survey-card .survey-meta {
+      font-size: 0.85rem;
+      color: var(--gris);
+      margin-top: 3px;
+    }
+
+    .survey-card .survey-info {
+      flex: 1;
+    }
+
+    .survey-card .survey-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      border-radius: 6px;
+      border: none;
+      font-family: var(--font-cuerpo);
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transicion);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-sm.verde {
+      background: var(--verde-bg);
+      color: var(--verde-medio);
+      border: 1.5px solid var(--verde-claro);
+    }
+
+    .btn-sm.azul {
+      background: var(--azul-bg);
+      color: var(--azul);
+      border: 1.5px solid var(--azul-claro);
+    }
+
+    .btn-sm.naranja {
+      background: var(--naranja-bg);
+      color: var(--naranja);
+      border: 1.5px solid var(--naranja-claro);
+    }
+
+    .btn-sm.rojo {
+      background: var(--rojo-bg);
+      color: var(--rojo);
+      border: 1.5px solid var(--rojo);
+    }
+
+    .btn-sm:hover {
+      opacity: 0.8;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gris-claro);
+    }
+
+    .empty-state .icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .empty-state p {
+      font-size: 1rem;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      padding: 28px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: var(--sombra-fuerte);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-box h3 {
+      font-family: var(--font-titulo);
+      color: var(--verde);
+      margin-bottom: 16px;
+      font-size: 1.2rem;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* ===== TOAST ===== */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--gris-oscuro);
+      color: var(--blanco);
+      padding: 14px 28px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      z-index: 9999;
+      transition: transform 0.35s ease;
+      white-space: nowrap;
+      box-shadow: var(--sombra-fuerte);
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #toast.success {
+      background: var(--verde-medio);
+    }
+
+    #toast.error {
+      background: var(--rojo);
+    }
+
+    /* ===== IMAGE UPLOAD ===== */
+    .image-upload-area {
+      border: 2.5px dashed var(--gris-borde);
+      border-radius: var(--radio);
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transicion);
+      background: var(--gris-bg);
+      position: relative;
+    }
+
+    .image-upload-area:hover {
+      border-color: var(--verde-claro);
+      background: var(--verde-bg);
+    }
+
+    .image-upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .image-upload-area .upload-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .image-upload-area p {
+      color: var(--gris);
+      font-size: 0.9rem;
+    }
+
+    .image-preview {
+      margin-top: 12px;
+    }
+
+    .image-preview img {
+      max-width: 100%;
+      border-radius: var(--radio-btn);
+      box-shadow: var(--sombra);
+    }
+
+    /* ===== VIEW-ONLY MODE ===== */
+    .readonly-field {
+      background: var(--gris-bg);
+      border: 1.5px solid var(--gris-borde);
+      border-radius: var(--radio-btn);
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      color: var(--gris-oscuro);
+      margin-bottom: 4px;
+    }
+
+    .readonly-label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--gris);
+      margin-bottom: 4px;
+      margin-top: 14px;
+    }
+
+    .readonly-chip {
+      display: inline-block;
+      background: var(--verde);
+      color: var(--blanco);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.82rem;
+      margin: 3px 3px 3px 0;
+    }
+
+    /* ===== IMPORT ZONE ===== */
+    .import-zone {
+      border: 2.5px dashed var(--azul-claro);
+      border-radius: var(--radio);
+      padding: 40px;
+      text-align: center;
+      background: var(--azul-bg);
+      cursor: pointer;
+      position: relative;
+      transition: var(--transicion);
+    }
+
+    .import-zone:hover {
+      border-color: var(--azul);
+    }
+
+    .import-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    hr.field-divider {
+      border: none;
+      border-top: 1.5px solid var(--verde-bg);
+      margin: 20px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app-header">
+    <div class="logo-area">
+      <div class="logo-badge">RET · UNICEF</div>
+      <div>
+        <h1>ANEXO 8 — Caracterización</h1>
+        <p>Formulario principal</p>
+      </div>
+    </div>
+    <div class="header-nav">
+      <button class="nav-btn" onclick="location.href='index.html'">↩︎ Menú</button>
+    </div>
+  </div>
+
+  <div id="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('nueva')">📋 Nueva Encuesta</button>
+    <button class="nav-tab" onclick="showTab('encuestas')">📂 Historial</button>
+    <button class="nav-tab" onclick="showTab('importar')">📥 Importar</button>
+  </div>
+
+  <!-- ===== TAB: NUEVA ENCUESTA ===== -->
+  <div class="view active" id="tab-nueva">
+
+    <!-- WELCOME -->
+    <div id="welcome-screen">
+      <div class="info-banner"
+        style="background:#f7fbff; border:1px solid #cfe2f3; border-left:6px solid #0d6efd; border-radius:10px; padding:18px; font-family:Arial, sans-serif; line-height:1.7; color:#1f2937; font-size:15px;">
+        <div style="font-size:18px; margin-bottom:12px; color:#0d6efd;">
+          <span style="font-size:20px;">💬</span>
+          <strong>INFORMACIÓN PARA EL PARTICIPANTE:</strong>
+        </div>
+
+        <p style="margin:0 0 12px 0;">
+          <em>Hola, soy agente comunitario de ______________________________</em> estamos trabajando en una encuesta
+          para realizar un proceso de caracterización como elemento del programa supervisado por
+          <strong>DISPROS</strong>, para la implementación del servicio de la <strong>MODALIDAD COMUNITARIA CON ENFOQUE
+            INTERCULTURAL E INCLUSIVO</strong> – este programa prioriza su trabajo en <strong>entornos
+            comunitarios</strong>; me gustaría conversar con usted acerca de algunos aspectos generales de
+          <strong>salud</strong> y <strong>bienestar</strong> de su familia y sus <strong>niños/as</strong>.
+        </p>
+
+        <p style="margin:0 0 12px 0;">
+          <span style="font-size:16px;">⏳</span>
+          La entrevista durará aproximadamente <strong>60 minutos</strong>.
+          Toda la información que obtengamos en esta conversación se mantendrá <strong><em>estrictamente
+              confidencial</em></strong>.
+          Yo estaré anotando sus respuestas, pero el acceso a esta información está restringido solamente para los
+          propósitos de este nuevo proyecto.
+        </p>
+
+        <p style="margin:0 0 12px 0;">
+          <span style="font-size:16px;">🙋</span>
+          Su participación es <strong>totalmente voluntaria</strong>.
+          Si no desea responder a alguna pregunta o desea detener la entrevista, por favor, <em>hágamelo saber</em>.
+        </p>
+
+        <p style="margin:0;">
+          <span style="font-size:16px;">📞</span>
+          ¿Tiene usted alguna pregunta al respecto? Aquí le voy a dejar mi número de contacto, por si después de la
+          entrevista, tiene alguna pregunta que quisiera hacerme.
+        </p>
+      </div>
+      <h2>Bienvenido/a al formulario ANEXO 8</h2>
+      <p>Complete cada
+        sección con los datos del hogar encuestado.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="startSurvey()">✏️ Iniciar Nueva Encuesta</button>
+      </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div id="progress-container">
+      <div class="progress-info">
+        <span class="section-name" id="progress-section-name">Sección 1</span>
+        <span class="step-count" id="progress-step-count">0 / 8</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- FORM SECTIONS -->
+    <div id="form-container"></div>
+
+  </div>
+
+  <!-- ===== TAB: ENCUESTAS ===== -->
+  <div class="view" id="tab-encuestas">
+    <div class="surveys-toolbar">
+      <strong style="color:var(--verde);font-size:1rem;">📂 Encuestas Registradas</strong>
+      <span class="spacer"></span>
+      <button class="btn-azul" onclick="downloadAllSurveys()">⬇️ Descargar Todas</button>
+    </div>
+    <div id="surveys-list"></div>
+  </div>
+
+  <!-- ===== TAB: IMPORTAR ===== -->
+  <div class="view" id="tab-importar">
+    <div class="form-card">
+      <div class="section-header">
+        <div class="section-number">📥</div>
+        <div class="section-title">Importar Encuesta desde archivo de exportacion</div>
+      </div>
+      <div class="import-zone" id="import-zone">
+        <input type="file" accept=".json" onchange="importJSON(event)">
+        <div style="font-size:2.5rem;margin-bottom:10px;">📂</div>
+        <p style="font-weight:600;color:var(--azul);margin-bottom:6px;">Toque para seleccionar archivo de exportacion
+        </p>
+        <p style="color:var(--gris);font-size:0.85rem;">Compatible con el formato de descarga de esta aplicación</p>
+      </div>
+      <div id="import-result" style="margin-top:16px;"></div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL VISUALIZAR ===== -->
+  <div class="modal-overlay" id="modal-view">
+    <div class="modal-box" style="max-width:700px;">
+      <h3>📋 Detalle de Encuesta</h3>
+      <div id="modal-view-content"></div>
+      <div class="modal-btns">
+        <button class="btn-secondary" onclick="closeModal('modal-view')">Cerrar</button>
+        <button class="btn-primary" id="modal-edit-btn" onclick="">✏️ Editar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL CONFIRMAR BORRAR ===== -->
+  <div class="modal-overlay" id="modal-delete">
+    <div class="modal-box">
+      <h3>⚠️ Confirmar eliminación</h3>
+      <p style="color:var(--gris);margin-bottom:8px;">¿Está seguro de que desea eliminar esta encuesta? Esta acción no
+        se puede deshacer.</p>
+      <div class="modal-btns">
+        <button class="btn-secondary" onclick="closeModal('modal-delete')">Cancelar</button>
+        <button class="btn-danger" id="confirm-delete-btn">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    // =============================================
+    // DATABASE
+    // =============================================
+    let db;
+    function openDB() {
+      return new Promise((res, rej) => {
+        const req = indexedDB.open('Anexo8DB', 1);
+        req.onupgradeneeded = e => {
+          const d = e.target.result;
+          if (!d.objectStoreNames.contains('surveys')) {
+            const store = d.createObjectStore('surveys', { keyPath: 'encuesta_id' });
+            store.createIndex('fecha_creacion', 'fecha_creacion');
+          }
+        };
+        req.onsuccess = e => { db = e.target.result; res(db); };
+        req.onerror = e => rej(e);
+      });
+    }
+    function saveSurvey(data) {
+      return new Promise((res, rej) => {
+        const tx = db.transaction('surveys', 'readwrite');
+        tx.objectStore('surveys').put(data);
+        tx.oncomplete = () => res();
+        tx.onerror = e => rej(e);
+      });
+    }
+    function getAllSurveys() {
+      return new Promise((res, rej) => {
+        const tx = db.transaction('surveys', 'readonly');
+        const req = tx.objectStore('surveys').getAll();
+        req.onsuccess = e => res(e.target.result);
+        req.onerror = e => rej(e);
+      });
+    }
+    function deleteSurvey(id) {
+      return new Promise((res, rej) => {
+        const tx = db.transaction('surveys', 'readwrite');
+        tx.objectStore('surveys').delete(id);
+        tx.oncomplete = () => res();
+        tx.onerror = e => rej(e);
+      });
+    }
+
+    // =============================================
+    // STATE
+    // =============================================
+    let currentSurvey = {};
+    let currentSection = 0;
+    let editingId = null;
+
+    // =============================================
+    // UNIQUE ID
+    // =============================================
+    function getTimestampCompact() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mi = String(d.getMinutes()).padStart(2, '0');
+      const ss = String(d.getSeconds()).padStart(2, '0');
+      return `${yyyy}${mm}${dd}${hh}${mi}${ss}`;
+    }
+
+    function generateId() {
+      const rand = Math.random().toString(36).substr(2, 6).toUpperCase();
+      return `a8_${getTimestampCompact()}_${rand}`;
+    }
+
+    function getTodayInputValue() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // =============================================
+    // TABS
+    // =============================================
+    function showTab(tab) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      const idx = ['nueva', 'encuestas', 'importar'].indexOf(tab);
+      document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+      if (tab === 'encuestas') renderSurveysList();
+    }
+
+    // =============================================
+    // TOAST
+    // =============================================
+    function showToast(msg, type = '') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'show ' + type;
+      setTimeout(() => t.className = '', 3000);
+    }
+
+    // =============================================
+    // MODAL
+    // =============================================
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    // =============================================
+    // FORM BUILDER
+    // =============================================
+    const SECTIONS = [
+      { id: 's1', title: '1. Información de la Entidad', num: '1' },
+      { id: 's2', title: '2. Composición del Hogar y Estructura Familiar', num: '2' },
+      { id: 's3', title: '3. Información de Niños/as de 0-8 Años', num: '3' },
+      { id: 's3_1', title: '3.1 Atención en Salud y Otros Cuidados', num: '3.1' },
+      { id: 's3_2', title: '3.2 Lactancia Materna y Alimentación Complementaria', num: '3.2' },
+      { id: 's3_3', title: '3.3 Actividades con el Niño/a y Cuidador', num: '3.3' },
+      { id: 's3_4', title: '3.4 Recursos en Familia', num: '3.4' },
+      { id: 's3_5', title: '3.5 Disciplina Violenta', num: '3.5' },
+      { id: 's3_6', title: '3.6 Participación en Programas de Crianza', num: '3.6' },
+      { id: 's3_7', title: '3.7 Necesidades de Apoyo Familiar', num: '3.7' },
+      { id: 's4', title: '4. Información de la Vivienda', num: '4' },
+      { id: 's4_1', title: '4.1 Acceso y Calidad del Agua', num: '4.1' },
+      { id: 's4_2', title: '4.2 Mapa de Accesibilidad', num: '4.2' },
+      { id: 's5', title: '5. Información de la Mujer Gestante', num: '5' },
+      { id: 's5_1', title: '5.1 Atención en Salud de la Gestante', num: '5.1' },
+      { id: 's5_2', title: '5.2 Consumo de Sustancias Psicoactivas', num: '5.2' },
+      { id: 's6', title: '6. Validación de Servicios de Salud para Gestantes', num: '6' },
+      { id: 's7', title: '7. Servicios de Salud — Adolescentes y Adultos', num: '7' },
+      { id: 's8', title: '8. Quien Realiza la Encuesta', num: '8' },
+    ];
+
+    function fieldText(key, label, placeholder = '') {
+      return `<div class="field-group">
+    <label class="field-label">${label}</label>
+    <input class="field-input" type="text" placeholder="${placeholder || label}" data-key="${key}" oninput="saveField(this)">
+  </div>`;
+    }
+    function fieldNum(key, label) {
+      return `<div class="field-group">
+    <label class="field-label">${label}</label>
+    <input class="field-input" type="number" min="0" placeholder="0" data-key="${key}" oninput="saveField(this)">
+  </div>`;
+    }
+    function fieldDate(key, label) {
+      return `<div class="field-group">
+    <label class="field-label">${label}</label>
+    <input class="field-input" type="date" data-key="${key}" onchange="saveField(this)">
+  </div>`;
+    }
+    function fieldRadio(key, label, options, extraKey = '', extraLabel = '') {
+      let btns = options.map(o => `<button type="button" class="option-btn" data-key="${key}" data-value="${o}" onclick="selectOption(this)">${o}</button>`).join('');
+      let extra = extraKey ? `<div class="inline-extra" id="extra-${key}">
+    <input class="field-input" type="text" placeholder="${extraLabel || 'Especifique...'}" data-key="${extraKey}" oninput="saveField(this)" style="margin-top:0">
+  </div>` : '';
+      return `<div class="field-group">
+    <label class="field-label">${label}</label>
+    <div class="options-grid">${btns}</div>
+    ${extra}
+  </div>`;
+    }
+    function fieldRadioList(key, label, options, extraKey = '', extraLabel = '') {
+      let btns = options.map(o => `<button type="button" class="option-btn" data-key="${key}" data-value="${o}" onclick="selectOption(this)">${o}</button>`).join('');
+      let extra = extraKey ? `<div class="inline-extra" id="extra-${key}">
+    <input class="field-input" type="text" placeholder="${extraLabel || 'Especifique...'}" data-key="${extraKey}" oninput="saveField(this)" style="margin-top:0">
+  </div>` : '';
+      return `<div class="field-group">
+    <label class="field-label">${label}</label>
+    <div class="options-list">${btns}</div>
+    ${extra}
+  </div>`;
+    }
+    function fieldCheckbox(key, label, options, extraKey = '', extraLabel = '') {
+      let btns = options.map(o => `<button type="button" class="option-btn multi" data-key="${key}" data-value="${o}" onclick="toggleOption(this)">${o}</button>`).join('');
+      let extra = extraKey ? `<div class="inline-extra" id="extra-${key}">
+    <input class="field-input" type="text" placeholder="${extraLabel || 'Especifique...'}" data-key="${extraKey}" oninput="saveField(this)" style="margin-top:0">
+  </div>` : '';
+      return `<div class="field-group">
+    <label class="field-label">${label} <span style="font-size:0.75rem;color:var(--gris);font-weight:400;">(Puede seleccionar varias)</span></label>
+    <div class="options-grid">${btns}</div>
+    ${extra}
+  </div>`;
+    }
+    function subsec(title, desc = '') {
+      return `<div class="subsection-title">${title}</div>${desc ? `<div class="subsection-desc">${desc}</div>` : ''}`;
+    }
+    function divider() { return `<hr class="field-divider">`; }
+
+    // =============================================
+    // SECTION HTML DEFINITIONS
+    // =============================================
+    function getSectionHTML(secId) {
+      switch (secId) {
+        case 's1': return `
+      ${fieldText('s1_provincia', 'Provincia')}
+      ${fieldText('s1_comunidad', 'Comunidad')}
+      ${fieldText('s1_corregimiento', 'Corregimiento')}
+      ${fieldDate('s1_fecha', 'Fecha')}`;
+
+        case 's2': return `
+      ${fieldRadioList('s2_grupo_etareo', 'Marque el grupo etáreo de la persona a caracterizar', ['Niño/a 0-6 MESES', 'Niño/a 7-24 MESES', 'Niño/a 25-36 MESES', 'Niño/a 36-47 MESES', 'Niño/a de 0 a 5 años con discapacidad', 'Niño/a 4-8 AÑOS', 'Niño/a 9-18 AÑOS', 'Adulto', 'Adulto con discapacidad'])}
+      ${subsec('2.2. Datos del Encuestado')}
+      ${fieldText('s2_nombre_apellidos', 'Nombre y Apellidos')}
+      ${fieldText('s2_nombre_cuidador', 'Nombre y apellido del cuidador principal')}
+      ${fieldRadio('s2_registro_civil', '¿La persona está registrada en el Registro Civil de Panamá u otro país?', ['Sí', 'No'], 's2_registro_civil_donde', '¿Dónde?')}
+      ${fieldText('s2_tipo_documento', 'Tipo de documento de identidad')}
+      ${fieldText('s2_otro_tipo_documento', 'Otro tipo de documento')}
+      ${fieldText('s2_num_documento', 'N° de Documento')}
+      ${fieldDate('s2_fecha_nacimiento', 'Fecha de Nacimiento')}
+      ${fieldNum('s2_edad', 'Edad')}
+      ${fieldText('s2_pais_nacimiento', 'País de Nacimiento')}
+      ${fieldRadio('s2_genero', 'Género', ['Masculino', 'Femenino', 'Otro'], 's2_genero_otro', 'Especifique género')}
+      ${fieldRadio('s2_embarazada', '¿Está embarazada en este momento? (Solo aplica para género Femenino)', ['Sí', 'No'])}
+      ${fieldRadioList('s2_estado_civil', 'Estado Civil', ['Casado(a)', 'Unido(a)', 'Separado(a)', 'Divorciado(a)', 'Soltero(a)', 'No aplica'])}
+      ${fieldRadio('s2_sabe_leer', '¿Sabe Leer y Escribir?', ['Sí', 'No'])}
+      ${fieldRadioList('s2_ultimo_anio', 'Último año aprobado', ['Pre Kinder', 'Kinder', 'Primer año', 'Segundo grado', 'Tercer grado', 'Cuarto grado', 'Quinto grado', 'Sexto grado', 'Séptimo grado', 'Octavo grado', 'Noveno grado', 'Décimo grado', 'Undécimo grado', 'Duodécimo'])}
+      ${fieldRadio('s2_estudia', '¿Actualmente estudia?', ['Sí', 'No'])}
+      ${fieldRadio('s2_trabaja', '¿Actualmente trabaja?', ['Sí', 'No'])}
+      ${fieldText('s2_situacion_laboral', '¿Qué tipo de situación laboral presenta?')}
+      ${fieldNum('s2_ingreso_mensual', 'Ingreso mensual promedio en dólares (USD)')}
+      ${fieldCheckbox('s2_programas_gobierno', '¿Alguien en el hogar es beneficiario de algún programa del gobierno?', ['Bono Solidario por la pandemia', 'Becas por méritos académicos', 'SENAPAN (Bono Compra Alimentos)', 'PASE-U (Beca Universal)', 'Red de Oportunidades', 'Ángel Guardián', '120 a los 65', 'Ninguno'])}
+      ${fieldText('s2_observacion', 'Observaciones')}`;
+
+        case 's3': return `
+      ${fieldRadio('s3_discapacidad', '¿El niño/a tiene discapacidad?', ['Sí', 'No'])}
+      ${fieldRadio('s3_tipo_discapacidad', 'Tipo de discapacidad', ['Física', 'Intelectual', 'Visual', 'Auditiva', 'Múltiple', 'Otra'], 's3_tipo_discapacidad_otra', '¿Cuál?')}
+      ${fieldRadio('s3_certificacion_senadis', '¿Tiene certificación de discapacidad emitida por SENADIS?', ['Sí', 'No'])}
+      ${fieldText('s3_sin_certificacion_razon', 'En caso de No, ¿por qué no tiene la certificación?')}
+      ${fieldRadio('s3_grupo_etnico', 'Grupo étnico del niño/a', ['Población indígena', 'Población afrodescendiente', 'Otro'], 's3_grupo_etnico_otro', '¿Cuál?')}
+      ${fieldText('s3_observaciones', 'Observaciones')}`;
+
+        case 's3_1': return `
+      ${fieldRadio('s3_1_vacunacion', '¿El niño/a cuenta con el esquema de vacunación completo según la edad?', ['Sí', 'No'])}
+      ${fieldText('s3_1_vacunacion_obs', 'Observaciones')}
+      ${fieldRadioList('s3_1_razon_sin_vacuna', 'En caso de no contar con vacunación completa, ¿cuál es la razón?', ['Falta de dinero', 'No le interesa', 'No hay entidad cercana', 'Las vacunas no se ofrecen en el centro de salud', 'No sabe que debe vacunarse', 'Motivos religiosos', 'Pertenece a movimiento anti-vacunas', 'Otra'], 's3_1_razon_sin_vacuna_otra', '¿Cuál?')}
+      ${fieldText('s3_1_vacuna_otra_obs', 'Observaciones')}
+      ${fieldRadio('s3_1_controles', '¿El niño/a ha recibido controles de crecimiento/desarrollo en centro o puesto de salud?', ['Sí', 'No'])}
+      ${fieldText('s3_1_controles_obs', 'Observaciones')}
+      ${fieldDate('s3_1_ultima_cita', 'Fecha de la última cita de crecimiento/desarrollo (si tiene)')}
+      ${fieldRadioList('s3_1_razon_sin_control', 'En caso de no contar con controles de crecimiento/desarrollo, ¿cuál es la razón?', ['Falta de dinero', 'No sabe la utilidad de esta valoración', 'No hay entidad cercana', 'Otros motivos'], 's3_1_razon_sin_control_otros', '¿Cuáles?')}
+      ${fieldCheckbox('s3_1_consulta_recibio', 'En la consulta de crecimiento y desarrollo, ¿el niño/a ha recibido?', ['Suplemento nutricional', 'Toma de talla y peso', 'Asesoría nutricional', 'Ninguna'])}
+      ${fieldText('s3_1_resultados', 'Resultados')}
+      ${fieldCheckbox('s3_1_educacion_inicial', 'En los últimos 6 meses, ¿ha participado en algún servicio de educación inicial?', ['CEFACEI', 'Programa Cuidarte', 'Mochila Cuidarte', 'Modalidad comunitaria'])}`;
+
+        case 's3_2': return `
+      ${fieldRadio('s3_2_leche_materna', '¿El niño/a recibió leche materna de forma exclusiva?', ['Sí', 'No'])}
+      ${fieldText('s3_2_leche_obs', 'Observaciones')}
+      ${fieldRadioList('s3_2_motivo_no_leche', 'Si la respuesta anterior es negativa, ¿cuál fue el motivo?', ['Ausencia de la madre', 'Falta de motivación', 'Dificultades de amamantamiento', 'No sabe cómo hacerlo', 'Tratamiento médico', 'Presión familiar', 'Otro'], 's3_2_motivo_no_leche_otro', '¿Cuál?')}
+      ${fieldRadioList('s3_2_edad_alimentos', '¿A qué edad le ofreció alimentos diferentes a la leche materna?', ['2 meses', '3 meses', '4 meses', '5 meses', '6 meses', '7 meses', '8 meses', '10 meses', '11 meses'])}
+      ${fieldText('s3_2_alimentos_obs', 'Observaciones')}`;
+
+        case 's3_3': return `
+      ${subsec('Cuidador Principal del NN')}
+      ${fieldText('s3_3_cuidador_quien', '¿Quién es el cuidador(a) principal del niño(a)?')}
+      ${fieldRadio('s3_3_cuidador_genero', 'Género del cuidador(a) principal', ['Femenino', 'Masculino', 'Otro'], 's3_3_cuidador_genero_otro', '¿Cuál?')}
+      ${fieldText('s3_3_cuidador_obs', 'Observaciones')}
+      ${fieldRadioList('s3_3_tiempo_cuidador', '¿Cuánto tiempo pasa el cuidador(a) con el niño/a al día?', ['Entre una hora y dos diarias', 'Entre dos y cuatro horas diarias', 'Más de 4 horas diarias', 'Todo el día'])}
+      ${fieldText('s3_3_tiempo_obs', 'Observaciones')}
+      ${fieldRadio('s3_3_solo', '¿La niña o el niño queda en algún momento solo(a)?', ['Sí', 'No'])}
+      ${fieldRadioList('s3_3_tiempo_solo', 'Si queda solo(a), ¿cuánto tiempo queda solo(a) al día?', ['Menos de 1 hora', 'Entre 1 y 3 horas', 'Más de 3 horas', 'No aplica'])}
+      ${fieldRadio('s3_3_tiempo_padre', '¿El niño/a comparte tiempo de calidad con el padre?', ['Sí', 'No'])}
+      ${fieldText('s3_3_padre_obs', 'Observaciones')}
+      ${divider()}
+      ${subsec('Cuidados — Semana Pasada (Cuidador Principal)', 'Participó usted la semana pasada en el cuidado o ayudo a este para los niños, niñas del hogar.')}
+      ${fieldRadio('s3_3_cuid1_alimentacion', 'Alimentación (dar alimentos)', ['Sí', 'No', 'Diariamente', 'Una vez a la semana'])}
+      ${fieldText('s3_3_cuid1_alimentacion_obs', 'Observaciones')}
+      ${fieldRadio('s3_3_cuid1_aseo', 'Aseo y arreglo personal (bañarse y vestirse)', ['Sí', 'No', 'Diariamente', 'Una vez a la semana'])}
+      ${fieldText('s3_3_cuid1_aseo_obs', 'Observaciones')}
+      ${fieldRadio('s3_3_cuid1_juegos', 'Juegos y actividades recreativas (lecturas, juegos)', ['Sí', 'No', 'Diariamente', 'Una vez a la semana'])}
+      ${fieldText('s3_3_cuid1_juegos_obs', 'Observaciones')}
+      ${fieldRadio('s3_3_cuid1_estimulacion', 'Asistencia para estimulación y/o terapias en rehabilitación', ['Sí', 'No', 'Diariamente', 'Una vez a la semana'])}
+      ${fieldText('s3_3_cuid1_estimulacion_obs', 'Observaciones')}
+      ${divider()}
+      ${subsec('Cuidador Adicional del NN')}
+      ${fieldText('s3_3_cuidador2_quien', '¿Quién es el cuidador(a) adicional y quién cuida al niño(a)?')}
+      ${fieldRadio('s3_3_cuidador2_genero', 'Género del cuidador(a) adicional', ['Femenino', 'Masculino', 'Otro'], 's3_3_cuidador2_genero_otro', '¿Cuál?')}
+      ${fieldText('s3_3_cuidador2_obs', 'Observaciones')}
+      ${fieldRadioList('s3_3_tiempo_cuidador2', '¿Cuánto tiempo pasa el cuidador(a) adicional con el niño/a al día?', ['Entre una y dos horas diarias', 'Entre dos y cuatro horas diarias', 'Más de 4 horas diarias', 'Todo el día'])}
+      ${fieldText('s3_3_tiempo2_obs', 'Observaciones')}
+      ${fieldRadio('s3_3_solo2', '¿La niña o el niño queda en algún momento solo(a)? (Cuidador adicional)', ['Sí', 'No'])}
+      ${fieldRadioList('s3_3_tiempo_solo2', 'Si queda solo(a), ¿cuánto tiempo al día?', ['Menos de 1 hora', 'Entre 1 y 3 horas', 'Más de 3 horas', 'No aplica'])}
+      ${fieldRadio('s3_3_tiempo_padre2', '¿El niño/a comparte tiempo de calidad con el padre? (Cuidador adicional)', ['Sí', 'No'])}
+      ${fieldText('s3_3_padre2_obs', 'Observaciones')}
+      ${divider()}
+      ${subsec('Cuidados — Semana Pasada (Cuidador Adicional)', 'Participó el cuidador adicional la semana pasada en el cuidado para los niños, niñas del hogar.')}
+      ${fieldRadio('s3_3_cuid2_alimentacion', 'Alimentación (dar alimentos)', ['Sí', 'No', 'Diariamente', 'Una vez a la semana'])}
+      ${fieldText('s3_3_cuid2_alimentacion_obs', 'Observaciones')}
+      ${fieldRadio('s3_3_cuid2_aseo', 'Aseo y arreglo personal (bañarse y vestirse)', ['Sí', 'No', 'Diariamente', 'Una vez a la semana'])}
+      ${fieldText('s3_3_cuid2_aseo_obs', 'Observaciones')}
+      ${fieldRadio('s3_3_cuid2_juegos', 'Juegos y actividades recreativas (lecturas, juegos)', ['Sí', 'No', 'Diariamente', 'Una vez a la semana'])}
+      ${fieldText('s3_3_cuid2_juegos_obs', 'Observaciones')}
+      ${fieldRadio('s3_3_cuid2_estimulacion', 'Asistencia para estimulación y/o terapias en rehabilitación', ['Sí', 'No', 'Diariamente', 'Una vez a la semana'])}
+      ${fieldText('s3_3_cuid2_estimulacion_obs', 'Observaciones')}`;
+
+        case 's3_4': return `
+      ${subsec('Actividades con el niño/a — Últimos 3 días', '¿Usted o alguien de su hogar mayor de 15 años realizó alguna de las siguientes actividades con su niño/a en los últimos 3 días?')}
+      ${fieldRadio('s3_4_libro', 'Leer un libro o ver las imágenes de un libro', ['Sí', 'No'])}
+      ${fieldRadio('s3_4_patio', 'Llevarlo(a) a un patio o un lugar abierto', ['Sí', 'No'])}
+      ${fieldRadio('s3_4_tv', 'Mirar la TV o celular con un programa infantil', ['Sí', 'No'])}
+      ${fieldRadio('s3_4_nombrando', 'Pasar tiempo nombrando cosas, contando, pintando o adivinando', ['Sí', 'No'])}
+      ${fieldRadio('s3_4_cantar', 'Cantar y/o bailar en algunos momentos del día', ['Sí', 'No'])}
+      ${fieldRadio('s3_4_jugar', 'Jugar con diversos objetos', ['Sí', 'No'])}
+      ${fieldRadio('s3_4_explorar', 'Explorar el jardín, parque, biblioteca infantil o sala de lectura', ['Sí', 'No'])}
+      ${fieldRadio('s3_4_supermercado', 'Ir al supermercado o realizar compras juntos(as)', ['Sí', 'No'])}
+      ${divider()}
+      ${fieldCheckbox('s3_4_quien_actividad', '¿Con quién o quiénes realizaron la actividad?', ['Padre', 'Madre', 'Abuela', 'Abuelo', 'Prima(o)', 'Sobrino(a)', 'Madrastra', 'Padrastro', 'Familia sustituta', 'Otro'], 's3_4_quien_actividad_otro', '¿Cuál?')}
+      ${fieldNum('s3_4_num_libros', '¿Cuántos libros infantiles tienen en el hogar?')}
+      ${fieldNum('s3_4_num_juguetes', '¿El niño tiene juguetes? ¿Cuántos juguetes aproximadamente?')}
+      ${fieldText('s3_4_juego_favorito', '¿Cuál cree usted que es el juego favorito de su hijo(a)?')}`;
+
+        case 's3_5': return `
+      ${subsec('Disciplina Violenta', 'A continuación, me gustaría conversar sobre formas de enseñar a los niños/as la manera correcta de comportarse. Le voy a leer varios métodos que usan. Por favor, dígame si usted o cualquier otro adulto del hogar ha usado estos métodos con el niño/a en el mes pasado.')}
+      ${fieldRadio('s3_5_privilegio', '¿Le quitó algún privilegio, le prohibió algo que al niño/a le gusta, o no le permitió salir de la casa?', ['Sí', 'No'])}
+      ${fieldRadio('s3_5_explico', '¿Le explicó al niño/a por qué estuvo mal su comportamiento?', ['Sí', 'No'])}
+      ${fieldRadio('s3_5_regano', '¿Lo/la regañó fuerte?', ['Sí', 'No'])}
+      ${fieldRadio('s3_5_otra_actividad', '¿Le dio otra cosa que hacer?', ['Sí', 'No'])}
+      ${fieldRadio('s3_5_golpeo', '¿Lo/la golpeó o le dio una palmada?', ['Sí', 'No'])}
+      ${fieldRadio('s3_5_castigo_fisico', '¿Cree usted que para criar correctamente a un niño/a se le debe castigar físicamente?', ['Sí', 'No'])}
+      ${fieldRadio('s3_5_hablarles', '¿Cree usted que es importante hablarles continuamente acerca de su comportamiento?', ['Sí', 'No'])}`;
+
+        case 's3_6': return `
+      ${subsec('Participación en Programas de Crianza y Pareja', 'Información del Uso del Tiempo y dedicación a actividades/cuidados.')}
+      ${fieldRadio('s3_6_programa_crianza', 'En los últimos 6 meses, ¿ha participado el cuidador principal en un programa de crianza o educación parental?', ['Sí', 'No', 'No Aplica'])}
+      ${fieldRadio('s3_6_programa_pareja', 'En los últimos 6 meses, ¿ha participado el cuidador principal en algún programa para fortalecer su relación de pareja?', ['Sí', 'No', 'No Aplica'])}`;
+
+        case 's3_7': return `
+      ${subsec('Necesidades de Apoyo', 'A continuación, conversemos sobre las necesidades de la familia y los desafíos que enfrentan para el cuidado de los niños y niñas del hogar.')}
+      ${fieldRadio('s3_7_orientacion_discap', '¿Ha recibido alguna orientación sobre los cuidados de los niños/as, en particular de alguno que presente alguna condición de discapacidad?', ['Sí', 'No', 'No aplica'])}
+      ${fieldText('s3_7_orientacion_discap_obs', 'Observación')}
+      ${fieldRadio('s3_7_primeros_auxilios', '¿Ha recibido formación y/o orientación en primeros auxilios y seguridad infantil?', ['Sí', 'No', 'No aplica'])}
+      ${fieldText('s3_7_primeros_auxilios_obs', 'Observación')}
+      ${fieldRadio('s3_7_formacion_discap', '¿Requiere formación para el cuidado de NN con alguna condición de discapacidad?', ['Sí', 'No', 'No aplica'])}
+      ${fieldText('s3_7_formacion_discap_obs', 'Observación')}
+      ${fieldRadio('s3_7_acceso_salud', '¿Ha tenido acceso a servicios de salud para usted y/o el NN?', ['Sí', 'No', 'No aplica'])}
+      ${fieldText('s3_7_acceso_salud_obs', 'Observación')}
+      ${fieldRadio('s3_7_apoyo_financiero', '¿Ha tenido acceso a apoyos financieros para el cuidado de los NNA, en particular de algún NN con discapacidad del hogar?', ['Sí', 'No', 'No aplica'])}
+      ${fieldText('s3_7_apoyo_financiero_obs', 'Observación')}
+      ${fieldRadio('s3_7_abrumado', '¿Se siente abrumado(a) y/o requiere apoyo emocional como cuidador(a)?', ['Sí', 'No', 'No aplica'])}
+      ${fieldText('s3_7_abrumado_obs', 'Observación')}
+      ${fieldRadio('s3_7_red_apoyo', '¿Cuenta con una red de apoyo familiar o comunitaria para el cuidado de NN?', ['Sí', 'No', 'No aplica'])}
+      ${fieldText('s3_7_red_apoyo_obs', 'Observación')}`;
+
+        case 's4': return `
+      ${fieldRadioList('s4_paredes', '¿De qué materiales son la mayor parte de las paredes de la vivienda?', ['Bloque, ladrillo, piedra o concreto', 'Madera (tablas o troza)', 'Quincha o adobe', 'Metal (zinc, aluminio)', 'Palma, paja, penca, cañaza, bambú o palos', 'Sin paredes'])}
+      ${fieldRadio('s4_tenencia', 'La vivienda es', ['Propia', 'En arriendo', 'Ocupador de hecho o posesión', 'Otra'], 's4_tenencia_otra', '¿Cuál?')}
+      ${fieldRadioList('s4_cocina', '¿En dónde preparan los alimentos?', ['En un cuarto usado solo para cocinar', 'En un cuarto usado también para dormir', 'En una sala-comedor con lavaplatos', 'En un patio, corredor, enramada o aire libre', 'No preparan alimentos en la vivienda', 'Otro'], 's4_cocina_otro', '¿Cuál?')}
+      ${fieldRadio('s4_espacios_independientes', '¿El lugar donde viven cuenta con espacios independientes para dormitorio, cocina y baños?', ['Sí', 'No'])}
+      ${fieldText('s4_espacios_obs', 'Observaciones')}
+      ${fieldRadioList('s4_alumbrado', '¿Qué tipo de alumbrado tiene la vivienda?', ['Eléctrico de compañía distribuidor', 'Eléctrico de la comunidad', 'Eléctrico propio (planta)', 'Panel solar (propio)', 'Querosín o diésel', 'Vela', 'Linterna o lámpara portátil', 'Gas', 'Otra'], 's4_alumbrado_otra', '¿Cuál?')}
+      ${fieldRadioList('s4_sanitario', '¿Qué tipo de servicio sanitario (inodoro) tiene la vivienda?', ['Conectado al alcantarillado', 'Conectado a tanque séptico', 'De hueco o letrina', 'No tiene', 'Otro'], 's4_sanitario_otro', '¿Cuál?')}
+      ${fieldCheckbox('s4_servicios', '¿El grupo familiar tiene acceso a los siguientes servicios domiciliarios?', ['Internet', 'Teléfono fijo', 'Ninguno'])}
+      ${fieldText('s4_servicios_obs', 'Observaciones')}
+      ${fieldRadioList('s4_basura', '¿Cómo eliminan principalmente la basura?', ['Servicio de recolección público', 'Servicio de recolección privado', 'Incineración o quema', 'Terreno baldío', 'Entierro', 'Río, quebrada o lago', 'Compostaje', 'Otro'], 's4_basura_otro', '¿Cuál?')}`;
+
+        case 's4_1': return `
+      ${fieldRadioList('s4_1_fuente_agua', '¿Cuál es la fuente principal para el consumo del agua?', ['Acueducto público del IDAAN', 'Acueducto público de la comunidad', 'Acueducto particular', 'Pozo brocal protegido', 'Pozo superficial (ojo de agua o manantial)', 'Recogen agua de lluvia', 'Río, quebrada o lago', 'Carro cisterna', 'Agua embotellada', 'Otro'], 's4_1_fuente_agua_otro', '¿Cuál?')}
+      ${fieldRadioList('s4_1_frecuencia_agua', '¿Con qué frecuencia disponen del agua para el consumo humano?', ['Nunca', 'Todos los días', 'Semanal', 'Quincenal', 'Mensual'])}
+      ${fieldRadioList('s4_1_tratamiento_agua', '¿Qué tratamiento usa para el agua de consumo?', ['Filtro casero', 'Agua hervida', 'Agua de lluvia tratada', 'Tanque', 'Agua embotellada o en bolsa', 'Pastillas potabilizadoras', 'Otra'], 's4_1_tratamiento_otra', '¿Cuál?')}`;
+
+        case 's4_2': return `
+      <div class="field-group">
+        <label class="field-label">📍 Mapa de Accesibilidad desde la Vivienda hasta el Entorno Físico para los Encuentros</label>
+        <div class="image-upload-area" onclick="document.getElementById('mapa-input').click()">
+          <input type="file" id="mapa-input" accept="image/*" capture="environment" onchange="handleMapaUpload(event)" style="display:none">
+          <div class="upload-icon">📷</div>
+          <p style="font-weight:600;color:var(--verde);margin-bottom:6px;">Tomar foto o subir imagen del mapa</p>
+          <p style="color:var(--gris);font-size:0.85rem;">Cámara o archivo de imagen</p>
+          <button type="button" class="btn-secondary" style="margin-top:12px;" onclick="event.stopPropagation();document.getElementById('mapa-input').click()">📷 Abrir cámara / galería</button>
+        </div>
+        <div class="image-preview" id="mapa-preview"></div>
+      </div>`;
+
+        case 's5': return `
+      ${fieldRadio('s5_discapacidad', '¿La mujer gestante tiene discapacidad?', ['Sí', 'No'])}
+      ${fieldRadio('s5_tipo_discapacidad', 'Tipo de discapacidad', ['Física', 'Intelectual', 'Visual', 'Auditiva', 'Múltiple', 'Otra'], 's5_tipo_discapacidad_otra', '¿Cuál?')}
+      ${fieldRadio('s5_certificacion', '¿Tiene certificación de su discapacidad?', ['Sí', 'No'])}
+      ${fieldText('s5_sin_cert_razon', 'En caso de No, ¿por qué no tiene la certificación?')}
+      ${fieldRadio('s5_grupo_etnico', 'Grupo étnico', ['Población indígena', 'Población afrodescendiente', 'Otro'], 's5_grupo_etnico_otro', '¿Cuál?')}
+      ${fieldText('s5_observaciones', 'Observaciones')}`;
+
+        case 's5_1': return `
+      ${fieldRadio('s5_1_primer_embarazo', '¿Es su primer embarazo?', ['Sí', 'No'])}
+      ${fieldRadio('s5_1_hijos_vivos', '¿Cuántos hijos(as) nacidos vivos ha tenido?', ['Uno', 'Dos', 'Tres', 'Cuatro o más'])}
+      ${fieldNum('s5_1_num_embarazos', '¿Cuántos embarazos ha tenido?')}
+      ${fieldNum('s5_1_edad_primer_embarazo', '¿A qué edad tuvo su primer embarazo?')}
+      ${fieldRadioList('s5_1_cuidador_gestacion', '¿Quién va a ser el cuidador(a) principal del niño o niña en gestación?', ['Madre', 'Padre', 'Abuelo(a)', 'Hermana(o)', 'Prima(o)', 'Sobrina(o)', 'Cónyuge', 'Otro'], 's5_1_cuidador_otro', 'Si respondió otro, especifique')}`;
+
+        case 's5_2': return `
+      ${fieldRadio('s5_2_consume_drogas', '¿Consume usted algún tipo de drogas?', ['Sí', 'No'])}
+      ${fieldText('s5_2_drogas_obs', 'Observaciones')}
+      ${fieldText('s5_2_tipo_sustancias', '¿Qué tipo de sustancias?')}
+      ${fieldRadio('s5_2_suplementos', '¿Consume algún suplemento de micronutrientes?', ['Sí', 'No'])}
+      ${fieldText('s5_2_suplementos_cual', '¿Cuál? Especifique')}`;
+
+        case 's6': return `
+      ${fieldRadio('s6_control_prenatal', '¿Ha asistido a un control prenatal en las últimas 8 semanas de gestación?', ['Sí', 'No', 'No aplica'])}
+      ${fieldDate('s6_prenatal_fecha', 'Última fecha de control prenatal')}
+      ${fieldRadioList('s6_tiempo_desplaz', '¿Cuánto tiempo toma en desplazarse al centro de salud?', ['5 min', '20 min', '40 min', '1 hora', '2 horas', '1 día', 'No hay centro de salud'])}
+      ${fieldRadioList('s6_costo_desplaz', '¿Qué valor tiene el desplazamiento al centro de salud?', ['10 USD', '20 USD', '50 USD', '100 USD'])}
+      ${fieldText('s6_desplaz_obs', 'Observaciones')}
+      ${fieldRadio('s6_control_salud_oral', '¿Ha asistido a un control en salud oral o medicina general en el último mes?', ['Sí', 'No', 'No aplica'])}
+      ${fieldDate('s6_salud_oral_fecha', 'Última fecha de control en salud oral')}
+      ${fieldRadioList('s6_visto_por', 'Sus controles prenatales son vistos por', ['Médico general', 'Médico especialista', 'Jaibana', 'Partera', 'Otros'], 's6_visto_otros', '¿Cuál?')}
+      ${fieldRadioList('s6_tiempo_desplaz2', '¿Cuánto tiempo toma en desplazarse al centro de salud? (control por especialista)', ['5 min', '20 min', '40 min', '1 hora', '2 horas', '1 día', 'No hay centro de salud'])}
+      ${fieldRadioList('s6_costo_desplaz2', '¿Qué valor tiene el desplazamiento? (control por especialista)', ['10 USD', '20 USD', '50 USD', '100 USD'])}
+      ${fieldText('s6_desplaz2_obs', 'Observaciones')}
+      ${fieldRadio('s6_diagnostico', '¿Tiene algún diagnóstico prenatal?', ['Sí', 'No'])}
+      ${fieldText('s6_diagnostico_cual', '¿Cuál?')}`;
+
+        case 's7': return `
+      ${fieldRadio('s7_control_salud', '¿Ha asistido a un control en salud oral o medicina general en el último mes?', ['Sí', 'No', 'No aplica'])}
+      ${fieldDate('s7_control_fecha', 'Última fecha')}
+      ${fieldRadioList('s7_tiempo_desplaz', '¿Cuánto tiempo toma en desplazarse al centro de salud?', ['5 min', '20 min', '40 min', '1 hora', '2 horas', '1 día', 'No hay centro de salud'])}
+      ${fieldRadioList('s7_costo_desplaz', '¿Qué valor tiene el desplazamiento al centro de salud?', ['10 USD', '20 USD', '50 USD', '100 USD'])}
+      ${fieldText('s7_obs', 'Observaciones')}`;
+
+        case 's8': return `
+      ${fieldText('s8_nombre', 'Nombre del encuestador(a)')}
+      ${fieldText('s8_cedula', 'Número de cédula')}
+      ${fieldDate('s8_fecha', 'Fecha')}`;
+
+        default: return '<p>Sección no disponible</p>';
+      }
+    }
+
+    // =============================================
+    // SURVEY START / NAVIGATION
+    // =============================================
+    function startSurvey(existing = null) {
+      editingId = existing ? existing.encuesta_id : null;
+      currentSurvey = existing ? JSON.parse(JSON.stringify(existing)) : {
+        encuesta_id: generateId(),
+        fecha_creacion: new Date().toISOString(),
+        formulario: 'ANEXO_8',
+        organizacion: 'RET-UNICEF',
+        region: 'Panama'
+      };
+      if (!existing && !currentSurvey.s1_fecha) {
+        currentSurvey.s1_fecha = getTodayInputValue();
+      }
+      currentSection = 0;
+      document.getElementById('welcome-screen').style.display = 'none';
+      document.getElementById('progress-container').classList.add('visible');
+      renderSection();
+      showTab('nueva');
+    }
+
+    function renderSection() {
+      const sec = SECTIONS[currentSection];
+      updateProgress();
+      const html = `
+    <div class="form-card">
+      <div class="section-header">
+        <div class="section-number">${sec.num}</div>
+        <div class="section-title">${sec.title}</div>
+      </div>
+      ${getSectionHTML(sec.id)}
+      <div class="nav-buttons">
+        ${currentSection > 0 ? `<button class="btn-secondary" onclick="goSection(-1)">← Anterior</button>` : '<div></div>'}
+        ${currentSection < SECTIONS.length - 1
+          ? `<button class="btn-primary" onclick="goSection(1)">Siguiente →</button>`
+          : `<button class="btn-primary" style="background:linear-gradient(135deg,var(--naranja-claro),var(--naranja));" onclick="finalizeSurvey()">✅ Finalizar y Guardar</button>`}
+      </div>
+    </div>`;
+      document.getElementById('form-container').innerHTML = html;
+      restoreValues();
+      window.scrollTo(0, 0);
+    }
+
+    function updateProgress() {
+      const pct = Math.round(((currentSection) / SECTIONS.length) * 100);
+      document.getElementById('progress-bar').style.width = pct + '%';
+      document.getElementById('progress-section-name').textContent = SECTIONS[currentSection].title;
+      document.getElementById('progress-step-count').textContent = `${currentSection + 1} / ${SECTIONS.length}`;
+    }
+
+    function goSection(dir) {
+      currentSection += dir;
+      if (currentSection < 0) currentSection = 0;
+      if (currentSection >= SECTIONS.length) currentSection = SECTIONS.length - 1;
+      renderSection();
+    }
+
+    // =============================================
+    // FIELD INTERACTION
+    // =============================================
+    function saveField(el) {
+      currentSurvey[el.dataset.key] = el.value;
+    }
+
+    function selectOption(btn) {
+      const key = btn.dataset.key;
+      const val = btn.dataset.value;
+      // deselect siblings
+      btn.closest('.options-grid, .options-list').querySelectorAll(`[data-key="${key}"]`).forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      currentSurvey[key] = val;
+      // show/hide extra
+      const extraDiv = document.getElementById('extra-' + key);
+      if (extraDiv) {
+        const needsExtra = ['Otro', 'Otra', 'Otros', 'Otros motivos', 'Otras'].some(x => val.includes(x));
+        extraDiv.classList.toggle('visible', needsExtra);
+      }
+    }
+
+    function toggleOption(btn) {
+      const key = btn.dataset.key;
+      btn.classList.toggle('selected');
+      const selected = [...btn.closest('.options-grid').querySelectorAll(`[data-key="${key}"].selected`)].map(b => b.dataset.value);
+      currentSurvey[key] = selected;
+      const extraDiv = document.getElementById('extra-' + key);
+      if (extraDiv) {
+        const hasOtro = selected.some(v => ['Otro', 'Otra', 'Otros'].some(x => v.includes(x)));
+        extraDiv.classList.toggle('visible', hasOtro);
+      }
+    }
+
+    function restoreValues() {
+      // restore text/date/number inputs
+      document.querySelectorAll('.field-input[data-key]').forEach(el => {
+        const v = currentSurvey[el.dataset.key];
+        if (v !== undefined) el.value = v;
+      });
+      // restore radio/single select
+      document.querySelectorAll('.option-btn:not(.multi)[data-key]').forEach(btn => {
+        if (currentSurvey[btn.dataset.key] === btn.dataset.value) {
+          btn.classList.add('selected');
+          const extraDiv = document.getElementById('extra-' + btn.dataset.key);
+          if (extraDiv && ['Otro', 'Otra', 'Otros', 'Otros motivos'].some(x => btn.dataset.value.includes(x))) {
+            extraDiv.classList.add('visible');
+          }
+        }
+      });
+      // restore checkboxes
+      document.querySelectorAll('.option-btn.multi[data-key]').forEach(btn => {
+        const arr = currentSurvey[btn.dataset.key];
+        if (Array.isArray(arr) && arr.includes(btn.dataset.value)) {
+          btn.classList.add('selected');
+        }
+      });
+      // restore mapa
+      const mapaPreview = document.getElementById('mapa-preview');
+      if (mapaPreview && currentSurvey.s4_2_mapa_base64) {
+        mapaPreview.innerHTML = `<img src="${currentSurvey.s4_2_mapa_base64}" alt="Mapa">`;
+      }
+    }
+
+    function compressImageToDataUrl(file, maxSize = 900, quality = 0.6) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onload = e => { img.src = e.target.result; };
+        reader.onerror = reject;
+        img.onload = () => {
+          const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+          const w = Math.max(1, Math.round(img.width * scale));
+          const h = Math.max(1, Math.round(img.height * scale));
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleMapaUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        const dataUrl = await compressImageToDataUrl(file, 900, 0.6);
+        currentSurvey['s4_2_mapa_base64'] = dataUrl;
+        document.getElementById('mapa-preview').innerHTML = `<img src="${dataUrl}" alt="Mapa subido" style="max-width:100%;border-radius:var(--radio-btn);margin-top:10px;">`;
+        showToast('Imagen guardada ✓', 'success');
+      } catch {
+        showToast('Error al procesar la imagen', 'error');
+      }
+    }
+
+    // =============================================
+    // FINALIZE
+    // =============================================
+    async function finalizeSurvey() {
+      currentSurvey.fecha_modificacion = new Date().toISOString();
+      await saveSurvey(currentSurvey);
+      downloadJSON(currentSurvey);
+      showToast('✅ Encuesta guardada y descargada', 'success');
+      setTimeout(() => {
+        resetForm();
+        showTab('encuestas');
+      }, 1500);
+    }
+
+    function resetForm() {
+      currentSurvey = {};
+      currentSection = 0;
+      editingId = null;
+      document.getElementById('welcome-screen').style.display = 'block';
+      document.getElementById('progress-container').classList.remove('visible');
+      document.getElementById('form-container').innerHTML = '';
+    }
+
+    // =============================================
+    // DOWNLOAD JSON
+    // =============================================
+    function downloadJSON(data) {
+      const payload = { total: 1, exportado: new Date().toISOString(), anexo: 8, A8: [data] };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `a8_ind_${data.encuesta_id}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function downloadAllSurveys() {
+      const all = await getAllSurveys();
+      if (!all.length) { showToast('No hay encuestas guardadas', 'error'); return; }
+      const payload = { total: all.length, exportado: new Date().toISOString(), anexo: 8, A8: all };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `a8_exportacion_${getTimestampCompact()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast(`✅ ${all.length} encuestas descargadas`, 'success');
+    }
+
+    // =============================================
+    // SURVEYS LIST
+    // =============================================
+    async function renderSurveysList() {
+      const all = await getAllSurveys();
+      const container = document.getElementById('surveys-list');
+      if (!all.length) {
+        container.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>No hay encuestas registradas aún.</p></div>`;
+        return;
+      }
+      // newest first
+      all.sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
+      container.innerHTML = all.map(s => {
+        const nombre = s.s2_nombre_apellidos || s.s8_nombre || 'Sin nombre';
+        const fecha = s.s1_fecha || (s.fecha_creacion ? s.fecha_creacion.substr(0, 10) : '—');
+        const comunidad = s.s1_comunidad || '—';
+        return `<div class="survey-card">
+      <div class="survey-info">
+        <div class="survey-name">👤 ${nombre}</div>
+        <div class="survey-meta">📍 ${comunidad} &nbsp;|&nbsp; 📅 ${fecha}</div>
+        <div class="survey-id">${s.encuesta_id}</div>
+      </div>
+      <div class="survey-actions">
+        <button class="btn-sm verde" onclick="viewSurvey('${s.encuesta_id}')">👁 Ver</button>
+        <button class="btn-sm naranja" onclick="editSurvey('${s.encuesta_id}')">✏️ Editar</button>
+        <button class="btn-sm azul" onclick="downloadJSON(${JSON.stringify(s).replace(/</g, '\\u003c')})">⬇️ Archivo de exportacion</button>
+        <button class="btn-sm rojo" onclick="confirmDelete('${s.encuesta_id}')">🗑 Eliminar</button>
+      </div>
+    </div>`;
+      }).join('');
+    }
+
+    // =============================================
+    // VIEW SURVEY
+    // =============================================
+    async function viewSurvey(id) {
+      const all = await getAllSurveys();
+      const s = all.find(x => x.encuesta_id === id);
+      if (!s) return;
+      let html = '';
+      for (const [k, v] of Object.entries(s)) {
+        if (k === 's4_2_mapa_base64') {
+          html += `<div class="readonly-label">📍 Mapa de Accesibilidad</div><div class="image-preview"><img src="${v}" style="max-width:100%;border-radius:8px;"></div>`;
+          continue;
+        }
+        const label = k.replace(/_/g, ' ').replace(/^s\d+[\d_]*/, '').trim() || k;
+        const val = Array.isArray(v) ? v.join(', ') : v;
+        if (!val) continue;
+        html += `<div class="readonly-label">${k}</div><div class="readonly-field">${val}</div>`;
+      }
+      document.getElementById('modal-view-content').innerHTML = html || '<p style="color:var(--gris)">Sin datos.</p>';
+      document.getElementById('modal-edit-btn').onclick = () => { closeModal('modal-view'); editSurvey(id); };
+      document.getElementById('modal-view').classList.add('open');
+    }
+
+    // =============================================
+    // EDIT SURVEY
+    // =============================================
+    async function editSurvey(id) {
+      const all = await getAllSurveys();
+      const s = all.find(x => x.encuesta_id === id);
+      if (!s) return;
+      startSurvey(s);
+    }
+
+    // =============================================
+    // DELETE SURVEY
+    // =============================================
+    function confirmDelete(id) {
+      const modal = document.getElementById('modal-delete');
+      modal.classList.add('open');
+      document.getElementById('confirm-delete-btn').onclick = async () => {
+        await deleteSurvey(id);
+        closeModal('modal-delete');
+        showToast('Encuesta eliminada', 'error');
+        renderSurveysList();
+      };
+    }
+
+    // =============================================
+    // IMPORT JSON
+    // =============================================
+    function importJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async e => {
+        try {
+          let data = JSON.parse(e.target.result);
+          // can be single or array
+          if (!Array.isArray(data)) data = [data];
+          let count = 0;
+          for (const item of data) {
+            if (!item.encuesta_id) item.encuesta_id = generateId();
+            if (!item.formulario) item.formulario = 'ANEXO_8';
+            item.fecha_importacion = new Date().toISOString();
+            await saveSurvey(item);
+            count++;
+          }
+          document.getElementById('import-result').innerHTML = `
+        <div style="background:var(--verde-bg);border:1.5px solid var(--verde-claro);border-radius:var(--radio);padding:16px;color:var(--verde);">
+          ✅ <strong>${count} encuesta(s) importada(s) exitosamente.</strong>
+        </div>`;
+          showToast(`✅ ${count} encuesta(s) importada(s)`, 'success');
+        } catch (err) {
+          document.getElementById('import-result').innerHTML = `
+        <div style="background:var(--rojo-bg);border:1.5px solid var(--rojo);border-radius:var(--radio);padding:16px;color:var(--rojo);">
+          ❌ Error al leer el archivo JSON. Verifique el formato.
+        </div>`;
+          showToast('Error al importar', 'error');
+        }
+      };
+      reader.readAsText(file);
+      // reset input
+      event.target.value = '';
+    }
+
+    // =============================================
+    // INIT
+    // =============================================
+    openDB().then(() => {
+      console.log('DB lista');
+    }).catch(err => {
+      console.error('Error DB:', err);
+      showToast('Error al iniciar base de datos', 'error');
+    });
+
+    // Close modal on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(m => {
+      m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+    });
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        let updatePrompted = false;
+
+        function promptUserToRefresh(registration) {
+          if (updatePrompted) return;
+          updatePrompted = true;
+          const aceptar = confirm('Hay una nueva version disponible. Deseas actualizar ahora?');
+          if (aceptar && registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+        }
+
+        navigator.serviceWorker.register('./service-worker.js').then((registration) => {
+          if (registration.waiting) {
+            promptUserToRefresh(registration);
+          }
+
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (!newWorker) return;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                promptUserToRefresh(registration);
+              }
+            });
+          });
+        });
+
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          window.location.reload();
+        });
+      });
+    }
+  </script>
+
+</body>
+
+</html>

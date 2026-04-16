@@ -986,7 +986,7 @@
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
         <span class="contador" id="contador-total">0 encuestas</span>
-        <button class="btn btn-secondary" onclick="descargarTodas()" id="btn-dl-todas">↓ Descargar todas (JSON)</button>
+        <button class="btn btn-secondary" onclick="descargarTodas()" id="btn-dl-todas">↓ Descargar todas (archivo de exportacion)</button>
         <button class="btn btn-danger" onclick="borrarTodas()" id="btn-borrar-todas">🗑️ Borrar todas</button>
         <span class="contador" id="status-exportacion">Ultima exportacion: —</span>
       </div>
@@ -1057,10 +1057,20 @@
     }
 
     // ======================== UUID ========================
+    function getTimestampCompact() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mi = String(d.getMinutes()).padStart(2, '0');
+      const ss = String(d.getSeconds()).padStart(2, '0');
+      return `${yyyy}${mm}${dd}${hh}${mi}${ss}`;
+    }
+
     function generarUID() {
-      const ts = Date.now().toString(36).toUpperCase();
-      const rand = Math.random().toString(36).substr(2, 8).toUpperCase();
-      return `A16-${ts}-${rand}`;
+      const rand = Math.random().toString(36).substr(2, 6).toUpperCase();
+      return `a16_${getTimestampCompact()}_${rand}`;
     }
 
     // ======================== TIPOS ========================
@@ -1377,7 +1387,7 @@
       };
 
       await dbPut(encuesta);
-      descargarJSON(encuesta, encuesta.id);
+      descargarJSON({ total: 1, exportado: new Date().toISOString(), anexo: 16, A16: [encuesta] }, `a16_ind_${encuesta.id}`);
       showToast(editingId ? '✓ Encuesta actualizada correctamente' : '✓ Encuesta guardada y descargada correctamente');
       resetFormulario();
     }
@@ -1395,7 +1405,7 @@
     async function descargarTodas() {
       const todas = await dbGetAll();
       if (!todas.length) { showToast('No hay encuestas guardadas', true); return; }
-      descargarJSON({ total: todas.length, exportado: new Date().toISOString(), encuestas: todas }, `ANEXO16_EXPORTACION_${Date.now()}`);
+      descargarJSON({ total: todas.length, exportado: new Date().toISOString(), anexo: 16, A16: todas }, `a16_exportacion_${getTimestampCompact()}`);
       const stamp = new Date().toISOString();
       localStorage.setItem(EXPORT_STATUS_KEY, stamp);
       actualizarEstadoExportacion();
@@ -1404,7 +1414,7 @@
 
     async function descargarUna(id) {
       const enc = await dbGet(id);
-      if (enc) descargarJSON(enc, enc.id);
+      if (enc) descargarJSON({ total: 1, exportado: new Date().toISOString(), anexo: 16, A16: [enc] }, `a16_ind_${enc.id}`);
     }
 
     // ======================== BORRAR TODO ========================
@@ -1447,7 +1457,7 @@
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
         <div class="encuesta-acciones">
           <button class="btn btn-primary" onclick="editarEncuesta('${e.id}')">✏️ Editar</button>
-          <button class="btn btn-secondary" onclick="descargarUna('${e.id}')">↓ JSON</button>
+          <button class="btn btn-secondary" onclick="descargarUna('${e.id}')">↓ Archivo de exportacion</button>
         </div>
       </div>
     </div>`;

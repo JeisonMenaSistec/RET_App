@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1a5c3a">
+  <title>ANEXO 20 – Escala de Parentalidad | RET-UNICEF</title>
+  <style>
+    :root {
+      --verde: #1a5c3a;
+      --verde-medio: #2e7d52;
+      --verde-claro: #4caf80;
+      --verde-bg: #e8f5ee;
+      --naranja: #e07b2a;
+      --naranja-claro: #f5a35a;
+      --naranja-bg: #fdf0e5;
+      --azul: #1565c0;
+      --azul-claro: #4a90d9;
+      --azul-bg: #e8f0fb;
+      --rojo: #c62828;
+      --rojo-bg: #fdecea;
+      --gris-oscuro: #2c2c2c;
+      --gris: #5a5a5a;
+      --gris-claro: #9e9e9e;
+      --gris-borde: #d0d0d0;
+      --gris-bg: #f5f5f5;
+      --blanco: #ffffff;
+      --sombra: 0 2px 12px rgba(0, 0, 0, 0.12);
+      --sombra-fuerte: 0 4px 24px rgba(0, 0, 0, 0.2);
+      --radio: 12px;
+      --radio-btn: 8px;
+      --font-titulo: 'Sora', sans-serif;
+      --font-cuerpo: 'Sora', sans-serif;
+      --transicion: 0.2s ease;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: var(--font-cuerpo);
+      background: var(--verde-bg);
+      color: var(--gris-oscuro);
+      overflow: auto;
+    }
+
+    /* ── LAYOUT ── */
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* HEADER */
+    #header {
+      background: var(--verde);
+      color: white;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-badge {
+      background: white;
+      color: var(--verde);
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+
+    #header h1 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      line-height: 1.2;
+    }
+
+    #header p {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 2px;
+      font-weight: 300;
+    }
+
+    #header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .hdr-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      color: white;
+      border-radius: 30px;
+      padding: 8px 18px;
+      font-family: var(--font-cuerpo);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transicion);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hdr-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .hdr-btn.active {
+      background: white;
+      color: var(--verde);
+      border-color: white;
+    }
+
+    /* MAIN CONTENT */
+    #main {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+    }
+
+    /* VIEWS */
+    .view {
+      display: none;
+      width: 100%;
+      min-height: 100%;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    /* ── FORM VIEW ── */
+    #view-form {
+      background: var(--gris-bg);
+    }
+
+    /* Progress bar */
+    #progress-bar-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--blanco);
+      border-bottom: 1px solid var(--gris-borde);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    #progress-label {
+      font-size: 13px;
+      color: var(--gris);
+      white-space: nowrap;
+    }
+
+    #progress-track {
+      flex: 1;
+      height: 8px;
+      background: var(--gris-borde);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    #progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--verde-medio), var(--verde-claro));
+      border-radius: 99px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    #progress-pct {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--verde);
+      width: 38px;
+      text-align: right;
+    }
+
+    /* Sections */
+    .section-wrap {
+      padding: 20px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-card {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      background: var(--verde);
+      color: var(--blanco);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-num {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-family: var(--font-titulo);
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .section-body {
+      padding: 20px;
+    }
+
+    /* Field groups */
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field-grid.col1 {
+      grid-template-columns: 1fr;
+    }
+
+    .field-grid.col3 {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-group.span2 {
+      grid-column: span 2;
+    }
+
+    label.field-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    label.field-label .req {
+      color: var(--rojo);
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radio-btn);
+      font-family: var(--font-cuerpo);
+      font-size: 15px;
+      color: var(--gris-oscuro);
+      background: var(--blanco);
+      transition: border-color var(--transicion), box-shadow var(--transicion);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--verde-medio);
+      box-shadow: 0 0 0 3px rgba(46, 125, 82, 0.15);
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a5a5a' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+
+    /* Age field with unit */
+    .age-field-wrap {
+      display: flex;
+      gap: 8px;
+    }
+
+    .age-field-wrap input {
+      flex: 1;
+    }
+
+    .age-field-wrap select {
+      width: 110px;
+      flex-shrink: 0;
+    }
+
+    /* Radio button groups (for scale questions) */
+    .radio-group {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .radio-opt {
+      position: relative;
+    }
+
+    .radio-opt input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .radio-opt label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 6px;
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radio-btn);
+      cursor: pointer;
+      transition: all var(--transicion);
+      text-align: center;
+      font-size: 13px;
+      color: var(--gris);
+      line-height: 1.3;
+      min-height: 52px;
+      user-select: none;
+      background: var(--blanco);
+    }
+
+    .radio-opt input[type="radio"]:checked+label {
+      border-color: var(--verde-medio);
+      background: var(--verde-bg);
+      color: var(--verde);
+      font-weight: 600;
+    }
+
+    .radio-opt label:hover {
+      border-color: var(--verde-claro);
+      background: var(--verde-bg);
+    }
+
+    .radio-opt input[type="radio"]:checked+label::before {
+      content: '✓';
+      display: block;
+      font-size: 16px;
+      color: var(--verde-medio);
+      margin-bottom: 2px;
+    }
+
+    /* Scale question item */
+    .scale-item {
+      padding: 16px;
+      border-bottom: 1px solid var(--gris-bg);
+      transition: background var(--transicion);
+    }
+
+    .scale-item:last-child {
+      border-bottom: none;
+    }
+
+    .scale-item:hover {
+      background: var(--gris-bg);
+    }
+
+    .scale-item.answered {
+      background: rgba(76, 175, 128, 0.05);
+    }
+
+    .scale-q-text {
+      font-size: 14px;
+      color: var(--gris-oscuro);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .scale-q-num {
+      display: inline-block;
+      background: var(--verde);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 24px;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Instructions box */
+    .instructions-box {
+      background: var(--naranja-bg);
+      border-left: 4px solid var(--naranja);
+      border-radius: var(--radio-btn);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--gris-oscuro);
+    }
+
+    .instructions-box strong {
+      color: var(--naranja);
+    }
+
+    /* Form footer */
+    #form-footer {
+      position: sticky;
+      bottom: 0;
+      background: var(--blanco);
+      border-top: 1px solid var(--gris-borde);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+      z-index: 50;
+    }
+
+    #form-id-display {
+      font-size: 12px;
+      color: var(--gris-claro);
+      font-family: monospace;
+    }
+
+    #form-footer-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 11px 22px;
+      border-radius: var(--radio-btn);
+      font-family: var(--font-cuerpo);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all var(--transicion);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--verde);
+      color: white;
+      border-color: var(--verde);
+    }
+
+    .btn-primary:hover {
+      background: var(--verde-medio);
+    }
+
+    .btn-secondary {
+      background: var(--blanco);
+      color: var(--gris);
+      border-color: var(--gris-borde);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gris-claro);
+      background: var(--gris-bg);
+    }
+
+    .btn-naranja {
+      background: var(--naranja);
+      color: white;
+      border-color: var(--naranja);
+    }
+
+    .btn-naranja:hover {
+      background: #c86b1e;
+    }
+
+    .btn-danger {
+      background: var(--rojo);
+      color: white;
+      border-color: var(--rojo);
+    }
+
+    .btn-danger:hover {
+      background: #a52020;
+    }
+
+    .btn-sm {
+      padding: 7px 14px;
+      font-size: 13px;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ── LIST VIEW ── */
+    #view-list {
+      background: var(--gris-bg);
+      padding: 24px;
+    }
+
+    .list-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 16px;
+    }
+
+    .list-header-bar h2 {
+      font-family: var(--font-titulo);
+      font-size: 22px;
+      color: var(--verde);
+    }
+
+    .list-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #survey-list-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .survey-card {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-left: 4px solid var(--verde-claro);
+      transition: box-shadow var(--transicion);
+    }
+
+    .survey-card:hover {
+      box-shadow: var(--sombra-fuerte);
+    }
+
+    .survey-card-id {
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--gris-claro);
+      background: var(--gris-bg);
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .survey-card-name {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--gris-oscuro);
+    }
+
+    .survey-card-meta {
+      font-size: 13px;
+      color: var(--gris);
+      line-height: 1.6;
+    }
+
+    .survey-card-date {
+      font-size: 12px;
+      color: var(--gris-claro);
+    }
+
+    .survey-card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .survey-card-complete {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 99px;
+    }
+
+    .survey-card-complete.done {
+      background: var(--verde-bg);
+      color: var(--verde);
+    }
+
+    .survey-card-complete.partial {
+      background: var(--naranja-bg);
+      color: var(--naranja);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gris-claro);
+      grid-column: 1 / -1;
+    }
+
+    .empty-state .empty-icon {
+      font-size: 52px;
+      margin-bottom: 12px;
+    }
+
+    .empty-state p {
+      font-size: 16px;
+    }
+
+    /* ── MODAL ── */
+    #modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra-fuerte);
+      padding: 28px;
+      max-width: 480px;
+      width: 90%;
+      animation: modalIn 0.2s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .modal h3 {
+      font-family: var(--font-titulo);
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: var(--verde);
+    }
+
+    .modal p {
+      font-size: 14px;
+      color: var(--gris);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    /* TOAST */
+    #toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--gris-oscuro);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 99px;
+      font-size: 14px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 999;
+      white-space: nowrap;
+      box-shadow: var(--sombra-fuerte);
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #toast.success {
+      background: var(--verde);
+    }
+
+    #toast.error {
+      background: var(--rojo);
+    }
+
+    /* READ-ONLY VIEW overlay */
+    .readonly-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--azul-bg);
+      color: var(--azul);
+      border: 1px solid var(--azul-claro);
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    /* Import file btn */
+    #import-file {
+      display: none;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--gris-borde);
+      border-radius: 3px;
+    }
+
+    /* Field validation */
+    input.invalid,
+    select.invalid,
+    textarea.invalid {
+      border-color: var(--rojo) !important;
+      background: var(--rojo-bg);
+    }
+
+    .field-error {
+      font-size: 12px;
+      color: var(--rojo);
+      margin-top: 2px;
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--gris-bg);
+      margin: 16px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+
+    <!-- HEADER -->
+    
+      <div id="header-left">
+
+        <div id="header">
+          <div class="header-logo">
+            <div class="logo-badge">RET · UNICEF</div>
+            <div>
+              <h1>ANEXO 20 — Escala de parentalidad</h1>
+              <p>Formulario principal</p>
+            </div>
+          </div>
+          <div id="header-actions">
+            <button class="hdr-btn active" id="btn-nav-form" onclick="startNewSurvey()">
+              Nueva
+            </button>
+            <button class="hdr-btn" id="btn-nav-list" onclick="navTo('list')">
+              Historial<span id="survey-count">0</span>
+            </button>
+            <button class="hdr-btn" onclick="location.href='index.html'">↩︎ Menú</button>
+          </div>
+        </div>
+
+      <!-- ── FORM VIEW ── -->
+      <div class="view active" id="view-form">
+        <!-- Progress -->
+        <div id="progress-bar-wrap">
+          <span id="progress-label">Progreso</span>
+          <div id="progress-track">
+            <div id="progress-fill"></div>
+          </div>
+          <span id="progress-pct">0%</span>
+          <button class="btn btn-secondary btn-sm" onclick="resetForm()" style="margin-left:8px;">🔄 Limpiar</button>
+        </div>
+
+        <div class="section-wrap" id="form-body">
+
+          <!-- SECTION 1: Datos del cuidador -->
+          <div class="section-card" id="sec-datos">
+            <div class="section-header">
+              <div class="section-num">1</div>
+              <div class="section-title">DATOS DEL CUIDADOR PRINCIPAL</div>
+            </div>
+            <div class="section-body">
+              <div class="field-grid">
+                <div class="field-group span2">
+                  <label class="field-label">Nombre <span class="req">*</span></label>
+                  <input type="text" id="f_nombre_cuidador" placeholder="Nombre completo del cuidador principal"
+                    oninput="updateProgress()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Edad</label>
+                  <input type="number" id="f_edad_cuidador" placeholder="Años" min="14" max="99"
+                    oninput="updateProgress()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Sexo</label>
+                  <select id="f_sexo_cuidador" onchange="updateProgress()">
+                    <option value="">— Seleccionar —</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Escolaridad</label>
+                  <select id="f_escolaridad_cuidador" onchange="updateProgress()">
+                    <option value="">— Seleccionar —</option>
+                    <option value="Sin escolaridad">Sin escolaridad</option>
+                    <option value="Básica">Básica</option>
+                    <option value="Media">Media</option>
+                    <option value="Técnico">Técnico</option>
+                    <option value="Universitario">Universitario</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Ingreso familiar total al mes</label>
+                  <input type="number" id="f_ingreso_familiar" placeholder="Monto en moneda local" min="0"
+                    oninput="updateProgress()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Ocupación (¿en qué trabaja?)</label>
+                  <input type="text" id="f_ocupacion" placeholder="Ej: Agricultor, vendedor ambulante..."
+                    oninput="updateProgress()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Estado civil</label>
+                  <select id="f_estado_civil" onchange="updateProgress()">
+                    <option value="">— Seleccionar —</option>
+                    <option value="Soltero(a)">Soltero(a)</option>
+                    <option value="Casado(a)">Casado(a)</option>
+                    <option value="Unión libre">Unión libre</option>
+                    <option value="Divorciado(a)">Divorciado(a)</option>
+                    <option value="Viudo(a)">Viudo(a)</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Nacionalidad</label>
+                  <input type="text" id="f_nacionalidad" placeholder="Ej: Colombiana, Venezolana..."
+                    oninput="updateProgress()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">¿Cuántas personas viven en su casa? (Total)</label>
+                  <input type="number" id="f_personas_casa" placeholder="Total de personas" min="1"
+                    oninput="updateProgress()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Personas menores de 18 años</label>
+                  <input type="number" id="f_menores_18" placeholder="Cantidad" min="0" oninput="updateProgress()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">¿Cuántos hijos tiene?</label>
+                  <input type="number" id="f_num_hijos" placeholder="Número de hijos" min="0"
+                    oninput="updateProgress()">
+                </div>
+              </div>
+
+              <hr class="divider">
+              <div style="font-weight:600; color:var(--verde); font-size:14px; margin-bottom:12px;">📌 Datos del Niño(a)
+              </div>
+
+              <div class="field-grid">
+                <div class="field-group span2">
+                  <label class="field-label">Nombre del niño(a) <span class="req">*</span></label>
+                  <input type="text" id="f_nombre_nino" placeholder="Nombre completo del niño o niña"
+                    oninput="updateProgress()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Edad del niño(a)</label>
+                  <div class="age-field-wrap">
+                    <input type="number" id="f_edad_nino" placeholder="Valor" min="0" max="99"
+                      oninput="updateProgress()">
+                    <select id="f_edad_nino_unidad" onchange="updateProgress()">
+                      <option value="Años">Años</option>
+                      <option value="Meses">Meses</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Sexo del niño(a)</label>
+                  <select id="f_sexo_nino" onchange="updateProgress()">
+                    <option value="">— Seleccionar —</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Escolaridad actual del niño(a)</label>
+                  <select id="f_escolaridad_nino" onchange="updateProgress()">
+                    <option value="">— Seleccionar —</option>
+                    <option value="Sala cuna">Sala cuna</option>
+                    <option value="Jardín infantil">Jardín infantil</option>
+                    <option value="No asiste">No asiste</option>
+                  </select>
+                </div>
+                <div class="field-group span2">
+                  <label class="field-label">¿Cuál es su relación con el niño(a)?</label>
+                  <select id="f_relacion_nino" onchange="updateProgress()">
+                    <option value="">— Seleccionar —</option>
+                    <option value="Padre">Padre</option>
+                    <option value="Madre">Madre</option>
+                    <option value="Abuela(o)">Abuela(o)</option>
+                    <option value="Otro familiar">Otro familiar</option>
+                    <option value="Cuidador no familiar">Cuidador no familiar</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">¿El niño(a) tiene alguna enfermedad diagnosticada?</label>
+                  <select id="f_enfermedad_si_no"
+                    onchange="toggleConditional('f_enfermedad_si_no','f_cual_enfermedad_wrap'); updateProgress()">
+                    <option value="">— Seleccionar —</option>
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+                <div class="field-group" id="f_cual_enfermedad_wrap" style="display:none;">
+                  <label class="field-label">¿Cuál es la enfermedad?</label>
+                  <input type="text" id="f_cual_enfermedad" placeholder="Describe la enfermedad"
+                    oninput="updateProgress()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">¿El niño(a) tiene algún problema emocional que le preocupe?</label>
+                  <select id="f_problema_emocional_si_no"
+                    onchange="toggleConditional('f_problema_emocional_si_no','f_cual_problema_wrap'); updateProgress()">
+                    <option value="">— Seleccionar —</option>
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+                <div class="field-group" id="f_cual_problema_wrap" style="display:none;">
+                  <label class="field-label">¿Cuál es el problema emocional?</label>
+                  <input type="text" id="f_cual_problema_emocional" placeholder="Describe el problema"
+                    oninput="updateProgress()">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 2: Instrucciones + Escala -->
+          <div class="section-card" id="sec-escala">
+            <div class="section-header">
+              <div class="section-num">2</div>
+              <div class="section-title">ESCALA DE PARENTALIDAD POSITIVA (E2P)</div>
+            </div>
+            <div class="section-body">
+              <div class="instructions-box">
+                <strong>📖 Instrucciones para el encuestador:</strong><br><br>
+                La <strong>Escala de Parentalidad Positiva (E2P)</strong> es un cuestionario muy sencillo que puede
+                contestarlo cualquier adulto responsable de la crianza de un niño o niña. Su objetivo es identificar
+                aquellas prácticas que usted usa al relacionarse con su hijo o hija en su vida cotidiana.<br><br>
+                A continuación, se presentan <strong>54 situaciones</strong>. Para cada una, seleccione la opción que
+                mejor describe con qué frecuencia usted realiza esa práctica:<br><br>
+                <strong>Casi nunca · A veces · Casi siempre · Siempre</strong><br><br>
+                No hay respuestas correctas ni incorrectas. Lo importante es que sea honesto(a) sobre lo que realmente
+                hace.
+              </div>
+
+              <!-- Scale options header -->
+              <div
+                style="display:grid; grid-template-columns: 1fr repeat(4,1fr); gap:8px; padding: 8px 16px; background:var(--gris-bg); border-radius:var(--radio-btn); margin-bottom:8px; font-size:12px; font-weight:700; color:var(--gris); text-transform:uppercase; letter-spacing:0.04em;">
+                <div>Situación</div>
+                <div style="text-align:center;">Casi<br>nunca</div>
+                <div style="text-align:center;">A<br>veces</div>
+                <div style="text-align:center;">Casi<br>siempre</div>
+                <div style="text-align:center;">Siempre</div>
+              </div>
+
+              <div id="scale-questions"></div>
+            </div>
+          </div>
+
+          <!-- SECTION 3: Observaciones -->
+          <div class="section-card">
+            <div class="section-header">
+              <div class="section-num">★</div>
+              <div class="section-title">OBSERVACIONES GENERALES</div>
+            </div>
+            <div class="section-body">
+              <div class="field-group">
+                <label class="field-label">Observaciones generales</label>
+                <textarea id="f_observaciones" rows="4"
+                  placeholder="Escriba aquí cualquier observación relevante sobre la encuesta, el entorno familiar, situaciones especiales observadas, etc."
+                  oninput="updateProgress()"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 3: Quien aplica -->
+          <div class="section-card">
+            <div class="section-header">
+              <div class="section-num">3</div>
+              <div class="section-title">QUIEN APLICA LA ENCUESTA (COORDINADOR / SUPERVISORA)</div>
+            </div>
+            <div class="section-body">
+              <div class="field-grid col3">
+                <div class="field-group">
+                  <label class="field-label">Nombre del encuestador <span class="req">*</span></label>
+                  <input type="text" id="f_encuestador_nombre" placeholder="Nombre completo" oninput="updateProgress()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Número de cédula</label>
+                  <input type="text" id="f_encuestador_cedula" placeholder="N.º de identificación"
+                    oninput="updateProgress()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Fecha de aplicación</label>
+                  <input type="date" id="f_fecha_aplicacion" oninput="updateProgress()">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="height:20px;"></div>
+        </div><!-- /section-wrap -->
+
+        <!-- FORM FOOTER -->
+        <div id="form-footer">
+          <div id="form-id-display">ID: —</div>
+          <div id="form-footer-btns">
+            <button class="btn btn-secondary" onclick="saveDraft()">💾 Guardar borrador</button>
+            <button class="btn btn-primary" onclick="submitSurvey()">✅ Guardar y Descargar</button>
+          </div>
+        </div>
+      </div><!-- /view-form -->
+
+      <!-- ── LIST VIEW ── -->
+      <div class="view" id="view-list">
+        <div class="list-header-bar">
+          <h2>📋 Encuestas Realizadas</h2>
+          <div class="list-actions">
+            <button class="btn btn-secondary btn-sm" onclick="triggerImport()">📥 Importar archivo de exportacion</button>
+            <input type="file" id="import-file" accept=".json" onchange="importJSON(event)">
+            <button class="btn btn-naranja btn-sm" onclick="downloadAll()">⬇️ Descargar todas</button>
+          </div>
+        </div>
+        <div id="survey-list-grid"></div>
+      </div><!-- /view-list -->
+
+    </div><!-- /main -->
+  
+
+  <!-- MODAL -->
+  <div id="modal-overlay">
+    <div class="modal" id="modal-box">
+      <h3 id="modal-title">Confirmación</h3>
+      <p id="modal-body">¿Está seguro?</p>
+      <div class="modal-btns">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-danger" id="modal-confirm-btn">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast"></div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════
+    // DATA
+    // ═══════════════════════════════════════════════════════
+    const SCALE_QUESTIONS = [
+      "Me hago el tiempo para jugar, dibujar y hacer otras cosas con mi hijo(a)",
+      "Con mi hijo(a), cantamos o bailamos juntos(as)",
+      "Con mi hijo(a), vemos juntos programas de TV o películas apropiadas a su edad",
+      "Cuando mi hijo(a) está irritable, puedo identificar las causas",
+      "Ayudo a mi hijo(a) a que reconozca sus emociones y les ponga nombre",
+      "Reservo un momento exclusivo del día para compartir con mi hijo(a)",
+      "Mi hijo(a) y yo conversamos de temas que le interesan",
+      "Logro ponerme en el lugar de mi hijo(a)",
+      "Cuando mi hijo(a) está estresado, me busca para que lo ayude a calmarse",
+      "Cuando mi hijo(a) pide mi atención, respondo pronto, en poco tiempo",
+      "Con mi hijo(a), nos reímos juntos de cosas divertidas",
+      "Cuando mi hijo(a) llora o se enoja, logro calmarlo(a) en poco tiempo",
+      "Mi hijo(a) y yo jugamos juntos",
+      "Le demuestro explícitamente mi cariño a mi hijo(a)",
+      "Si mi hijo(a) no entiende una idea, busco la manera de explicarle y que comprenda",
+      "Hablo con mi hijo(a) sobre las cosas que no se deben hacer",
+      "Converso con mi hijo(a) algún tema o acontecimiento del día, para que aprenda",
+      "Le explico cuáles son las normas y límites que deben respetarse",
+      "Le explico que las personas pueden equivocarse",
+      "Me disculpo con mi hijo(a) cuando me equivoco",
+      "Lo acompaño a encontrar solución a problemas",
+      "Lo motivo a tomar sus decisiones, ofreciéndole alternativas de acuerdo a su edad",
+      "En casa, logro que mi hijo(a) respete y cumpla la rutina diaria",
+      "Cuando se porta mal, mi hijo(a) y yo buscamos juntos formas positivas de reparar el error",
+      "Le enseño a mi hijo(a) cómo debe comportarse en la calle, reuniones y cumpleaños",
+      "Le explico cómo espero que se comporte antes de salir de casa",
+      "Me relaciono con los amiguitos, primitos o vecinitos actuales de mi hijo(a)",
+      "Me relaciono con las familias de los amiguitos, primitos o vecinitos actuales de mi hijo(a)",
+      "Me mantengo informado(a) de lo que mi hijo(a) realiza en la sala cuna o jardín infantil",
+      "Asisto a las reuniones de apoderados en la sala cuna o jardín infantil",
+      "Cuando no estoy con mi hijo(a), estoy seguro(a) de que el adulto o los adultos que lo cuidan lo tratan bien",
+      "Le enseño a mi hijo(a) a reconocer en qué personas se puede confiar",
+      "Cuando la crianza se me hace difícil, busco ayuda de mis amigos o familiares",
+      "Averiguo y utilizo los recursos o servicios que hay en mi comuna para apoyarme en la crianza",
+      "Si tengo dudas sobre un tema de crianza, pido consejos, orientación y ayuda",
+      "En casa, mi hijo(a) utiliza juguetes u objetos que estimulan su aprendizaje de acuerdo a su edad",
+      "En casa, mi hijo(a) juega con libros y cuentos apropiados para su edad",
+      "Me ocupo de la higiene y cuidado que necesita",
+      "Mi hijo(a) puede usar un espacio especial de la casa para jugar y distraerse",
+      "En casa, logro armar una rutina para organizar el día de mi hijo(a)",
+      "Logro que mi hijo(a) se alimente de forma balanceada para su edad",
+      "Mi hijo(a) anda limpio y bien aseado",
+      "Llevo a mi hijo(a) a controles preventivos de salud",
+      "La crianza me ha dejado tiempo para disfrutar de otras cosas que me gustan",
+      "Dedico tiempo a pensar cómo apoyarlo(a) en los desafíos propios de su edad",
+      "Antes de relacionarme con mi hijo(a), me limpio de rabias, penas o frustraciones",
+      "Reflexiono sobre cómo superar las dificultades de relación que pueda tener con mi hijo(a)",
+      "He logrado mantener un clima familiar bueno para su desarrollo",
+      "Me doy espacios para mí mismo(a), distintos de la crianza",
+      "Siento que tengo tiempo para descansar",
+      "Dedico tiempo a evaluar y pensar sobre cómo se está desarrollando mi hijo(a)",
+      "Siento que he logrado mantener una buena salud mental",
+      "Me he asegurado de que mi vida personal no dañe a mi hijo(a)",
+      "Logro anticipar momentos difíciles en la crianza y me preparo"
+    ];
+
+    const SCALE_OPTIONS = ["Casi nunca", "A veces", "Casi siempre", "Siempre"];
+    const SCALE_FIELD_KEYS = SCALE_QUESTIONS.map((_, i) => `escala_p${String(i + 1).padStart(2, '0')}`);
+
+    function ensureScaleFields(data) {
+      SCALE_QUESTIONS.forEach((q, i) => {
+        const key = SCALE_FIELD_KEYS[i];
+        if (!(key in data)) data[key] = null;
+        if (!(`${key}_texto` in data)) data[`${key}_texto`] = q;
+      });
+      return data;
+    }
+
+    function normalizeScaleValue(val) {
+      if (val == null) return null;
+      const raw = String(val).trim();
+      if (!raw) return null;
+      const asNum = Number(raw);
+      if (!Number.isNaN(asNum)) {
+        if (asNum >= 1 && asNum <= SCALE_OPTIONS.length) return SCALE_OPTIONS[asNum - 1];
+        if (asNum >= 0 && asNum < SCALE_OPTIONS.length) return SCALE_OPTIONS[asNum];
+      }
+      const normalizedRaw = raw.replace(/\s+/g, ' ').toLowerCase();
+      for (const opt of SCALE_OPTIONS) {
+        if (opt.toLowerCase() === normalizedRaw) return opt;
+      }
+      return raw;
+    }
+
+    let currentSurveyId = null;
+    let currentSurveyMode = 'new'; // 'new' | 'edit' | 'view'
+    let currentSurveyData = null;
+    let db = null;
+
+    // ═══════════════════════════════════════════════════════
+    // INDEXEDDB
+    // ═══════════════════════════════════════════════════════
+    function initDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open('AnexO20DB', 1);
+        req.onupgradeneeded = e => {
+          const d = e.target.result;
+          if (!d.objectStoreNames.contains('encuestas')) {
+            const store = d.createObjectStore('encuestas', { keyPath: 'survey_id' });
+            store.createIndex('fecha_creacion', 'fecha_creacion');
+            store.createIndex('nombre_cuidador', 'nombre_cuidador');
+          }
+        };
+        req.onsuccess = e => { db = e.target.result; resolve(); };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    function dbSave(data) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction('encuestas', 'readwrite');
+        tx.objectStore('encuestas').put(data).onsuccess = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    function dbGetAll() {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction('encuestas', 'readonly');
+        const req = tx.objectStore('encuestas').getAll();
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    function dbGet(id) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction('encuestas', 'readonly');
+        const req = tx.objectStore('encuestas').get(id);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    function dbDelete(id) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction('encuestas', 'readwrite');
+        tx.objectStore('encuestas').delete(id).onsuccess = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // UNIQUE ID
+    // ═══════════════════════════════════════════════════════
+    function getTimestampCompact() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mi = String(d.getMinutes()).padStart(2, '0');
+      const ss = String(d.getSeconds()).padStart(2, '0');
+      return `${yyyy}${mm}${dd}${hh}${mi}${ss}`;
+    }
+
+    function generateId() {
+      const rand = Math.random().toString(36).substr(2, 6).toUpperCase();
+      return `a20_${getTimestampCompact()}_${rand}`;
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // RENDER SCALE QUESTIONS
+    // ═══════════════════════════════════════════════════════
+    function renderScaleQuestions() {
+      const container = document.getElementById('scale-questions');
+      container.innerHTML = '';
+      SCALE_QUESTIONS.forEach((q, i) => {
+        const key = SCALE_FIELD_KEYS[i];
+        const num = i + 1;
+        const div = document.createElement('div');
+        div.className = 'scale-item';
+        div.id = `scale-item-${num}`;
+        div.innerHTML = `
+      <div class="scale-q-text">
+        <span class="scale-q-num">${num}</span>${q}
+      </div>
+      <div class="radio-group">
+        ${SCALE_OPTIONS.map(opt => `
+          <div class="radio-opt">
+            <input type="radio" name="${key}" id="${key}_${opt.replace(/\s/g, '_')}" value="${opt}" onchange="onScaleChange(${i})">
+            <label for="${key}_${opt.replace(/\s/g, '_')}">${opt}</label>
+          </div>
+        `).join('')}
+      </div>
+    `;
+        container.appendChild(div);
+      });
+    }
+
+    function onScaleChange(idx) {
+      const item = document.getElementById(`scale-item-${idx + 1}`);
+      if (item) item.classList.add('answered');
+      updateProgress();
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // PROGRESS
+    // ═══════════════════════════════════════════════════════
+    function updateProgress() {
+      const fields = [
+        'f_nombre_cuidador', 'f_edad_cuidador', 'f_sexo_cuidador', 'f_escolaridad_cuidador',
+        'f_ingreso_familiar', 'f_ocupacion', 'f_estado_civil', 'f_nacionalidad',
+        'f_personas_casa', 'f_menores_18', 'f_num_hijos',
+        'f_nombre_nino', 'f_edad_nino', 'f_sexo_nino', 'f_escolaridad_nino',
+        'f_relacion_nino', 'f_enfermedad_si_no', 'f_problema_emocional_si_no',
+        'f_observaciones',
+        'f_encuestador_nombre', 'f_encuestador_cedula', 'f_fecha_aplicacion'
+      ];
+      let filled = 0;
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.value && el.value.trim() !== '') filled++;
+      });
+      // Scale questions
+      let scaleFilled = 0;
+      SCALE_FIELD_KEYS.forEach(key => {
+        if (document.querySelector(`input[name="${key}"]:checked`)) scaleFilled++;
+      });
+      const total = fields.length + SCALE_QUESTIONS.length;
+      const done = filled + scaleFilled;
+      const pct = Math.round((done / total) * 100);
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-pct').textContent = pct + '%';
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // COLLECT FORM DATA
+    // ═══════════════════════════════════════════════════════
+    function collectFormData() {
+      // FIX: Use the current ID if exists (edit mode), otherwise generate a new one.
+      // This ensures re-saving an edited survey doesn't lose its ID.
+      const surveyId = currentSurveyId || generateId();
+
+      const data = {
+        // --- Metadata ---
+        survey_id: surveyId,
+        formulario: 'ANEXO 20 - ESCALA DE PARENTALIDAD POSITIVA E2P',
+        organizacion: 'RET-UNICEF',
+        region: 'Panama',
+        fecha_creacion: new Date().toISOString(),
+        estado: 'completo',
+
+        // --- Sección 1: Cuidador ---
+        nombre_cuidador: v('f_nombre_cuidador'),
+        edad_cuidador: vn('f_edad_cuidador'),
+        sexo_cuidador: v('f_sexo_cuidador'),
+        escolaridad_cuidador: v('f_escolaridad_cuidador'),
+        ingreso_familiar_mensual: vn('f_ingreso_familiar'),
+        ocupacion_cuidador: v('f_ocupacion'),
+        estado_civil_cuidador: v('f_estado_civil'),
+        nacionalidad_cuidador: v('f_nacionalidad'),
+        total_personas_hogar: vn('f_personas_casa'),
+        menores_18_hogar: vn('f_menores_18'),
+        numero_hijos_cuidador: vn('f_num_hijos'),
+
+        // --- Niño(a) ---
+        nombre_nino: v('f_nombre_nino'),
+        edad_nino: vn('f_edad_nino'),
+        edad_nino_unidad: v('f_edad_nino_unidad'),
+        sexo_nino: v('f_sexo_nino'),
+        escolaridad_nino: v('f_escolaridad_nino'),
+        relacion_cuidador_nino: v('f_relacion_nino'),
+        nino_tiene_enfermedad_diagnosticada: v('f_enfermedad_si_no'),
+        descripcion_enfermedad_nino: v('f_cual_enfermedad'),
+        nino_tiene_problema_emocional: v('f_problema_emocional_si_no'),
+        descripcion_problema_emocional_nino: v('f_cual_problema_emocional'),
+      };
+
+      // FIX: Store the generated/existing ID so subsequent saves in this session keep the same ID
+      currentSurveyId = surveyId;
+
+      // Scale answers
+      SCALE_QUESTIONS.forEach((q, i) => {
+        const key = SCALE_FIELD_KEYS[i];
+        const checked = document.querySelector(`input[name="${key}"]:checked`);
+        let val = checked ? checked.value : null;
+        if (!val && currentSurveyData) {
+          const altKey = `escala_p${i + 1}`;
+          const prev = currentSurveyData[key] != null ? currentSurveyData[key] : currentSurveyData[altKey];
+          val = normalizeScaleValue(prev);
+        }
+        data[key] = val || null;
+        data[`${key}_texto`] = q;
+      });
+
+      // Observaciones y encuestador
+      data.observaciones_generales = v('f_observaciones');
+      data.encuestador_nombre = v('f_encuestador_nombre');
+      data.encuestador_cedula = v('f_encuestador_cedula');
+      data.fecha_aplicacion = v('f_fecha_aplicacion');
+
+      // Score summary
+      const scoreMap = { 'Casi nunca': 1, 'A veces': 2, 'Casi siempre': 3, 'Siempre': 4 };
+      let total = 0, answered = 0;
+      SCALE_FIELD_KEYS.forEach(k => {
+        if (data[k] && scoreMap[data[k]]) { total += scoreMap[data[k]]; answered++; }
+      });
+      data.puntaje_total = total;
+      data.preguntas_respondidas = answered;
+      data.puntaje_promedio = answered > 0 ? Math.round((total / answered) * 100) / 100 : null;
+
+      return ensureScaleFields(data);
+    }
+
+    function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+    function vn(id) { const el = document.getElementById(id); return el && el.value !== '' ? Number(el.value) : null; }
+
+    // ═══════════════════════════════════════════════════════
+    // FILL FORM FROM DATA
+    // ═══════════════════════════════════════════════════════
+    function fillForm(data) {
+      const normalized = ensureScaleFields({ ...data });
+      const set = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val != null && val !== '') el.value = val;
+      };
+      set('f_nombre_cuidador', normalized.nombre_cuidador);
+      set('f_edad_cuidador', normalized.edad_cuidador);
+      set('f_sexo_cuidador', normalized.sexo_cuidador);
+      set('f_escolaridad_cuidador', normalized.escolaridad_cuidador);
+      set('f_ingreso_familiar', normalized.ingreso_familiar_mensual);
+      set('f_ocupacion', normalized.ocupacion_cuidador);
+      set('f_estado_civil', normalized.estado_civil_cuidador);
+      set('f_nacionalidad', normalized.nacionalidad_cuidador);
+      set('f_personas_casa', normalized.total_personas_hogar);
+      set('f_menores_18', normalized.menores_18_hogar);
+      set('f_num_hijos', normalized.numero_hijos_cuidador);
+      set('f_nombre_nino', normalized.nombre_nino);
+      set('f_edad_nino', normalized.edad_nino);
+      set('f_edad_nino_unidad', normalized.edad_nino_unidad || 'Años');
+      set('f_sexo_nino', normalized.sexo_nino);
+      set('f_escolaridad_nino', normalized.escolaridad_nino);
+      set('f_relacion_nino', normalized.relacion_cuidador_nino);
+      set('f_enfermedad_si_no', normalized.nino_tiene_enfermedad_diagnosticada);
+      set('f_cual_enfermedad', normalized.descripcion_enfermedad_nino);
+      set('f_problema_emocional_si_no', normalized.nino_tiene_problema_emocional);
+      set('f_cual_problema_emocional', normalized.descripcion_problema_emocional_nino);
+
+      // Conditionals
+      toggleConditional('f_enfermedad_si_no', 'f_cual_enfermedad_wrap');
+      toggleConditional('f_problema_emocional_si_no', 'f_cual_problema_wrap');
+
+      // FIX: Restore scale radio buttons correctly.
+      // Use requestAnimationFrame to ensure the DOM is fully ready before setting checked state.
+      requestAnimationFrame(() => {
+        SCALE_FIELD_KEYS.forEach((key, idx) => {
+          const altKey = `escala_p${idx + 1}`;
+          const rawVal = normalized[key] != null ? normalized[key] : normalized[altKey];
+          const val = normalizeScaleValue(rawVal);
+          if (val) {
+            const radio = document.querySelector(`input[type="radio"][name="${key}"][value="${val}"]`);
+            if (radio) {
+              radio.checked = true;
+              const item = document.getElementById(`scale-item-${idx + 1}`);
+              if (item) item.classList.add('answered');
+            }
+          }
+        });
+        updateProgress();
+      });
+
+      set('f_observaciones', normalized.observaciones_generales);
+      set('f_encuestador_nombre', normalized.encuestador_nombre);
+      set('f_encuestador_cedula', normalized.encuestador_cedula);
+      set('f_fecha_aplicacion', normalized.fecha_aplicacion);
+
+      document.getElementById('form-id-display').textContent = `ID: ${normalized.survey_id}`;
+      // FIX: Set currentSurveyId here so that collectFormData() reuses the same ID on save
+      currentSurveyId = normalized.survey_id;
+
+      updateProgress();
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // CONDITIONAL FIELDS
+    // ═══════════════════════════════════════════════════════
+    function toggleConditional(selectId, wrapId) {
+      const sel = document.getElementById(selectId);
+      const wrap = document.getElementById(wrapId);
+      if (sel && wrap) {
+        wrap.style.display = sel.value === 'Sí' ? '' : 'none';
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // NAVIGATION
+    // ═══════════════════════════════════════════════════════
+    function navTo(view) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.hdr-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`view-${view}`).classList.add('active');
+      document.getElementById(`btn-nav-${view}`).classList.add('active');
+      if (view === 'list') renderList();
+    }
+
+    function startNewSurvey() {
+      resetFormSilent();
+      renderScaleQuestions();
+      currentSurveyMode = 'new';
+      currentSurveyId = null;
+      currentSurveyData = null;
+      navTo('form');
+      document.getElementById('f_fecha_aplicacion').value = new Date().toISOString().slice(0, 10);
+      updateProgress();
+      document.getElementById('view-form').scrollTop = 0;
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // SAVE DRAFT
+    // ═══════════════════════════════════════════════════════
+    async function saveDraft() {
+      const data = collectFormData();
+      data.estado = 'borrador';
+      // currentSurveyId is already set inside collectFormData()
+      document.getElementById('form-id-display').textContent = `ID: ${data.survey_id}`;
+      await dbSave(data);
+      updateCount();
+      showToast('Borrador guardado ✓', 'success');
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // SUBMIT
+    // ═══════════════════════════════════════════════════════
+    async function submitSurvey() {
+      const nombre = document.getElementById('f_nombre_cuidador').value.trim();
+      const encuestador = document.getElementById('f_encuestador_nombre').value.trim();
+      if (!nombre || !encuestador) {
+        showToast('Complete los campos obligatorios (*)', 'error');
+        if (!nombre) document.getElementById('f_nombre_cuidador').classList.add('invalid');
+        if (!encuestador) document.getElementById('f_encuestador_nombre').classList.add('invalid');
+        return;
+      }
+
+      const data = collectFormData();
+      data.estado = 'completo';
+      // currentSurveyId is already set inside collectFormData()
+      document.getElementById('form-id-display').textContent = `ID: ${data.survey_id}`;
+      await dbSave(data);
+      updateCount();
+      downloadJSON(data);
+      showToast('Encuesta guardada y descargada ✓', 'success');
+      resetFormSilent();
+      renderScaleQuestions();
+      currentSurveyMode = 'new';
+      currentSurveyId = null;
+      currentSurveyData = null;
+      document.getElementById('f_fecha_aplicacion').value = new Date().toISOString().slice(0, 10);
+      updateProgress();
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // RESET FORM
+    // ═══════════════════════════════════════════════════════
+    function resetForm() {
+      openModal('Limpiar formulario', '¿Desea limpiar todos los campos y comenzar una nueva encuesta?', () => {
+        document.getElementById('form-body').querySelectorAll('input, select, textarea').forEach(el => {
+          el.value = '';
+          el.classList.remove('invalid');
+        });
+        document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+        document.querySelectorAll('.scale-item').forEach(i => i.classList.remove('answered'));
+        document.getElementById('f_cual_enfermedad_wrap').style.display = 'none';
+        document.getElementById('f_cual_problema_wrap').style.display = 'none';
+        currentSurveyId = null;
+        currentSurveyMode = 'new';
+        document.getElementById('form-id-display').textContent = 'ID: —';
+        // Set today
+        document.getElementById('f_fecha_aplicacion').value = new Date().toISOString().slice(0, 10);
+        updateProgress();
+        showToast('Formulario limpiado', 'success');
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // DOWNLOAD JSON
+    // ═══════════════════════════════════════════════════════
+    function downloadJSON(data) {
+      const normalized = ensureScaleFields({ ...data });
+      const filename = `a20_ind_${data.survey_id}.json`;
+      const payload = { total: 1, exportado: new Date().toISOString(), anexo: 20, A20: [normalized] };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+
+    function downloadAll() {
+      dbGetAll().then(all => {
+        if (!all.length) { showToast('No hay encuestas para descargar', 'error'); return; }
+        const normalizedAll = all.map(item => ensureScaleFields({ ...item }));
+        const payload = { total: normalizedAll.length, exportado: new Date().toISOString(), anexo: 20, A20: normalizedAll };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `a20_exportacion_${getTimestampCompact()}.json`;
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a); URL.revokeObjectURL(url);
+        showToast(`${all.length} encuesta(s) descargadas ✓`, 'success');
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // IMPORT JSON
+    // ═══════════════════════════════════════════════════════
+    function triggerImport() {
+      document.getElementById('import-file').value = '';
+      document.getElementById('import-file').click();
+    }
+
+    function importJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async ev => {
+        try {
+          let parsed = JSON.parse(ev.target.result);
+          let items = [];
+          if (parsed && parsed.A20) {
+            items = Array.isArray(parsed.A20) ? parsed.A20 : [parsed.A20];
+          } else {
+            items = Array.isArray(parsed) ? parsed : [parsed];
+          }
+          let imported = 0;
+          for (const item of items) {
+            if (!item.survey_id) item.survey_id = generateId();
+            await dbSave(ensureScaleFields(item));
+            imported++;
+          }
+          updateCount();
+          renderList();
+          showToast(`${imported} encuesta(s) importada(s) ✓`, 'success');
+        } catch {
+          showToast('Error al leer el archivo de exportacion', 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // RENDER LIST
+    // ═══════════════════════════════════════════════════════
+    async function renderList() {
+      const grid = document.getElementById('survey-list-grid');
+      const all = await dbGetAll();
+      all.sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
+      grid.innerHTML = '';
+
+      if (!all.length) {
+        grid.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <p>No hay encuestas guardadas aún.</p>
+      <p style="margin-top:8px;font-size:13px;">Comience llenando una nueva encuesta.</p>
+    </div>`;
+        return;
+      }
+
+      all.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'survey-card';
+        const answered = SCALE_FIELD_KEYS.filter(k => s[k]).length;
+        const fecha = s.fecha_aplicacion || s.fecha_creacion?.slice(0, 10) || '—';
+        const isComplete = s.estado === 'completo';
+
+        card.innerHTML = `
+      <div>
+        <span class="survey-card-id">${s.survey_id}</span>
+        <span class="survey-card-complete ${isComplete ? 'done' : 'partial'}" style="margin-left:8px;">
+          ${isComplete ? '✅ Completa' : '✏️ Borrador'}
+        </span>
+      </div>
+      <div class="survey-card-name">${s.nombre_cuidador || '(Sin nombre)'}</div>
+      <div class="survey-card-meta">
+        👶 ${s.nombre_nino || '—'} &nbsp;·&nbsp;
+        📊 ${answered}/54 preguntas
+        ${s.puntaje_total ? `&nbsp;·&nbsp; Puntaje: <strong>${s.puntaje_total}</strong>` : ''}
+      </div>
+      <div class="survey-card-meta">
+        🏳️ ${s.nacionalidad_cuidador || '—'} &nbsp;·&nbsp;
+        👤 ${s.encuestador_nombre || '—'}
+      </div>
+      <div class="survey-card-date">📅 ${fecha}</div>
+      <div class="survey-card-actions">
+        <button class="btn btn-secondary btn-sm" onclick="viewSurvey('${s.survey_id}')">👁️ Ver</button>
+        <button class="btn btn-secondary btn-sm" onclick="editSurvey('${s.survey_id}')">✏️ Editar</button>
+        <button class="btn btn-naranja btn-sm" onclick="downloadSingleById('${s.survey_id}')">⬇️ Archivo de exportacion</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteSurvey('${s.survey_id}')">🗑️</button>
+      </div>
+    `;
+        grid.appendChild(card);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // SURVEY ACTIONS
+    // ═══════════════════════════════════════════════════════
+    async function editSurvey(id) {
+      const data = await dbGet(id);
+      if (!data) return;
+      // FIX: Reset silently first, then fill. currentSurveyId will be set by fillForm().
+      resetFormSilent();
+      navTo('form');
+      // Use setTimeout to ensure the view is visible before filling (helps with radio rendering)
+      setTimeout(() => {
+        renderScaleQuestions();
+        currentSurveyData = data;
+        fillForm(data);
+        currentSurveyMode = 'edit';
+        document.getElementById('view-form').scrollTop = 0;
+        showToast('Encuesta cargada para edición ✓', 'success');
+      }, 50);
+    }
+
+    async function viewSurvey(id) {
+      const data = await dbGet(id);
+      if (!data) return;
+      // FIX: Reset silently first, then fill. currentSurveyId will be set by fillForm().
+      resetFormSilent();
+      navTo('form');
+      // Use setTimeout to ensure the view is visible before filling (helps with radio rendering)
+      setTimeout(() => {
+        renderScaleQuestions();
+        currentSurveyData = data;
+        fillForm(data);
+        currentSurveyMode = 'view';
+        document.getElementById('view-form').scrollTop = 0;
+        showToast('Modo visualización (solo lectura)', 'success');
+      }, 50);
+    }
+
+    async function downloadSingleById(id) {
+      const data = await dbGet(id);
+      if (data) downloadJSON(data);
+    }
+
+    function deleteSurvey(id) {
+      openModal('Eliminar encuesta', '¿Está seguro de que desea eliminar esta encuesta? Esta acción no se puede deshacer.', async () => {
+        await dbDelete(id);
+        updateCount();
+        renderList();
+        showToast('Encuesta eliminada', 'error');
+      });
+    }
+
+    function resetFormSilent() {
+      document.getElementById('form-body').querySelectorAll('input, select, textarea').forEach(el => {
+        el.value = '';
+        el.classList.remove('invalid');
+      });
+      document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+      document.querySelectorAll('.scale-item').forEach(i => i.classList.remove('answered'));
+      document.getElementById('f_cual_enfermedad_wrap').style.display = 'none';
+      document.getElementById('f_cual_problema_wrap').style.display = 'none';
+      // FIX: Don't null currentSurveyId here — fillForm() will set the correct one
+      currentSurveyId = null;
+      currentSurveyData = null;
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // COUNT
+    // ═══════════════════════════════════════════════════════
+    async function updateCount() {
+      const all = await dbGetAll();
+      document.getElementById('survey-count').textContent = all.length;
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // MODAL
+    // ═══════════════════════════════════════════════════════
+    let modalCallback = null;
+    function openModal(title, body, cb) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-body').textContent = body;
+      modalCallback = cb;
+      document.getElementById('modal-overlay').classList.add('open');
+    }
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('open');
+      modalCallback = null;
+    }
+    document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+      if (modalCallback) modalCallback();
+      closeModal();
+    });
+    document.getElementById('modal-overlay').addEventListener('click', e => {
+      if (e.target === document.getElementById('modal-overlay')) closeModal();
+    });
+
+    // ═══════════════════════════════════════════════════════
+    // TOAST
+    // ═══════════════════════════════════════════════════════
+    let toastTimer = null;
+    function showToast(msg, type = '') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'show ' + type;
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { t.className = ''; }, 3000);
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════════════════════
+    async function init() {
+      await initDB();
+      renderScaleQuestions();
+      await updateCount();
+      // Set today's date
+      document.getElementById('f_fecha_aplicacion').value = new Date().toISOString().slice(0, 10);
+      updateProgress();
+      // Remove invalid on input
+      document.querySelectorAll('input, select').forEach(el => {
+        el.addEventListener('input', () => el.classList.remove('invalid'));
+        el.addEventListener('change', () => el.classList.remove('invalid'));
+      });
+    }
+
+    init();
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        let updatePrompted = false;
+
+        function promptUserToRefresh(registration) {
+          if (updatePrompted) return;
+          updatePrompted = true;
+          const aceptar = confirm('Hay una nueva version disponible. Deseas actualizar ahora?');
+          if (aceptar && registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+        }
+
+        navigator.serviceWorker.register('./service-worker.js').then((registration) => {
+          if (registration.waiting) {
+            promptUserToRefresh(registration);
+          }
+
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (!newWorker) return;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                promptUserToRefresh(registration);
+              }
+            });
+          });
+        });
+
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          window.location.reload();
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>

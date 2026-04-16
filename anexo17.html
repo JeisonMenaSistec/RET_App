@@ -1167,7 +1167,7 @@
     <div id="main-nav">
       <button class="nav-tab active" onclick="showView('home')">🏠 Inicio</button>
       <button class="nav-tab" onclick="showView('nueva')">➕ Nueva Encuesta</button>
-      <button class="nav-tab" onclick="showView('lista')">📋 Encuestas</button>
+      <button class="nav-tab" onclick="showView('lista')">📋 Historial</button>
     </div>
   </div>
 
@@ -1720,7 +1720,7 @@
         <button class="btn btn-primary" onclick="startNuevaEncuesta('apendice1')">➕ Nueva</button>
         <div class="toolbar-spacer"></div>
         <button class="btn btn-secondary btn-sm" onclick="toggleSelectAll()">☑️ Seleccionar Todo</button>
-        <button class="btn btn-naranja btn-sm" onclick="downloadSelected()">⬇️ Descargar JSON</button>
+        <button class="btn btn-naranja btn-sm" onclick="downloadSelected()">⬇️ Archivo de exportacion</button>
         <button class="btn btn-rojo btn-sm" onclick="deleteSelected()">🗑️ Eliminar</button>
         <button class="btn btn-rojo btn-sm" onclick="deleteAllSurveys()">🧹 Borrar todas</button>
       </div>
@@ -1784,12 +1784,12 @@
   <!-- MODAL IMPORT -->
   <div class="modal-overlay" id="modal-import">
     <div class="modal" style="max-width:520px">
-      <div class="modal-header">📥 Importar Encuesta(s) desde JSON</div>
+      <div class="modal-header">📥 Importar encuesta(s) desde archivo</div>
       <div class="modal-body">
         <div class="import-drop" id="import-drop" onclick="document.getElementById('import-file').click()">
           <div class="icon">📂</div>
-          <p style="font-size:15px;font-weight:600">Toque para seleccionar archivo JSON</p>
-          <p style="font-size:12px;margin-top:6px;color:var(--gris-claro)">Formato: JSON exportado desde esta app</p>
+          <p style="font-size:15px;font-weight:600">Toque para seleccionar archivo de exportacion</p>
+          <p style="font-size:12px;margin-top:6px;color:var(--gris-claro)">Formato: archivo de exportacion de esta app</p>
         </div>
         <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
         <div id="import-preview" style="margin-top:16px;display:none"></div>
@@ -1869,10 +1869,20 @@
     // =====================================================
     // ID GENERATOR
     // =====================================================
+    function getTimestampCompact() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mi = String(d.getMinutes()).padStart(2, '0');
+      const ss = String(d.getSeconds()).padStart(2, '0');
+      return `${yyyy}${mm}${dd}${hh}${mi}${ss}`;
+    }
+
     function generateUUID() {
-      const ts = Date.now().toString(36).toUpperCase();
-      const rand = Math.random().toString(36).substr(2, 8).toUpperCase();
-      return `A17-${ts}-${rand}`;
+      const rand = Math.random().toString(36).substr(2, 6).toUpperCase();
+      return `a17_${getTimestampCompact()}_${rand}`;
     }
 
     // =====================================================
@@ -2225,7 +2235,7 @@
       <div class="survey-actions">
         <button class="btn btn-secondary btn-sm" onclick="verEncuesta('${r.id}')">👁️ Ver</button>
         <button class="btn btn-primary btn-sm" onclick="editarEncuesta('${r.id}')">✏️ Editar</button>
-        <button class="btn btn-naranja btn-sm" onclick="downloadJSON(null,'${r.id}')">⬇️ JSON</button>
+        <button class="btn btn-naranja btn-sm" onclick="downloadJSON(null,'${r.id}')">⬇️ Archivo de exportacion</button>
         <button class="btn btn-rojo btn-sm" onclick="softDelete('${r.id}')">🗑️</button>
       </div>
     </div>
@@ -2269,16 +2279,35 @@
     // =====================================================
     // DOWNLOAD JSON
     // =====================================================
+    function buildExportPayload(records) {
+      const a17a = [];
+      const a17b = [];
+      records.forEach(r => {
+        if (r.tipo === 'apendiceA') {
+          a17a.push(r);
+        } else {
+          a17b.push(r);
+        }
+      });
+      return {
+        total: records.length,
+        exportado: new Date().toISOString(),
+        anexo: 17,
+        A17_A: a17a,
+        A17_B: a17b
+      };
+    }
+
     async function downloadJSON(record, id) {
       let rec = record;
       if (!rec && id) rec = await dbGet(id);
       if (!rec) return;
-      const blob = new Blob([JSON.stringify(rec, null, 2)], { type: 'application/json' });
+      const payload = buildExportPayload([rec]);
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      const safeTitle = (rec.titulo_display || rec.id).replace(/[^a-z0-9_\-]/gi, '_');
-      a.download = `Anexo17_${rec.tipo}_${safeTitle}_${rec.fecha_display || rec.fecha_creacion?.split('T')[0]}.json`;
+      a.download = `a17_ind_${rec.id}.json`;
       document.body.appendChild(a);
       a.click();
       setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
@@ -2289,11 +2318,12 @@
       if (!ids.length) { showToast('Seleccione al menos una encuesta', 'error'); return; }
       const records = await Promise.all(ids.map(id => dbGet(id)));
       if (ids.length === 1) { downloadJSON(records[0]); return; }
-      const blob = new Blob([JSON.stringify(records, null, 2)], { type: 'application/json' });
+      const payload = buildExportPayload(records);
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Anexo17_Lote_${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `a17_exportacion_${getTimestampCompact()}.json`;
       document.body.appendChild(a);
       a.click();
       setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
@@ -2302,11 +2332,12 @@
     async function downloadAll() {
       const all = (await dbGetAll()).filter(r => !r.eliminado);
       if (!all.length) { showToast('No hay encuestas para descargar', 'error'); return; }
-      const blob = new Blob([JSON.stringify(all, null, 2)], { type: 'application/json' });
+      const payload = buildExportPayload(all);
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Anexo17_Todas_${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `a17_exportacion_${getTimestampCompact()}.json`;
       document.body.appendChild(a);
       a.click();
       setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);

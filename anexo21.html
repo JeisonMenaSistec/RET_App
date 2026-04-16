@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Anexo 21 — Encuesta de Satisfacción</title>
+  <style>
+    :root {
+      --verde: #1a5c3a;
+      --verde-medio: #2e7d52;
+      --verde-claro: #4caf80;
+      --verde-bg: #e8f5ee;
+      --naranja: #e07b2a;
+      --naranja-claro: #f5a35a;
+      --naranja-bg: #fdf0e5;
+      --azul: #1565c0;
+      --azul-claro: #4a90d9;
+      --azul-bg: #e8f0fb;
+      --rojo: #c62828;
+      --rojo-bg: #fdecea;
+      --gris-oscuro: #2c2c2c;
+      --gris: #5a5a5a;
+      --gris-claro: #9e9e9e;
+      --gris-borde: #d0d0d0;
+      --gris-bg: #f5f5f5;
+      --blanco: #ffffff;
+      --sombra: 0 2px 12px rgba(0, 0, 0, 0.12);
+      --sombra-fuerte: 0 4px 24px rgba(0, 0, 0, 0.2);
+      --radio: 12px;
+      --radio-btn: 8px;
+      --font-titulo: 'Sora', sans-serif;
+      --font-cuerpo: 'Sora', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --transicion: 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: var(--font-cuerpo);
+      background: var(--gris-bg);
+      color: var(--gris-oscuro);
+    }
+
+    /* NAV */
+    #nav {
+      display: flex;
+      background: var(--verde);
+      padding: 14px 28px;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-right: auto;
+    }
+
+    .logo-badge {
+      background: white;
+      color: var(--verde);
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+
+    #nav h1 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      line-height: 1.2;
+      color: var(--blanco);
+    }
+
+    #nav p {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 2px;
+      font-weight: 300;
+      color: var(--blanco);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-family: var(--font-cuerpo);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transicion);
+    }
+
+    .nav-btn:hover,
+    .nav-btn.activo {
+      background: white;
+      color: var(--verde);
+    }
+
+    /* VISTAS */
+    .vista {
+      display: none;
+      padding: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .vista.activa {
+      display: block;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    /* HEADER ENCUESTA */
+    .enc-header {
+      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-medio) 100%);
+      border-radius: var(--radio);
+      padding: 28px 24px;
+      color: var(--blanco);
+      margin-bottom: 20px;
+    }
+
+    .enc-header h1 {
+      font-family: var(--font-titulo);
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .enc-header .org {
+      font-size: 12px;
+      opacity: 0.8;
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    .enc-header .descripcion {
+      font-size: 13.5px;
+      line-height: 1.6;
+      opacity: 0.92;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    /* INSTRUCCIONES */
+    .instrucciones {
+      background: var(--naranja-bg);
+      border-left: 4px solid var(--naranja);
+      border-radius: 0 var(--radio-btn) var(--radio-btn) 0;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--gris-oscuro);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .instrucciones strong {
+      color: var(--naranja);
+    }
+
+    /* NIVEL SATISFACCION BADGE */
+    .nivel-badge {
+      background: var(--azul-bg);
+      border-radius: var(--radio-btn);
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--azul);
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* PREGUNTA */
+    .pregunta-bloque {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      border: 2px solid transparent;
+      transition: border-color var(--transicion);
+    }
+
+    .pregunta-bloque.respondida {
+      border-color: var(--verde-claro);
+    }
+
+    .pregunta-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gris-claro);
+      margin-bottom: 6px;
+    }
+
+    .pregunta-texto {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 18px;
+      color: var(--gris-oscuro);
+    }
+
+    /* ESCALA 1-5 */
+    .escala {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .escala-etiquetas {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--gris-claro);
+      margin-top: 6px;
+    }
+
+    .btn-escala {
+      flex: 1;
+      min-width: 52px;
+      height: 64px;
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radio);
+      background: var(--gris-bg);
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: 700;
+      font-family: var(--font-cuerpo);
+      color: var(--gris);
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 2px;
+      position: relative;
+    }
+
+    .btn-escala .emoji {
+      font-size: 18px;
+    }
+
+    .btn-escala:hover {
+      border-color: var(--verde-claro);
+      background: var(--verde-bg);
+      color: var(--verde);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 92, 58, 0.2);
+    }
+
+    .btn-escala.seleccionado {
+      border-color: var(--verde);
+      background: var(--verde);
+      color: var(--blanco);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(26, 92, 58, 0.35);
+    }
+
+    .btn-escala[data-val="1"].seleccionado {
+      background: #c62828;
+      border-color: #c62828;
+    }
+
+    .btn-escala[data-val="2"].seleccionado {
+      background: #e07b2a;
+      border-color: #e07b2a;
+    }
+
+    .btn-escala[data-val="3"].seleccionado {
+      background: #f5c842;
+      border-color: #f5c842;
+      color: var(--gris-oscuro);
+    }
+
+    .btn-escala[data-val="4"].seleccionado {
+      background: var(--verde-claro);
+      border-color: var(--verde-claro);
+      color: var(--blanco);
+    }
+
+    .btn-escala[data-val="5"].seleccionado {
+      background: var(--verde);
+      border-color: var(--verde);
+      color: var(--blanco);
+    }
+
+    /* TEXTAREA */
+    .campo-texto {
+      width: 100%;
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radio-btn);
+      padding: 14px;
+      font-family: var(--font-cuerpo);
+      font-size: 15px;
+      resize: vertical;
+      min-height: 100px;
+      color: var(--gris-oscuro);
+      transition: border-color var(--transicion);
+    }
+
+    .campo-texto:focus {
+      outline: none;
+      border-color: var(--verde-claro);
+    }
+
+    /* BARRA PROGRESO */
+    .progreso-bar {
+      background: var(--gris-borde);
+      border-radius: 99px;
+      height: 6px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+
+    .progreso-fill {
+      background: var(--verde-claro);
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+
+    .progreso-texto {
+      font-size: 12px;
+      color: var(--gris-claro);
+      text-align: right;
+    }
+
+    /* BOTONES ACCION */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 22px;
+      border-radius: var(--radio-btn);
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-cuerpo);
+      font-size: 15px;
+      font-weight: 600;
+      transition: all var(--transicion);
+    }
+
+    .btn-primario {
+      background: var(--verde);
+      color: var(--blanco);
+    }
+
+    .btn-primario:hover {
+      background: var(--verde-medio);
+    }
+
+    .btn-primario:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secundario {
+      background: var(--gris-bg);
+      color: var(--gris-oscuro);
+      border: 1.5px solid var(--gris-borde);
+    }
+
+    .btn-secundario:hover {
+      background: var(--gris-borde);
+    }
+
+    .btn-naranja {
+      background: var(--naranja);
+      color: var(--blanco);
+    }
+
+    .btn-naranja:hover {
+      background: var(--naranja-claro);
+    }
+
+    .btn-azul {
+      background: var(--azul);
+      color: var(--blanco);
+    }
+
+    .btn-azul:hover {
+      background: var(--azul-claro);
+    }
+
+    .btn-peligro {
+      background: var(--rojo);
+      color: var(--blanco);
+    }
+
+    .btn-peligro:hover {
+      opacity: 0.88;
+    }
+
+    .btn-fila {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    /* LISTA ENCUESTAS */
+    .enc-item {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .enc-item-id {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--azul);
+      background: var(--azul-bg);
+      padding: 3px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .enc-item-info {
+      flex: 1;
+    }
+
+    .enc-item-titulo {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+
+    .enc-item-fecha {
+      font-size: 12px;
+      color: var(--gris-claro);
+    }
+
+    .enc-item-acciones {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 13px;
+      border-radius: var(--radio-btn);
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-cuerpo);
+      font-weight: 600;
+      transition: all var(--transicion);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-sm:active {
+      transform: scale(0.97);
+    }
+
+    .btn-sm.verde {
+      background: var(--verde-bg);
+      color: var(--verde);
+    }
+
+    .btn-sm.verde:hover {
+      background: var(--verde-claro);
+      color: var(--blanco);
+    }
+
+    .btn-sm.naranja {
+      background: var(--naranja-bg);
+      color: var(--naranja);
+    }
+
+    .btn-sm.naranja:hover {
+      background: var(--naranja);
+      color: var(--blanco);
+    }
+
+    .btn-sm.azul {
+      background: var(--azul-bg);
+      color: var(--azul);
+    }
+
+    .btn-sm.azul:hover {
+      background: var(--azul);
+      color: var(--blanco);
+    }
+
+    .btn-sm.rojo {
+      background: var(--rojo-bg);
+      color: var(--rojo);
+    }
+
+    .btn-sm.rojo:hover {
+      background: var(--rojo);
+      color: var(--blanco);
+    }
+
+    /* TOAST */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--verde);
+      color: var(--blanco);
+      padding: 14px 24px;
+      border-radius: var(--radio);
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 9999;
+      box-shadow: var(--sombra-fuerte);
+      transition: transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    #toast.visible {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #toast.error {
+      background: var(--rojo);
+    }
+
+    /* MODAL */
+    #modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    #modal-overlay.activo {
+      display: flex;
+    }
+
+    #modal-caja {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra-fuerte);
+      max-width: 700px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 28px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      font-family: var(--font-titulo);
+      font-size: 18px;
+    }
+
+    .btn-cerrar {
+      background: var(--gris-bg);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-cerrar:hover {
+      background: var(--gris-borde);
+    }
+
+    /* VISTA ENCUESTA GUARDADA */
+    .respuesta-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gris-borde);
+    }
+
+    .respuesta-pregunta {
+      flex: 1;
+      font-size: 13.5px;
+      color: var(--gris);
+      line-height: 1.5;
+    }
+
+    .respuesta-valor {
+      font-weight: 700;
+      font-size: 20px;
+      min-width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rv-1 {
+      background: #fdecea;
+      color: #c62828;
+    }
+
+    .rv-2 {
+      background: #fdf0e5;
+      color: #e07b2a;
+    }
+
+    .rv-3 {
+      background: #fffde7;
+      color: #f9a825;
+    }
+
+    .rv-4 {
+      background: var(--verde-bg);
+      color: var(--verde-claro);
+    }
+
+    .rv-5 {
+      background: var(--verde-bg);
+      color: var(--verde);
+    }
+
+    .rv-texto {
+      background: var(--azul-bg);
+      color: var(--azul);
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: var(--radio-btn);
+      max-width: 240px;
+    }
+
+    /* VACIO */
+    .vacio {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--gris-claro);
+    }
+
+    .vacio .icono {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .vacio p {
+      font-size: 15px;
+    }
+
+    /* BARRA ACCIONES LISTA */
+    .lista-acciones {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .lista-acciones .cuenta {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--gris-claro);
+      margin-left: auto;
+    }
+
+    /* INPUT FILE */
+    #input-importar {
+      display: none;
+    }
+
+    .importar-zona {
+      border: 2px dashed var(--gris-borde);
+      border-radius: var(--radio);
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transicion);
+    }
+
+    .importar-zona:hover {
+      border-color: var(--verde-claro);
+    }
+
+    /* CONFIRMACION */
+    .confirm-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    /* RESPONSIVE TABLET */
+    @media (max-width: 768px) {
+      .vista {
+        padding: 16px;
+      }
+
+      .enc-item {
+        flex-wrap: wrap;
+      }
+
+      .btn-escala {
+        min-width: 44px;
+        height: 58px;
+        font-size: 20px;
+      }
+    }
+
+    /* ANIMACIÓN ENTRADA */
+    .pregunta-bloque {
+      animation: fadeUp 0.3s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <div id="nav">
+    <div class="header-logo">
+      <div class="logo-badge">RET · UNICEF</div>
+      <div>
+        <h1>ANEXO 21 — Encuesta de Satisfacción</h1>
+        <p>Formulario principal</p>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn activo" data-view="nueva" onclick="irVista('nueva')">Nueva</button>
+      <button class="nav-btn" data-view="lista" onclick="irVista('lista')">Historial</button>
+      <button class="nav-btn" onclick="location.href='index.html'">↩︎ Menú</button>
+    </div>
+  </div>
+
+  <!-- VISTA: NUEVA ENCUESTA -->
+  <div class="vista activa" id="v-nueva">
+    <div class="enc-header">
+      <div class="org">MIDES · UNICEF · Fundación Atenas</div>
+      <h1>ANEXO 21 — Encuesta de Satisfacción del Servicio de la Modalidad Comunitaria</h1>
+      <div class="descripcion">
+        Este formulario recibe retroalimentación sobre el servicio en la modalidad comunitaria implementada por
+        MIDES-UNICEF por medio del socio implementador Fundación Atenas. Solicitar a los usuarios del Entorno Protector
+        que completen esta encuesta de satisfacción. <strong>Una encuesta por cada usuario.</strong>
+      </div>
+    </div>
+
+    <div class="instrucciones">
+      <strong>Instrucciones para el encuestador:</strong> Entregue la Tablet al usuario para que escoja la mejor opción.
+      Si el usuario no sabe usar la Tablet o no puede leer, lea las preguntas en voz alta. Sugerimos completar al menos
+      1 encuesta por familia encontrada.
+    </div>
+
+    <div class="nivel-badge">
+      <svg width="16" height="16" viewBox="0 0 16 16">
+        <circle cx="8" cy="8" r="7" stroke="#1565c0" stroke-width="1.5" fill="none" /><text x="8" y="12"
+          text-anchor="middle" font-size="10" fill="#1565c0" font-family="sans-serif">i</text>
+      </svg>
+      NIVEL DE SATISFACCIÓN: Responda del 1 al 5 — siendo 1 la puntuación más baja y 5 la más alta.
+    </div>
+
+    <!-- PROGRESO -->
+    <div class="progreso-bar">
+      <div class="progreso-fill" id="progreso-fill" style="width:0%"></div>
+    </div>
+    <div class="progreso-texto" id="progreso-texto">0 de 8 preguntas respondidas</div>
+
+    <form id="form-encuesta" onsubmit="return false;">
+
+      <!-- PREGUNTAS NUMÉRICAS -->
+      <div class="pregunta-bloque" id="pb-1">
+        <div class="pregunta-num">PREGUNTA 01</div>
+        <div class="pregunta-texto">¿Del 1 al 5, qué tan satisfecho(a) está con los temas tratados en los encuentros
+          comunitarios en los que participó?</div>
+        <div class="escala" id="escala-1">
+          <button type="button" class="btn-escala" data-grupo="1" data-val="1" onclick="seleccionarEscala(1,1)"><span
+              class="emoji">😞</span>1</button>
+          <button type="button" class="btn-escala" data-grupo="1" data-val="2" onclick="seleccionarEscala(1,2)"><span
+              class="emoji">😕</span>2</button>
+          <button type="button" class="btn-escala" data-grupo="1" data-val="3" onclick="seleccionarEscala(1,3)"><span
+              class="emoji">😐</span>3</button>
+          <button type="button" class="btn-escala" data-grupo="1" data-val="4" onclick="seleccionarEscala(1,4)"><span
+              class="emoji">🙂</span>4</button>
+          <button type="button" class="btn-escala" data-grupo="1" data-val="5" onclick="seleccionarEscala(1,5)"><span
+              class="emoji">😄</span>5</button>
+        </div>
+        <div class="escala-etiquetas"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
+      </div>
+
+      <div class="pregunta-bloque" id="pb-2">
+        <div class="pregunta-num">PREGUNTA 02</div>
+        <div class="pregunta-texto">¿Del 1 al 5, qué le pareció la información recibida por parte de la Agente
+          Comunitaria a cargo de la modalidad comunitaria?</div>
+        <div class="escala" id="escala-2">
+          <button type="button" class="btn-escala" data-grupo="2" data-val="1" onclick="seleccionarEscala(2,1)"><span
+              class="emoji">😞</span>1</button>
+          <button type="button" class="btn-escala" data-grupo="2" data-val="2" onclick="seleccionarEscala(2,2)"><span
+              class="emoji">😕</span>2</button>
+          <button type="button" class="btn-escala" data-grupo="2" data-val="3" onclick="seleccionarEscala(2,3)"><span
+              class="emoji">😐</span>3</button>
+          <button type="button" class="btn-escala" data-grupo="2" data-val="4" onclick="seleccionarEscala(2,4)"><span
+              class="emoji">🙂</span>4</button>
+          <button type="button" class="btn-escala" data-grupo="2" data-val="5" onclick="seleccionarEscala(2,5)"><span
+              class="emoji">😄</span>5</button>
+        </div>
+        <div class="escala-etiquetas"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
+      </div>
+
+      <div class="pregunta-bloque" id="pb-3">
+        <div class="pregunta-num">PREGUNTA 03</div>
+        <div class="pregunta-texto">¿Del 1 al 5, qué tan satisfecho(a) está con las actividades desarrolladas en los
+          encuentros comunitarios?</div>
+        <div class="escala" id="escala-3">
+          <button type="button" class="btn-escala" data-grupo="3" data-val="1" onclick="seleccionarEscala(3,1)"><span
+              class="emoji">😞</span>1</button>
+          <button type="button" class="btn-escala" data-grupo="3" data-val="2" onclick="seleccionarEscala(3,2)"><span
+              class="emoji">😕</span>2</button>
+          <button type="button" class="btn-escala" data-grupo="3" data-val="3" onclick="seleccionarEscala(3,3)"><span
+              class="emoji">😐</span>3</button>
+          <button type="button" class="btn-escala" data-grupo="3" data-val="4" onclick="seleccionarEscala(3,4)"><span
+              class="emoji">🙂</span>4</button>
+          <button type="button" class="btn-escala" data-grupo="3" data-val="5" onclick="seleccionarEscala(3,5)"><span
+              class="emoji">😄</span>5</button>
+        </div>
+        <div class="escala-etiquetas"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
+      </div>
+
+      <div class="pregunta-bloque" id="pb-4">
+        <div class="pregunta-num">PREGUNTA 04</div>
+        <div class="pregunta-texto">¿Del 1 al 5, cómo califica las actividades desarrolladas en la línea de
+          fortalecimiento de la iniciativa comunitaria, como las meriendas participativas, donaciones, entre otros?
+        </div>
+        <div class="escala" id="escala-4">
+          <button type="button" class="btn-escala" data-grupo="4" data-val="1" onclick="seleccionarEscala(4,1)"><span
+              class="emoji">😞</span>1</button>
+          <button type="button" class="btn-escala" data-grupo="4" data-val="2" onclick="seleccionarEscala(4,2)"><span
+              class="emoji">😕</span>2</button>
+          <button type="button" class="btn-escala" data-grupo="4" data-val="3" onclick="seleccionarEscala(4,3)"><span
+              class="emoji">😐</span>3</button>
+          <button type="button" class="btn-escala" data-grupo="4" data-val="4" onclick="seleccionarEscala(4,4)"><span
+              class="emoji">🙂</span>4</button>
+          <button type="button" class="btn-escala" data-grupo="4" data-val="5" onclick="seleccionarEscala(4,5)"><span
+              class="emoji">😄</span>5</button>
+        </div>
+        <div class="escala-etiquetas"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
+      </div>
+
+      <div class="pregunta-bloque" id="pb-5">
+        <div class="pregunta-num">PREGUNTA 05</div>
+        <div class="pregunta-texto">¿Del 1 al 5, cómo califica en general la modalidad comunitaria?</div>
+        <div class="escala" id="escala-5">
+          <button type="button" class="btn-escala" data-grupo="5" data-val="1" onclick="seleccionarEscala(5,1)"><span
+              class="emoji">😞</span>1</button>
+          <button type="button" class="btn-escala" data-grupo="5" data-val="2" onclick="seleccionarEscala(5,2)"><span
+              class="emoji">😕</span>2</button>
+          <button type="button" class="btn-escala" data-grupo="5" data-val="3" onclick="seleccionarEscala(5,3)"><span
+              class="emoji">😐</span>3</button>
+          <button type="button" class="btn-escala" data-grupo="5" data-val="4" onclick="seleccionarEscala(5,4)"><span
+              class="emoji">🙂</span>4</button>
+          <button type="button" class="btn-escala" data-grupo="5" data-val="5" onclick="seleccionarEscala(5,5)"><span
+              class="emoji">😄</span>5</button>
+        </div>
+        <div class="escala-etiquetas"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
+      </div>
+
+      <div class="pregunta-bloque" id="pb-6">
+        <div class="pregunta-num">PREGUNTA 06</div>
+        <div class="pregunta-texto">En general, ¿cómo se siente respecto a la atención y participación en el proyecto
+          Modalidad Comunitaria?</div>
+        <div class="escala" id="escala-6">
+          <button type="button" class="btn-escala" data-grupo="6" data-val="1" onclick="seleccionarEscala(6,1)"><span
+              class="emoji">😞</span>1</button>
+          <button type="button" class="btn-escala" data-grupo="6" data-val="2" onclick="seleccionarEscala(6,2)"><span
+              class="emoji">😕</span>2</button>
+          <button type="button" class="btn-escala" data-grupo="6" data-val="3" onclick="seleccionarEscala(6,3)"><span
+              class="emoji">😐</span>3</button>
+          <button type="button" class="btn-escala" data-grupo="6" data-val="4" onclick="seleccionarEscala(6,4)"><span
+              class="emoji">🙂</span>4</button>
+          <button type="button" class="btn-escala" data-grupo="6" data-val="5" onclick="seleccionarEscala(6,5)"><span
+              class="emoji">😄</span>5</button>
+        </div>
+        <div class="escala-etiquetas"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
+      </div>
+
+      <div class="pregunta-bloque" id="pb-7">
+        <div class="pregunta-num">PREGUNTA 07</div>
+        <div class="pregunta-texto">Del 1 al 5, ¿considera usted que la atención recibida le ha ayudado a fortalecer sus
+          relaciones familiares y comunitarias?</div>
+        <div class="escala" id="escala-7">
+          <button type="button" class="btn-escala" data-grupo="7" data-val="1" onclick="seleccionarEscala(7,1)"><span
+              class="emoji">😞</span>1</button>
+          <button type="button" class="btn-escala" data-grupo="7" data-val="2" onclick="seleccionarEscala(7,2)"><span
+              class="emoji">😕</span>2</button>
+          <button type="button" class="btn-escala" data-grupo="7" data-val="3" onclick="seleccionarEscala(7,3)"><span
+              class="emoji">😐</span>3</button>
+          <button type="button" class="btn-escala" data-grupo="7" data-val="4" onclick="seleccionarEscala(7,4)"><span
+              class="emoji">🙂</span>4</button>
+          <button type="button" class="btn-escala" data-grupo="7" data-val="5" onclick="seleccionarEscala(7,5)"><span
+              class="emoji">😄</span>5</button>
+        </div>
+        <div class="escala-etiquetas"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
+      </div>
+
+      <!-- PREGUNTA TEXTO -->
+      <div class="pregunta-bloque" id="pb-8">
+        <div class="pregunta-num">PREGUNTA 08</div>
+        <div class="pregunta-texto">¿Qué sugiere para mejorar la modalidad comunitaria con enfoque intercultural
+          implementada en su comunidad?</div>
+        <textarea class="campo-texto" id="sugerencias" placeholder="Escriba aquí sus sugerencias..."
+          oninput="actualizarProgreso()"></textarea>
+      </div>
+
+      <div class="btn-fila">
+        <button type="button" class="btn btn-primario" onclick="guardarEncuesta()">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M3 9l4.5 4.5L15 5" stroke="white" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          Guardar y descargar encuesta
+        </button>
+        <button type="button" class="btn btn-secundario" onclick="limpiarFormulario()">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          Limpiar formulario
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- VISTA: HISTORIAL -->
+  <div class="vista" id="v-lista">
+    <div class="card">
+      <h2 style="font-family:var(--font-titulo);font-size:20px;margin-bottom:16px;color:var(--verde);">Historial de
+        encuestas</h2>
+      <div class="lista-acciones">
+        <button class="btn btn-naranja" onclick="descargarTodasEncuestas()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2v8M5 7l3 3 3-3M2 12h12" stroke="white" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          Descargar todas (archivo de exportacion)
+        </button>
+        <span class="cuenta" id="cuenta-encuestas">0 encuestas guardadas</span>
+      </div>
+      <div id="lista-encuestas"></div>
+    </div>
+
+    <div class="card">
+      <h2 style="font-family:var(--font-titulo);font-size:20px;margin-bottom:8px;color:var(--verde);">Importar encuestas
+      </h2>
+      <p style="font-size:14px;color:var(--gris);margin-bottom:20px;line-height:1.6;">Suba un archivo de exportacion con el mismo
+        formato de exportación para importar encuestas al historial local. Puede importar una encuesta individual o un
+        archivo con varias.</p>
+      <input type="file" id="input-importar" accept=".json" onchange="importarJSON(event)">
+      <div class="importar-zona" onclick="document.getElementById('input-importar').click()">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" style="margin-bottom:10px;opacity:0.4;">
+          <circle cx="20" cy="20" r="18" stroke="#1a5c3a" stroke-width="2" />
+          <path d="M20 12v12M14 18l6-6 6 6M13 28h14" stroke="#1a5c3a" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <p style="font-size:14px;color:var(--gris);">Toque aquí para seleccionar un archivo de exportacion</p>
+        <p style="font-size:12px;color:var(--gris-claro);margin-top:4px;">Formatos aceptados: .json</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL VER/EDITAR ENCUESTA -->
+  <div id="modal-overlay">
+    <div id="modal-caja">
+      <div class="modal-header">
+        <h2 id="modal-titulo">Ver encuesta</h2>
+        <button class="btn-cerrar" onclick="cerrarModal()">✕</button>
+      </div>
+      <div id="modal-contenido"></div>
+      <div class="btn-fila" id="modal-acciones"></div>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIRMACIÓN ELIMINAR -->
+  <div id="modal-confirm-overlay"
+    style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:600;align-items:center;justify-content:center;padding:24px;">
+    <div
+      style="background:var(--blanco);border-radius:var(--radio);padding:28px;max-width:380px;width:100%;box-shadow:var(--sombra-fuerte);">
+      <h3 style="font-size:17px;margin-bottom:10px;">¿Eliminar encuesta?</h3>
+      <p style="font-size:14px;color:var(--gris);line-height:1.6;">Esta acción no se puede deshacer. La encuesta será
+        eliminada del historial local.</p>
+      <div class="confirm-btns">
+        <button class="btn btn-secundario" onclick="cerrarConfirm()">Cancelar</button>
+        <button class="btn btn-peligro" id="btn-confirm-eliminar">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast"></div>
+
+  <script>
+    // ================== INDEXEDDB ==================
+    const DB_NAME = 'ret_unicef_db';
+    const DB_VER = 1;
+    const STORE = 'encuestas';
+    let db;
+
+    function abrirDB() {
+      return new Promise((res, rej) => {
+        const req = indexedDB.open(DB_NAME, DB_VER);
+        req.onupgradeneeded = e => {
+          const d = e.target.result;
+          if (!d.objectStoreNames.contains(STORE)) {
+            d.createObjectStore(STORE, { keyPath: 'encuesta_id' });
+          }
+        };
+        req.onsuccess = e => { db = e.target.result; res(db); };
+        req.onerror = e => rej(e);
+      });
+    }
+
+    function guardarEnDB(datos) {
+      return new Promise((res, rej) => {
+        const tx = db.transaction(STORE, 'readwrite');
+        tx.objectStore(STORE).put(datos);
+        tx.oncomplete = () => res();
+        tx.onerror = e => rej(e);
+      });
+    }
+
+    function obtenerTodasDB() {
+      return new Promise((res, rej) => {
+        const tx = db.transaction(STORE, 'readonly');
+        const req = tx.objectStore(STORE).getAll();
+        req.onsuccess = () => res(req.result);
+        req.onerror = e => rej(e);
+      });
+    }
+
+    function eliminarDeDB(id) {
+      return new Promise((res, rej) => {
+        const tx = db.transaction(STORE, 'readwrite');
+        tx.objectStore(STORE).delete(id);
+        tx.oncomplete = () => res();
+        tx.onerror = e => rej(e);
+      });
+    }
+
+    // ================== ESTADO ==================
+    const respuestas = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null };
+    let encuestaEnEdicion = null;
+
+    // ================== ESCALA ==================
+    function seleccionarEscala(grupo, valor) {
+      respuestas[grupo] = valor;
+      const btns = document.querySelectorAll(`[data-grupo="${grupo}"]`);
+      btns.forEach(b => b.classList.remove('seleccionado'));
+      document.querySelector(`[data-grupo="${grupo}"][data-val="${valor}"]`).classList.add('seleccionado');
+      document.getElementById(`pb-${grupo}`).classList.add('respondida');
+      actualizarProgreso();
+    }
+
+    function actualizarProgreso() {
+      let count = 0;
+      for (let i = 1; i <= 7; i++) if (respuestas[i] !== null) count++;
+      const sug = document.getElementById('sugerencias').value.trim();
+      if (sug) count++;
+      const pct = Math.round((count / 8) * 100);
+      document.getElementById('progreso-fill').style.width = pct + '%';
+      document.getElementById('progreso-texto').textContent = `${count} de 8 preguntas respondidas`;
+      if (sug) document.getElementById('pb-8').classList.add('respondida');
+      else document.getElementById('pb-8').classList.remove('respondida');
+    }
+
+    // ================== GENERAR ID ÚNICO ==================
+    function getTimestampCompact() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mi = String(d.getMinutes()).padStart(2, '0');
+      const ss = String(d.getSeconds()).padStart(2, '0');
+      return `${yyyy}${mm}${dd}${hh}${mi}${ss}`;
+    }
+
+    function generarID() {
+      const rand = Math.random().toString(36).substr(2, 6).toUpperCase();
+      return `a21_${getTimestampCompact()}_${rand}`;
+    }
+
+    // ================== GUARDAR ENCUESTA ==================
+    async function guardarEncuesta() {
+      const validas = Object.values(respuestas).filter(v => v !== null).length;
+      if (validas < 7) {
+        mostrarToast('Por favor responda todas las preguntas del 1 al 5', true);
+        return;
+      }
+
+      const id = encuestaEnEdicion || generarID();
+      const now = new Date();
+
+      const datos = {
+        encuesta_id: id,
+        formulario: 'ANEXO_21_ENCUESTA_SATISFACCION_MODALIDAD_COMUNITARIA',
+        organizacion: 'RET-UNICEF / MIDES / Fundacion Atenas',
+        fecha_registro: now.toISOString(),
+        fecha_registro_local: now.toLocaleDateString('es-CR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+        p1_satisfaccion_temas_encuentros: respuestas[1],
+        p2_calificacion_informacion_agente_comunitaria: respuestas[2],
+        p3_satisfaccion_actividades_encuentros: respuestas[3],
+        p4_calificacion_fortalecimiento_iniciativa_comunitaria: respuestas[4],
+        p5_calificacion_general_modalidad_comunitaria: respuestas[5],
+        p6_sentimiento_atencion_participacion_proyecto: respuestas[6],
+        p7_fortalecimiento_relaciones_familiares_comunitarias: respuestas[7],
+        p8_sugerencias_mejora_modalidad_intercultural: document.getElementById('sugerencias').value.trim(),
+        promedio_satisfaccion: parseFloat(((respuestas[1] + respuestas[2] + respuestas[3] + respuestas[4] + respuestas[5] + respuestas[6] + respuestas[7]) / 7).toFixed(2))
+      };
+
+      try {
+        await guardarEnDB(datos);
+        const payload = { total: 1, exportado: new Date().toISOString(), anexo: 21, A21: [datos] };
+        descargarJSON(payload, `a21_ind_${id}.json`);
+        mostrarToast(encuestaEnEdicion ? 'Encuesta actualizada y descargada' : 'Encuesta guardada y descargada');
+        encuestaEnEdicion = null;
+        limpiarFormulario();
+      } catch (e) {
+        mostrarToast('Error al guardar. Intente de nuevo.', true);
+      }
+    }
+
+    // ================== LIMPIAR ==================
+    function limpiarFormulario() {
+      for (let i = 1; i <= 7; i++) {
+        respuestas[i] = null;
+        document.querySelectorAll(`[data-grupo="${i}"]`).forEach(b => b.classList.remove('seleccionado'));
+        document.getElementById(`pb-${i}`).classList.remove('respondida');
+      }
+      document.getElementById('sugerencias').value = '';
+      document.getElementById('pb-8').classList.remove('respondida');
+      encuestaEnEdicion = null;
+      actualizarProgreso();
+    }
+
+    // ================== DESCARGAR JSON ==================
+    function descargarJSON(datos, nombre) {
+      const blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = nombre; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function descargarTodasEncuestas() {
+      const todas = await obtenerTodasDB();
+      if (!todas.length) { mostrarToast('No hay encuestas guardadas', true); return; }
+      const payload = { total: todas.length, exportado: new Date().toISOString(), anexo: 21, A21: todas };
+      descargarJSON(payload, `a21_exportacion_${getTimestampCompact()}.json`);
+      mostrarToast(`${todas.length} encuestas descargadas`);
+    }
+
+    // ================== HISTORIAL ==================
+    async function cargarHistorial() {
+      const todas = await obtenerTodasDB();
+      const cont = document.getElementById('lista-encuestas');
+      document.getElementById('cuenta-encuestas').textContent = `${todas.length} encuesta${todas.length !== 1 ? 's' : ''} guardada${todas.length !== 1 ? 's' : ''}`;
+
+      if (!todas.length) {
+        cont.innerHTML = `<div class="vacio"><div class="icono">📋</div><p>No hay encuestas guardadas aún.</p></div>`;
+        return;
+      }
+
+      todas.sort((a, b) => new Date(b.fecha_registro) - new Date(a.fecha_registro));
+      cont.innerHTML = todas.map(enc => `
+    <div class="enc-item">
+      <div class="enc-item-id">${enc.encuesta_id}</div>
+      <div class="enc-item-info">
+        <div class="enc-item-titulo">Encuesta de Satisfacción — Anexo 21</div>
+        <div class="enc-item-fecha">${enc.fecha_registro_local} · Promedio: <strong>${enc.promedio_satisfaccion}</strong>/5</div>
+      </div>
+      <div class="enc-item-acciones">
+        <button class="btn-sm verde" onclick="verEncuesta('${enc.encuesta_id}')">👁 Ver</button>
+        <button class="btn-sm naranja" onclick="editarEncuesta('${enc.encuesta_id}')">✏️ Editar</button>
+        <button class="btn-sm azul" onclick="descargarUna('${enc.encuesta_id}')">⬇ Archivo de exportacion</button>
+        <button class="btn-sm rojo" onclick="confirmarEliminar('${enc.encuesta_id}')">🗑 Eliminar</button>
+      </div>
+    </div>
+  `).join('');
+    }
+
+    // ================== VER ENCUESTA ==================
+    const preguntasLabels = [
+      'Satisfacción con los temas tratados en encuentros comunitarios',
+      'Información recibida por la Agente Comunitaria',
+      'Satisfacción con las actividades de encuentros comunitarios',
+      'Calificación de actividades de fortalecimiento de iniciativa comunitaria',
+      'Calificación general de la modalidad comunitaria',
+      'Sentimiento respecto a la atención y participación en el proyecto',
+      'La atención recibida fortaleció relaciones familiares y comunitarias',
+      'Sugerencias para mejorar la modalidad intercultural'
+    ];
+
+    async function verEncuesta(id) {
+      const todas = await obtenerTodasDB();
+      const enc = todas.find(e => e.encuesta_id === id);
+      if (!enc) return;
+
+      const campos = [
+        enc.p1_satisfaccion_temas_encuentros,
+        enc.p2_calificacion_informacion_agente_comunitaria,
+        enc.p3_satisfaccion_actividades_encuentros,
+        enc.p4_calificacion_fortalecimiento_iniciativa_comunitaria,
+        enc.p5_calificacion_general_modalidad_comunitaria,
+        enc.p6_sentimiento_atencion_participacion_proyecto,
+        enc.p7_fortalecimiento_relaciones_familiares_comunitarias,
+        enc.p8_sugerencias_mejora_modalidad_intercultural
+      ];
+
+      let html = `<div style="margin-bottom:16px;padding:12px;background:var(--verde-bg);border-radius:var(--radio-btn);">
+    <span style="font-family:var(--font-mono);font-size:12px;color:var(--verde);">${enc.encuesta_id}</span>
+    <span style="font-size:13px;color:var(--gris);margin-left:12px;">${enc.fecha_registro_local}</span>
+    <span style="font-size:13px;font-weight:700;color:var(--verde);margin-left:12px;">Promedio: ${enc.promedio_satisfaccion}/5</span>
+  </div>`;
+
+      campos.forEach((val, i) => {
+        const esTexto = i === 7;
+        html += `<div class="respuesta-row">
+      <div class="respuesta-pregunta"><strong>P${i + 1}.</strong> ${preguntasLabels[i]}</div>
+      ${esTexto
+            ? `<div class="rv-texto">${val || '<em style="opacity:0.5">Sin respuesta</em>'}</div>`
+            : `<div class="respuesta-valor rv-${val}">${val}</div>`
+          }
+    </div>`;
+      });
+
+      document.getElementById('modal-titulo').textContent = 'Ver encuesta';
+      document.getElementById('modal-contenido').innerHTML = html;
+      document.getElementById('modal-acciones').innerHTML = `
+    <button class="btn btn-azul" onclick="descargarUna('${id}')">⬇ Descargar archivo de exportacion</button>
+    <button class="btn btn-secundario" onclick="cerrarModal()">Cerrar</button>
+  `;
+      document.getElementById('modal-overlay').classList.add('activo');
+    }
+
+    // ================== EDITAR ==================
+    async function editarEncuesta(id) {
+      const todas = await obtenerTodasDB();
+      const enc = todas.find(e => e.encuesta_id === id);
+      if (!enc) return;
+
+      limpiarFormulario();
+      encuestaEnEdicion = id;
+
+      seleccionarEscala(1, enc.p1_satisfaccion_temas_encuentros);
+      seleccionarEscala(2, enc.p2_calificacion_informacion_agente_comunitaria);
+      seleccionarEscala(3, enc.p3_satisfaccion_actividades_encuentros);
+      seleccionarEscala(4, enc.p4_calificacion_fortalecimiento_iniciativa_comunitaria);
+      seleccionarEscala(5, enc.p5_calificacion_general_modalidad_comunitaria);
+      seleccionarEscala(6, enc.p6_sentimiento_atencion_participacion_proyecto);
+      seleccionarEscala(7, enc.p7_fortalecimiento_relaciones_familiares_comunitarias);
+      document.getElementById('sugerencias').value = enc.p8_sugerencias_mejora_modalidad_intercultural || '';
+
+      irVista('nueva');
+      mostrarToast(`Editando encuesta ${id}`);
+      window.scrollTo(0, 0);
+    }
+
+    // ================== DESCARGAR UNA ==================
+    async function descargarUna(id) {
+      const todas = await obtenerTodasDB();
+      const enc = todas.find(e => e.encuesta_id === id);
+      if (enc) {
+        const payload = { total: 1, exportado: new Date().toISOString(), anexo: 21, A21: [enc] };
+        descargarJSON(payload, `a21_ind_${id}.json`);
+      }
+    }
+
+    // ================== ELIMINAR ==================
+    let idAEliminar = null;
+    function confirmarEliminar(id) {
+      idAEliminar = id;
+      const ov = document.getElementById('modal-confirm-overlay');
+      ov.style.display = 'flex';
+      document.getElementById('btn-confirm-eliminar').onclick = async () => {
+        await eliminarDeDB(idAEliminar);
+        cerrarConfirm();
+        cargarHistorial();
+        mostrarToast('Encuesta eliminada');
+      };
+    }
+    function cerrarConfirm() {
+      document.getElementById('modal-confirm-overlay').style.display = 'none';
+      idAEliminar = null;
+    }
+
+    // ================== IMPORTAR ==================
+    function importarJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          let lista = [];
+          if (Array.isArray(data)) {
+            lista = data;
+          } else if (data.encuestas && Array.isArray(data.encuestas)) {
+            lista = data.encuestas;
+          } else if (data.encuesta_id) {
+            lista = [data];
+          } else {
+            throw new Error('Formato no reconocido');
+          }
+
+          let count = 0;
+          for (const enc of lista) {
+            if (enc.encuesta_id) {
+              await guardarEnDB(enc);
+              count++;
+            }
+          }
+          mostrarToast(`${count} encuesta${count !== 1 ? 's' : ''} importada${count !== 1 ? 's' : ''} correctamente`);
+          event.target.value = '';
+        } catch (err) {
+          mostrarToast('Error al importar. Verifique el archivo de exportacion.', true);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // ================== NAVEGACIÓN ==================
+    function irVista(nombre) {
+      document.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
+      document.querySelectorAll('.nav-btn[data-view]').forEach(b => b.classList.remove('activo'));
+      document.getElementById('v-' + nombre).classList.add('activa');
+      const idx = ['nueva', 'lista'].indexOf(nombre);
+      const navButtons = document.querySelectorAll('.nav-btn[data-view]');
+      if (navButtons[idx]) navButtons[idx].classList.add('activo');
+      if (nombre === 'lista') cargarHistorial();
+    }
+
+    // ================== MODAL ==================
+    function cerrarModal() {
+      document.getElementById('modal-overlay').classList.remove('activo');
+    }
+    document.getElementById('modal-overlay').addEventListener('click', e => {
+      if (e.target === document.getElementById('modal-overlay')) cerrarModal();
+    });
+
+    // ================== TOAST ==================
+    let toastTimer;
+    function mostrarToast(msg, error = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = error ? 'error' : '';
+      void t.offsetWidth;
+      t.classList.add('visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('visible'), 3000);
+    }
+
+    // ================== INIT ==================
+    abrirDB().then(() => {
+      mostrarToast('App lista. Base de datos cargada.');
+    }).catch(() => {
+      mostrarToast('Error al iniciar base de datos', true);
+    });
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        let updatePrompted = false;
+
+        function promptUserToRefresh(registration) {
+          if (updatePrompted) return;
+          updatePrompted = true;
+          const aceptar = confirm('Hay una nueva version disponible. Deseas actualizar ahora?');
+          if (aceptar && registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+        }
+
+        navigator.serviceWorker.register('./service-worker.js').then((registration) => {
+          if (registration.waiting) {
+            promptUserToRefresh(registration);
+          }
+
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (!newWorker) return;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                promptUserToRefresh(registration);
+              }
+            });
+          });
+        });
+
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          window.location.reload();
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>
