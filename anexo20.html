@@ -1208,10 +1208,24 @@
     function ensureScaleFields(data) {
       SCALE_QUESTIONS.forEach((q, i) => {
         const key = SCALE_FIELD_KEYS[i];
+        if (data[key] == null && q in data) {
+          data[key] = normalizeScaleValue(data[q]);
+        }
         if (!(key in data)) data[key] = null;
         if (!(`${key}_texto` in data)) data[`${key}_texto`] = q;
       });
       return data;
+    }
+
+    function toExportData(data) {
+      const normalized = ensureScaleFields({ ...data });
+      SCALE_QUESTIONS.forEach((q, i) => {
+        const key = SCALE_FIELD_KEYS[i];
+        normalized[q] = normalized[key] ?? null;
+        delete normalized[key];
+        delete normalized[`${key}_texto`];
+      });
+      return normalized;
     }
 
     function normalizeScaleValue(val) {
@@ -1624,7 +1638,7 @@
     // DOWNLOAD JSON
     // ═══════════════════════════════════════════════════════
     function downloadJSON(data) {
-      const normalized = ensureScaleFields({ ...data });
+      const normalized = toExportData(data);
       const filename = `a20_ind_${data.survey_id}.json`;
       const payload = { total: 1, exportado: new Date().toISOString(), anexo: 20, A20: [normalized] };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -1638,7 +1652,7 @@
     function downloadAll() {
       dbGetAll().then(all => {
         if (!all.length) { showToast('No hay encuestas para descargar', 'error'); return; }
-        const normalizedAll = all.map(item => ensureScaleFields({ ...item }));
+        const normalizedAll = all.map(item => toExportData(item));
         const payload = { total: normalizedAll.length, exportado: new Date().toISOString(), anexo: 20, A20: normalizedAll };
         const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);

@@ -209,6 +209,74 @@
       gap: 8px;
     }
 
+    /* SECCION DATOS */
+    .seccion-datos {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+
+    .seccion-datos h3 {
+      font-family: var(--font-titulo);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--verde);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .campos-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .campos-grid.cols-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .campo-grupo {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .campo-grupo.full {
+      grid-column: 1 / -1;
+    }
+
+    .campo-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .campo-input {
+      width: 100%;
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radio-btn);
+      padding: 10px 14px;
+      font-family: var(--font-cuerpo);
+      font-size: 14px;
+      color: var(--gris-oscuro);
+      background: var(--gris-bg);
+      transition: border-color var(--transicion);
+    }
+
+    .campo-input:focus {
+      outline: none;
+      border-color: var(--verde-claro);
+      background: var(--blanco);
+    }
+
     /* PREGUNTA */
     .pregunta-bloque {
       background: var(--blanco);
@@ -680,6 +748,35 @@
       max-width: 240px;
     }
 
+    /* SECCION MODAL DATOS */
+    .modal-datos-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      background: var(--gris-bg);
+      border-radius: var(--radio-btn);
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .modal-dato {
+      font-size: 13px;
+    }
+
+    .modal-dato-label {
+      font-size: 11px;
+      color: var(--gris-claro);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+    }
+
+    .modal-dato-valor {
+      color: var(--gris-oscuro);
+      font-weight: 600;
+    }
+
     /* VACIO */
     .vacio {
       text-align: center;
@@ -753,6 +850,15 @@
         height: 58px;
         font-size: 20px;
       }
+
+      .campos-grid,
+      .campos-grid.cols-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-datos-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* ANIMACIÓN ENTRADA */
@@ -796,7 +902,7 @@
   <div class="vista activa" id="v-nueva">
     <div class="enc-header">
       <div class="org">MIDES · UNICEF · Fundación Atenas</div>
-      <h1>ANEXO 21 — Encuesta de Satisfacción del Servicio de la Modalidad Comunitaria</h1>
+      <h1>ENCUESTA DE SATISFACCIÓN — Modalidad Comunitaria con Enfoque de Interculturalidad e Inclusión</h1>
       <div class="descripcion">
         Este formulario recibe retroalimentación sobre el servicio en la modalidad comunitaria implementada por
         MIDES-UNICEF por medio del socio implementador Fundación Atenas. Solicitar a los usuarios del Entorno Protector
@@ -806,8 +912,8 @@
 
     <div class="instrucciones">
       <strong>Instrucciones para el encuestador:</strong> Entregue la Tablet al usuario para que escoja la mejor opción.
-      Si el usuario no sabe usar la Tablet o no puede leer, lea las preguntas en voz alta. Sugerimos completar al menos
-      1 encuesta por familia encontrada.
+      Si el usuario no sabe usar la Tablet o no puede leer, lea las preguntas en voz alta. Por favor, califica cada
+      afirmación utilizando la siguiente escala.
     </div>
 
     <div class="nivel-badge">
@@ -822,15 +928,44 @@
     <div class="progreso-bar">
       <div class="progreso-fill" id="progreso-fill" style="width:0%"></div>
     </div>
-    <div class="progreso-texto" id="progreso-texto">0 de 8 preguntas respondidas</div>
+    <div class="progreso-texto" id="progreso-texto">0 de 5 preguntas respondidas</div>
 
     <form id="form-encuesta" onsubmit="return false;">
+
+      <!-- DATOS DEL USUARIO -->
+      <div class="seccion-datos">
+        <h3>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="4.5" r="2.5" stroke="#1a5c3a" stroke-width="1.5" />
+            <path d="M2 12c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="#1a5c3a" stroke-width="1.5"
+              stroke-linecap="round" />
+          </svg>
+          Datos del usuario
+        </h3>
+        <div class="campos-grid">
+          <div class="campo-grupo">
+            <label class="campo-label" for="nombre-cuidador">Nombre del Cuidador</label>
+            <input type="text" class="campo-input" id="nombre-cuidador" placeholder="Nombre completo"
+              oninput="actualizarProgreso()">
+          </div>
+          <div class="campo-grupo">
+            <label class="campo-label" for="nombre-beneficiario">Nombre del Beneficiario MC</label>
+            <input type="text" class="campo-input" id="nombre-beneficiario" placeholder="Nombre completo"
+              oninput="actualizarProgreso()">
+          </div>
+          <div class="campo-grupo full">
+            <label class="campo-label" for="comunidad">Comunidad</label>
+            <input type="text" class="campo-input" id="comunidad" placeholder="Nombre de la comunidad"
+              oninput="actualizarProgreso()">
+          </div>
+        </div>
+      </div>
 
       <!-- PREGUNTAS NUMÉRICAS -->
       <div class="pregunta-bloque" id="pb-1">
         <div class="pregunta-num">PREGUNTA 01</div>
-        <div class="pregunta-texto">¿Del 1 al 5, qué tan satisfecho(a) está con los temas tratados en los encuentros
-          comunitarios en los que participó?</div>
+        <div class="pregunta-texto">¿Qué tan satisfecho(a) se encuentra con la calidad de las actividades realizadas en
+          los encuentros comunitarios?</div>
         <div class="escala" id="escala-1">
           <button type="button" class="btn-escala" data-grupo="1" data-val="1" onclick="seleccionarEscala(1,1)"><span
               class="emoji">😞</span>1</button>
@@ -848,8 +983,8 @@
 
       <div class="pregunta-bloque" id="pb-2">
         <div class="pregunta-num">PREGUNTA 02</div>
-        <div class="pregunta-texto">¿Del 1 al 5, qué le pareció la información recibida por parte de la Agente
-          Comunitaria a cargo de la modalidad comunitaria?</div>
+        <div class="pregunta-texto">¿Qué tan satisfecho(a) se encuentra con lo que ha aprendido para aplicar en el
+          cuidado y desarrollo de su hijo/a?</div>
         <div class="escala" id="escala-2">
           <button type="button" class="btn-escala" data-grupo="2" data-val="1" onclick="seleccionarEscala(2,1)"><span
               class="emoji">😞</span>1</button>
@@ -867,8 +1002,8 @@
 
       <div class="pregunta-bloque" id="pb-3">
         <div class="pregunta-num">PREGUNTA 03</div>
-        <div class="pregunta-texto">¿Del 1 al 5, qué tan satisfecho(a) está con las actividades desarrolladas en los
-          encuentros comunitarios?</div>
+        <div class="pregunta-texto">¿Qué tan satisfecho(a) se encuentra con el trato y acompañamiento brindado por el
+          equipo (agentes comunitarias, coordinadora y enlaces)?</div>
         <div class="escala" id="escala-3">
           <button type="button" class="btn-escala" data-grupo="3" data-val="1" onclick="seleccionarEscala(3,1)"><span
               class="emoji">😞</span>1</button>
@@ -886,9 +1021,8 @@
 
       <div class="pregunta-bloque" id="pb-4">
         <div class="pregunta-num">PREGUNTA 04</div>
-        <div class="pregunta-texto">¿Del 1 al 5, cómo califica las actividades desarrolladas en la línea de
-          fortalecimiento de la iniciativa comunitaria, como las meriendas participativas, donaciones, entre otros?
-        </div>
+        <div class="pregunta-texto">¿Qué tan satisfecho(a) se encuentra con la forma en que el programa incluye y
+          atiende a niños, niñas y familias con necesidades específicas o discapacidad?</div>
         <div class="escala" id="escala-4">
           <button type="button" class="btn-escala" data-grupo="4" data-val="1" onclick="seleccionarEscala(4,1)"><span
               class="emoji">😞</span>1</button>
@@ -906,7 +1040,8 @@
 
       <div class="pregunta-bloque" id="pb-5">
         <div class="pregunta-num">PREGUNTA 05</div>
-        <div class="pregunta-texto">¿Del 1 al 5, cómo califica en general la modalidad comunitaria?</div>
+        <div class="pregunta-texto">En general, ¿qué tan satisfecho(a) se encuentra con su participación en la
+          modalidad?</div>
         <div class="escala" id="escala-5">
           <button type="button" class="btn-escala" data-grupo="5" data-val="1" onclick="seleccionarEscala(5,1)"><span
               class="emoji">😞</span>1</button>
@@ -922,51 +1057,39 @@
         <div class="escala-etiquetas"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
       </div>
 
+      <!-- COMENTARIOS ADICIONALES -->
       <div class="pregunta-bloque" id="pb-6">
-        <div class="pregunta-num">PREGUNTA 06</div>
-        <div class="pregunta-texto">En general, ¿cómo se siente respecto a la atención y participación en el proyecto
-          Modalidad Comunitaria?</div>
-        <div class="escala" id="escala-6">
-          <button type="button" class="btn-escala" data-grupo="6" data-val="1" onclick="seleccionarEscala(6,1)"><span
-              class="emoji">😞</span>1</button>
-          <button type="button" class="btn-escala" data-grupo="6" data-val="2" onclick="seleccionarEscala(6,2)"><span
-              class="emoji">😕</span>2</button>
-          <button type="button" class="btn-escala" data-grupo="6" data-val="3" onclick="seleccionarEscala(6,3)"><span
-              class="emoji">😐</span>3</button>
-          <button type="button" class="btn-escala" data-grupo="6" data-val="4" onclick="seleccionarEscala(6,4)"><span
-              class="emoji">🙂</span>4</button>
-          <button type="button" class="btn-escala" data-grupo="6" data-val="5" onclick="seleccionarEscala(6,5)"><span
-              class="emoji">😄</span>5</button>
-        </div>
-        <div class="escala-etiquetas"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
-      </div>
-
-      <div class="pregunta-bloque" id="pb-7">
-        <div class="pregunta-num">PREGUNTA 07</div>
-        <div class="pregunta-texto">Del 1 al 5, ¿considera usted que la atención recibida le ha ayudado a fortalecer sus
-          relaciones familiares y comunitarias?</div>
-        <div class="escala" id="escala-7">
-          <button type="button" class="btn-escala" data-grupo="7" data-val="1" onclick="seleccionarEscala(7,1)"><span
-              class="emoji">😞</span>1</button>
-          <button type="button" class="btn-escala" data-grupo="7" data-val="2" onclick="seleccionarEscala(7,2)"><span
-              class="emoji">😕</span>2</button>
-          <button type="button" class="btn-escala" data-grupo="7" data-val="3" onclick="seleccionarEscala(7,3)"><span
-              class="emoji">😐</span>3</button>
-          <button type="button" class="btn-escala" data-grupo="7" data-val="4" onclick="seleccionarEscala(7,4)"><span
-              class="emoji">🙂</span>4</button>
-          <button type="button" class="btn-escala" data-grupo="7" data-val="5" onclick="seleccionarEscala(7,5)"><span
-              class="emoji">😄</span>5</button>
-        </div>
-        <div class="escala-etiquetas"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
-      </div>
-
-      <!-- PREGUNTA TEXTO -->
-      <div class="pregunta-bloque" id="pb-8">
-        <div class="pregunta-num">PREGUNTA 08</div>
-        <div class="pregunta-texto">¿Qué sugiere para mejorar la modalidad comunitaria con enfoque intercultural
-          implementada en su comunidad?</div>
-        <textarea class="campo-texto" id="sugerencias" placeholder="Escriba aquí sus sugerencias..."
+        <div class="pregunta-num">COMENTARIOS ADICIONALES</div>
+        <div class="pregunta-texto">¿Tiene algún comentario adicional sobre la modalidad comunitaria?</div>
+        <textarea class="campo-texto" id="comentarios" placeholder="Escriba aquí sus comentarios..."
           oninput="actualizarProgreso()"></textarea>
+      </div>
+
+      <!-- DATOS DEL ENCUESTADOR -->
+      <div class="seccion-datos">
+        <h3>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="1" y="2" width="12" height="10" rx="2" stroke="#1a5c3a" stroke-width="1.5" />
+            <path d="M4 6h6M4 9h4" stroke="#1a5c3a" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          Datos del encuestador
+        </h3>
+        <div class="campos-grid">
+          <div class="campo-grupo">
+            <label class="campo-label" for="nombre-encuestador">Nombre Encuestador</label>
+            <input type="text" class="campo-input" id="nombre-encuestador" placeholder="Nombre completo"
+              oninput="actualizarProgreso()">
+          </div>
+          <div class="campo-grupo">
+            <label class="campo-label" for="cedula-encuestador">Cédula Encuestador</label>
+            <input type="text" class="campo-input" id="cedula-encuestador" placeholder="N° de cédula"
+              oninput="actualizarProgreso()">
+          </div>
+          <div class="campo-grupo">
+            <label class="campo-label" for="fecha-encuesta">Fecha</label>
+            <input type="date" class="campo-input" id="fecha-encuesta" oninput="actualizarProgreso()">
+          </div>
+        </div>
       </div>
 
       <div class="btn-fila">
@@ -999,15 +1122,19 @@
           </svg>
           Descargar todas (archivo de exportacion)
         </button>
+        <button class="btn btn-secundario" type="button" onclick="toggleImportar()">
+          <span id="btn-importar-texto">Importar</span>
+        </button>
         <span class="cuenta" id="cuenta-encuestas">0 encuestas guardadas</span>
       </div>
       <div id="lista-encuestas"></div>
     </div>
 
-    <div class="card">
+    <div class="card" id="seccion-importar" style="display:none;">
       <h2 style="font-family:var(--font-titulo);font-size:20px;margin-bottom:8px;color:var(--verde);">Importar encuestas
       </h2>
-      <p style="font-size:14px;color:var(--gris);margin-bottom:20px;line-height:1.6;">Suba un archivo de exportacion con el mismo
+      <p style="font-size:14px;color:var(--gris);margin-bottom:20px;line-height:1.6;">Suba un archivo de exportacion con
+        el mismo
         formato de exportación para importar encuestas al historial local. Puede importar una encuesta individual o un
         archivo con varias.</p>
       <input type="file" id="input-importar" accept=".json" onchange="importarJSON(event)">
@@ -1031,21 +1158,6 @@
       </div>
       <div id="modal-contenido"></div>
       <div class="btn-fila" id="modal-acciones"></div>
-    </div>
-  </div>
-
-  <!-- MODAL CONFIRMACIÓN ELIMINAR -->
-  <div id="modal-confirm-overlay"
-    style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:600;align-items:center;justify-content:center;padding:24px;">
-    <div
-      style="background:var(--blanco);border-radius:var(--radio);padding:28px;max-width:380px;width:100%;box-shadow:var(--sombra-fuerte);">
-      <h3 style="font-size:17px;margin-bottom:10px;">¿Eliminar encuesta?</h3>
-      <p style="font-size:14px;color:var(--gris);line-height:1.6;">Esta acción no se puede deshacer. La encuesta será
-        eliminada del historial local.</p>
-      <div class="confirm-btns">
-        <button class="btn btn-secundario" onclick="cerrarConfirm()">Cancelar</button>
-        <button class="btn btn-peligro" id="btn-confirm-eliminar">Eliminar</button>
-      </div>
     </div>
   </div>
 
@@ -1101,7 +1213,7 @@
     }
 
     // ================== ESTADO ==================
-    const respuestas = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null };
+    const respuestas = { 1: null, 2: null, 3: null, 4: null, 5: null };
     let encuestaEnEdicion = null;
 
     // ================== ESCALA ==================
@@ -1116,14 +1228,27 @@
 
     function actualizarProgreso() {
       let count = 0;
-      for (let i = 1; i <= 7; i++) if (respuestas[i] !== null) count++;
-      const sug = document.getElementById('sugerencias').value.trim();
-      if (sug) count++;
-      const pct = Math.round((count / 8) * 100);
+      for (let i = 1; i <= 5; i++) if (respuestas[i] !== null) count++;
+      const pct = Math.round((count / 5) * 100);
       document.getElementById('progreso-fill').style.width = pct + '%';
-      document.getElementById('progreso-texto').textContent = `${count} de 8 preguntas respondidas`;
-      if (sug) document.getElementById('pb-8').classList.add('respondida');
-      else document.getElementById('pb-8').classList.remove('respondida');
+      document.getElementById('progreso-texto').textContent = `${count} de 5 preguntas respondidas`;
+      const comentarios = document.getElementById('comentarios').value.trim();
+      if (comentarios) document.getElementById('pb-6').classList.add('respondida');
+      else document.getElementById('pb-6').classList.remove('respondida');
+    }
+
+    function obtenerFechaISO() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function setFechaHoy(force = false) {
+      const input = document.getElementById('fecha-encuesta');
+      if (!input) return;
+      if (force || !input.value) input.value = obtenerFechaISO();
     }
 
     // ================== GENERAR ID ÚNICO ==================
@@ -1146,7 +1271,7 @@
     // ================== GUARDAR ENCUESTA ==================
     async function guardarEncuesta() {
       const validas = Object.values(respuestas).filter(v => v !== null).length;
-      if (validas < 7) {
+      if (validas < 5) {
         mostrarToast('Por favor responda todas las preguntas del 1 al 5', true);
         return;
       }
@@ -1157,18 +1282,22 @@
       const datos = {
         encuesta_id: id,
         formulario: 'ANEXO_21_ENCUESTA_SATISFACCION_MODALIDAD_COMUNITARIA',
-        organizacion: 'RET-UNICEF / MIDES / Fundacion Atenas',
+        organizacion: 'RET',
         fecha_registro: now.toISOString(),
         fecha_registro_local: now.toLocaleDateString('es-CR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-        p1_satisfaccion_temas_encuentros: respuestas[1],
-        p2_calificacion_informacion_agente_comunitaria: respuestas[2],
-        p3_satisfaccion_actividades_encuentros: respuestas[3],
-        p4_calificacion_fortalecimiento_iniciativa_comunitaria: respuestas[4],
-        p5_calificacion_general_modalidad_comunitaria: respuestas[5],
-        p6_sentimiento_atencion_participacion_proyecto: respuestas[6],
-        p7_fortalecimiento_relaciones_familiares_comunitarias: respuestas[7],
-        p8_sugerencias_mejora_modalidad_intercultural: document.getElementById('sugerencias').value.trim(),
-        promedio_satisfaccion: parseFloat(((respuestas[1] + respuestas[2] + respuestas[3] + respuestas[4] + respuestas[5] + respuestas[6] + respuestas[7]) / 7).toFixed(2))
+        nombre_cuidador: document.getElementById('nombre-cuidador').value.trim(),
+        nombre_beneficiario_mc: document.getElementById('nombre-beneficiario').value.trim(),
+        comunidad: document.getElementById('comunidad').value.trim(),
+        p1_satisfaccion_calidad_actividades_encuentros: respuestas[1],
+        p2_satisfaccion_aprendizaje_cuidado_desarrollo: respuestas[2],
+        p3_satisfaccion_trato_acompanamiento_equipo: respuestas[3],
+        p4_satisfaccion_inclusion_necesidades_discapacidad: respuestas[4],
+        p5_satisfaccion_general_participacion_modalidad: respuestas[5],
+        comentarios_adicionales: document.getElementById('comentarios').value.trim(),
+        nombre_encuestador: document.getElementById('nombre-encuestador').value.trim(),
+        cedula_encuestador: document.getElementById('cedula-encuestador').value.trim(),
+        fecha_encuesta: document.getElementById('fecha-encuesta').value,
+        promedio_satisfaccion: parseFloat(((respuestas[1] + respuestas[2] + respuestas[3] + respuestas[4] + respuestas[5]) / 5).toFixed(2))
       };
 
       try {
@@ -1185,13 +1314,19 @@
 
     // ================== LIMPIAR ==================
     function limpiarFormulario() {
-      for (let i = 1; i <= 7; i++) {
+      for (let i = 1; i <= 5; i++) {
         respuestas[i] = null;
         document.querySelectorAll(`[data-grupo="${i}"]`).forEach(b => b.classList.remove('seleccionado'));
         document.getElementById(`pb-${i}`).classList.remove('respondida');
       }
-      document.getElementById('sugerencias').value = '';
-      document.getElementById('pb-8').classList.remove('respondida');
+      document.getElementById('comentarios').value = '';
+      document.getElementById('pb-6').classList.remove('respondida');
+      document.getElementById('nombre-cuidador').value = '';
+      document.getElementById('nombre-beneficiario').value = '';
+      document.getElementById('comunidad').value = '';
+      document.getElementById('nombre-encuestador').value = '';
+      document.getElementById('cedula-encuestador').value = '';
+      setFechaHoy(true);
       encuestaEnEdicion = null;
       actualizarProgreso();
     }
@@ -1229,14 +1364,12 @@
     <div class="enc-item">
       <div class="enc-item-id">${enc.encuesta_id}</div>
       <div class="enc-item-info">
-        <div class="enc-item-titulo">Encuesta de Satisfacción — Anexo 21</div>
-        <div class="enc-item-fecha">${enc.fecha_registro_local} · Promedio: <strong>${enc.promedio_satisfaccion}</strong>/5</div>
+        <div class="enc-item-titulo">Encuesta de Satisfacción — Anexo 21${enc.nombre_cuidador ? ' · ' + enc.nombre_cuidador : ''}</div>
+        <div class="enc-item-fecha">${enc.fecha_registro_local} · Promedio: <strong>${enc.promedio_satisfaccion}</strong>/5${enc.comunidad ? ' · ' + enc.comunidad : ''}</div>
       </div>
       <div class="enc-item-acciones">
         <button class="btn-sm verde" onclick="verEncuesta('${enc.encuesta_id}')">👁 Ver</button>
-        <button class="btn-sm naranja" onclick="editarEncuesta('${enc.encuesta_id}')">✏️ Editar</button>
         <button class="btn-sm azul" onclick="descargarUna('${enc.encuesta_id}')">⬇ Archivo de exportacion</button>
-        <button class="btn-sm rojo" onclick="confirmarEliminar('${enc.encuesta_id}')">🗑 Eliminar</button>
       </div>
     </div>
   `).join('');
@@ -1244,14 +1377,12 @@
 
     // ================== VER ENCUESTA ==================
     const preguntasLabels = [
-      'Satisfacción con los temas tratados en encuentros comunitarios',
-      'Información recibida por la Agente Comunitaria',
-      'Satisfacción con las actividades de encuentros comunitarios',
-      'Calificación de actividades de fortalecimiento de iniciativa comunitaria',
-      'Calificación general de la modalidad comunitaria',
-      'Sentimiento respecto a la atención y participación en el proyecto',
-      'La atención recibida fortaleció relaciones familiares y comunitarias',
-      'Sugerencias para mejorar la modalidad intercultural'
+      'Satisfacción con la calidad de las actividades realizadas en los encuentros comunitarios',
+      'Satisfacción con lo aprendido para aplicar en el cuidado y desarrollo de su hijo/a',
+      'Satisfacción con el trato y acompañamiento brindado por el equipo (agentes comunitarias, coordinadora y enlaces)',
+      'Satisfacción con la forma en que el programa incluye y atiende a niños, niñas y familias con necesidades específicas o discapacidad',
+      'Satisfacción general con la participación en la modalidad',
+      'Comentarios adicionales'
     ];
 
     async function verEncuesta(id) {
@@ -1260,14 +1391,12 @@
       if (!enc) return;
 
       const campos = [
-        enc.p1_satisfaccion_temas_encuentros,
-        enc.p2_calificacion_informacion_agente_comunitaria,
-        enc.p3_satisfaccion_actividades_encuentros,
-        enc.p4_calificacion_fortalecimiento_iniciativa_comunitaria,
-        enc.p5_calificacion_general_modalidad_comunitaria,
-        enc.p6_sentimiento_atencion_participacion_proyecto,
-        enc.p7_fortalecimiento_relaciones_familiares_comunitarias,
-        enc.p8_sugerencias_mejora_modalidad_intercultural
+        enc.p1_satisfaccion_calidad_actividades_encuentros,
+        enc.p2_satisfaccion_aprendizaje_cuidado_desarrollo,
+        enc.p3_satisfaccion_trato_acompanamiento_equipo,
+        enc.p4_satisfaccion_inclusion_necesidades_discapacidad,
+        enc.p5_satisfaccion_general_participacion_modalidad,
+        enc.comentarios_adicionales
       ];
 
       let html = `<div style="margin-bottom:16px;padding:12px;background:var(--verde-bg);border-radius:var(--radio-btn);">
@@ -1276,16 +1405,30 @@
     <span style="font-size:13px;font-weight:700;color:var(--verde);margin-left:12px;">Promedio: ${enc.promedio_satisfaccion}/5</span>
   </div>`;
 
+      // Datos del usuario
+      html += `<div class="modal-datos-grid">
+    <div class="modal-dato"><div class="modal-dato-label">Nombre del Cuidador</div><div class="modal-dato-valor">${enc.nombre_cuidador || '—'}</div></div>
+    <div class="modal-dato"><div class="modal-dato-label">Nombre del Beneficiario MC</div><div class="modal-dato-valor">${enc.nombre_beneficiario_mc || '—'}</div></div>
+    <div class="modal-dato"><div class="modal-dato-label">Comunidad</div><div class="modal-dato-valor">${enc.comunidad || '—'}</div></div>
+  </div>`;
+
       campos.forEach((val, i) => {
-        const esTexto = i === 7;
+        const esTexto = i === 5;
         html += `<div class="respuesta-row">
       <div class="respuesta-pregunta"><strong>P${i + 1}.</strong> ${preguntasLabels[i]}</div>
       ${esTexto
-            ? `<div class="rv-texto">${val || '<em style="opacity:0.5">Sin respuesta</em>'}</div>`
+            ? `<div class="rv-texto">${val || '<em style="opacity:0.5">Sin comentarios</em>'}</div>`
             : `<div class="respuesta-valor rv-${val}">${val}</div>`
           }
     </div>`;
       });
+
+      // Datos del encuestador
+      html += `<div class="modal-datos-grid" style="margin-top:16px;">
+    <div class="modal-dato"><div class="modal-dato-label">Nombre Encuestador</div><div class="modal-dato-valor">${enc.nombre_encuestador || '—'}</div></div>
+    <div class="modal-dato"><div class="modal-dato-label">Cédula Encuestador</div><div class="modal-dato-valor">${enc.cedula_encuestador || '—'}</div></div>
+    <div class="modal-dato"><div class="modal-dato-label">Fecha</div><div class="modal-dato-valor">${enc.fecha_encuesta || '—'}</div></div>
+  </div>`;
 
       document.getElementById('modal-titulo').textContent = 'Ver encuesta';
       document.getElementById('modal-contenido').innerHTML = html;
@@ -1296,27 +1439,13 @@
       document.getElementById('modal-overlay').classList.add('activo');
     }
 
-    // ================== EDITAR ==================
-    async function editarEncuesta(id) {
-      const todas = await obtenerTodasDB();
-      const enc = todas.find(e => e.encuesta_id === id);
-      if (!enc) return;
-
-      limpiarFormulario();
-      encuestaEnEdicion = id;
-
-      seleccionarEscala(1, enc.p1_satisfaccion_temas_encuentros);
-      seleccionarEscala(2, enc.p2_calificacion_informacion_agente_comunitaria);
-      seleccionarEscala(3, enc.p3_satisfaccion_actividades_encuentros);
-      seleccionarEscala(4, enc.p4_calificacion_fortalecimiento_iniciativa_comunitaria);
-      seleccionarEscala(5, enc.p5_calificacion_general_modalidad_comunitaria);
-      seleccionarEscala(6, enc.p6_sentimiento_atencion_participacion_proyecto);
-      seleccionarEscala(7, enc.p7_fortalecimiento_relaciones_familiares_comunitarias);
-      document.getElementById('sugerencias').value = enc.p8_sugerencias_mejora_modalidad_intercultural || '';
-
-      irVista('nueva');
-      mostrarToast(`Editando encuesta ${id}`);
-      window.scrollTo(0, 0);
+    // ================== IMPORTAR (TOGGLE) ==================
+    function toggleImportar() {
+      const sec = document.getElementById('seccion-importar');
+      const label = document.getElementById('btn-importar-texto');
+      const visible = sec.style.display !== 'none';
+      sec.style.display = visible ? 'none' : 'block';
+      label.textContent = visible ? 'Importar' : 'Ocultar importacion';
     }
 
     // ================== DESCARGAR UNA ==================
@@ -1327,24 +1456,6 @@
         const payload = { total: 1, exportado: new Date().toISOString(), anexo: 21, A21: [enc] };
         descargarJSON(payload, `a21_ind_${id}.json`);
       }
-    }
-
-    // ================== ELIMINAR ==================
-    let idAEliminar = null;
-    function confirmarEliminar(id) {
-      idAEliminar = id;
-      const ov = document.getElementById('modal-confirm-overlay');
-      ov.style.display = 'flex';
-      document.getElementById('btn-confirm-eliminar').onclick = async () => {
-        await eliminarDeDB(idAEliminar);
-        cerrarConfirm();
-        cargarHistorial();
-        mostrarToast('Encuesta eliminada');
-      };
-    }
-    function cerrarConfirm() {
-      document.getElementById('modal-confirm-overlay').style.display = 'none';
-      idAEliminar = null;
     }
 
     // ================== IMPORTAR ==================
@@ -1416,6 +1527,7 @@
     // ================== INIT ==================
     abrirDB().then(() => {
       mostrarToast('App lista. Base de datos cargada.');
+      setFechaHoy();
     }).catch(() => {
       mostrarToast('Error al iniciar base de datos', true);
     });

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>ANEXO 16 — Cuaderno Viajero | RET-UNICEF</title>
+  <title>Cuaderno Viajero | RET-UNICEF</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#ffffff">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -349,12 +349,16 @@
 
     .eval-table .indicador-cell {
       width: 45%;
+      text-align: center;
+      vertical-align: middle;
     }
 
     .eval-table .escala-cell {
       width: 25%;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 12px;
+      text-align: center;
+      vertical-align: middle;
     }
 
     /* ---- TABLA SEGUIMIENTO ---- */
@@ -610,6 +614,63 @@
       font-size: 13px;
     }
 
+    .historial-table-wrap {
+      background: white;
+      border: 1px solid var(--gris-borde);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      overflow-x: auto;
+    }
+
+    .historial-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 840px;
+    }
+
+    .historial-table th {
+      text-align: left;
+      background: var(--verde-bg);
+      color: var(--verde);
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--verde-borde);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      font-size: 11px;
+    }
+
+    .historial-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--gris-borde);
+      vertical-align: top;
+    }
+
+    .historial-table tr:nth-child(even) td {
+      background: var(--gris-bg);
+    }
+
+    .historial-meta {
+      color: var(--gris-texto);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .historial-id {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--gris-texto);
+    }
+
+    .paginacion {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
     /* ---- INTRO ---- */
     .intro-banner {
       background: linear-gradient(135deg, var(--verde) 0%, #0f4a30 100%);
@@ -805,27 +866,34 @@
         <h2>Nueva Encuesta</h2>
         <p>Seleccione el tipo de encuentro comunitario para comenzar el registro.</p>
       </div>
-      <div class="page-title">Seleccione el tipo de Anexo 16</div>
+      <div class="page-title">Seleccione el tipo</div>
       <div class="tipo-grid">
         <div class="tipo-card" onclick="seleccionarTipo('gestion')" id="tipo-gestion">
           <span class="tipo-icon">💬</span>
           <h3>Gestión de Emociones</h3>
-          <p>Encuentros enfocados en el manejo emocional con niños y cuidadores</p>
+          <p>Encuentros orientados al reconocimiento, expresión y regulación emocional, fortaleciendo el vínculo
+            afectivo y la empatía entre niños y cuidadores.</p>
         </div>
+
         <div class="tipo-card" onclick="seleccionarTipo('resolucion')" id="tipo-resolucion">
           <span class="tipo-icon">🧩</span>
           <h3>Resolución de Problemas</h3>
-          <p>Encuentros para desarrollar habilidades de resolución de conflictos</p>
+          <p>Encuentros centrados en la exploración, el ensayo, la búsqueda de soluciones y el desarrollo del
+            pensamiento causal y creativo según la edad.</p>
         </div>
-        <div class="tipo-card" onclick="seleccionarTipo('movimiento1')" id="tipo-movimiento1">
+
+        <div class="tipo-card" onclick="seleccionarTipo('movimiento')" id="tipo-movimiento">
           <span class="tipo-icon">🏃</span>
-          <h3>Movimiento y Expresión Corporal v1</h3>
-          <p>Primera variante de actividades de movimiento y expresión</p>
+          <h3>Movimiento y Expresión Corporal</h3>
+          <p>Encuentros enfocados en la motricidad, la coordinación, el ritmo y la expresión corporal, promoviendo el
+            uso del cuerpo como medio de juego y comunicación.</p>
         </div>
-        <div class="tipo-card" onclick="seleccionarTipo('movimiento2')" id="tipo-movimiento2">
-          <span class="tipo-icon">🤸</span>
-          <h3>Movimiento y Expresión Corporal v2</h3>
-          <p>Segunda variante de actividades de movimiento y expresión</p>
+
+        <div class="tipo-card" onclick="seleccionarTipo('comunicacion')" id="tipo-comunicacion">
+          <span class="tipo-icon">🗣️</span>
+          <h3>COMUNICACIÓN Y LENGUAJE</h3>
+          <p>Encuentros dirigidos al desarrollo de la vocalización, la comprensión, la expresión verbal y la interacción
+            social entre niños y cuidadores.</p>
         </div>
       </div>
       <div class="acciones" style="margin-top:24px">
@@ -986,12 +1054,31 @@
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
         <span class="contador" id="contador-total">0 encuestas</span>
-        <button class="btn btn-secondary" onclick="descargarTodas()" id="btn-dl-todas">↓ Descargar todas (archivo de exportacion)</button>
+        <button class="btn btn-secondary" onclick="descargarTodas()" id="btn-dl-todas">↓ Descargar todos (archivo de
+          exportacion)</button>
         <button class="btn btn-danger" onclick="borrarTodas()" id="btn-borrar-todas">🗑️ Borrar todas</button>
         <span class="contador" id="status-exportacion">Ultima exportacion: —</span>
       </div>
     </div>
-    <div id="lista-encuestas"></div>
+    <div class="historial-table-wrap">
+      <table class="historial-table">
+        <thead>
+          <tr>
+            <th>Identificador</th>
+            <th>Encuesta</th>
+            <th>Fecha</th>
+            <th>Resumen</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="lista-encuestas"></tbody>
+      </table>
+    </div>
+    <div class="paginacion" id="paginacion-encuestas">
+      <button class="btn btn-secondary" id="pag-prev" onclick="cambiarPagina(-1)">← Anterior</button>
+      <span class="contador" id="pag-info">Pagina 1 de 1</span>
+      <button class="btn btn-secondary" id="pag-next" onclick="cambiarPagina(1)">Siguiente →</button>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -1080,19 +1167,24 @@
         icono: "💬",
         evaluacion: [
           {
-            objetivo: "Reconocimiento emocional",
-            indicador: "El niño(a) identifica y nombra sus emociones básicas (alegría, tristeza, enojo, miedo) durante la actividad.",
-            escala: "1 = No logrado\n2 = En proceso\n3 = Logrado\n4 = Destacado"
+            indicadores_logro: "0-12 Meses \n APEGO Y CONTENCION",
+            objetivos_observacion_nn: "1. Expresa necesidades mediante el llanto, gestos o sonidos.\n2. Se calma con la voz, mirada o contacto físico del adulto.\n3. Sonríe y responde a la interacción afectiva.\n4. Diferencia figuras familiares de extraños.",
+            objetivos_observacion_cuidadores: "Sostiene contacto visual y físico de manera contenedora (abrazo,caricia, tono de voz cálido)."
           },
           {
-            objetivo: "Regulación emocional",
-            indicador: "El niño(a) utiliza al menos una estrategia de autorregulación emocional propuesta durante el encuentro.",
-            escala: "1–4"
+            indicadores_logro: "13-24 meses \n RECONOCIMIENTO Y EXPRESIÓN BASICA",
+            objetivos_observacion_nn: "1. Comienza a reconocer emociones simples (alegría, enojo,tristeza). \n2. Usa gestos o palabras para expresar lo que siente (“no”, “feliz”,“malo”) \n3. Busca al adulto cuando se siente inseguro o frustrado.\n4. Imita expresiones o reacciones emocionales de los demás.",
+            objetivos_observacion_cuidadores: "Nombra la emoción que percibe en el niño (Creo que estas molesto, te ayudo a calmarte"
           },
           {
-            objetivo: "Expresión emocional positiva",
-            indicador: "El niño(a) expresa sus emociones de forma apropiada y segura en el contexto del encuentro comunitario.",
-            escala: "1–4"
+            indicadores_logro: "25 - 36 meses \n CO REGULACIÓN Y EXPRESION VERBAL",
+            objetivos_observacion_nn: "1. Identifica y nombra varias emociones (triste, molesto, asustado).\n 2. Comienza a expresar causas de su emoción (“me enojoporque”).\n 3. Acepta ayuda del adulto para calmarse.\n 4.Usa estrategias simples para tranquilizarse (respirar, abrazar,alejarse).",
+            objetivos_observacion_cuidadores: "Espera sin juzgar ante una rabieta o llanto."
+          },
+          {
+            indicadores_logro: "37 a 48 meses \n AUTORREGULACIÓN INICIAL Y EMPATÍA",
+            objetivos_observacion_nn: "1. Reconoce emociones propias y ajenas con mayor precisión.\n 2. Usa el lenguaje para comunicar cómo se siente y qué necesita.\n 3. Aplica estrategias de autorregulación aprendidas (respirar,contar, cambiar de actividad).\n 4. Muestra empatía: consuela, comparte, espera su turno.",
+            objetivos_observacion_cuidadores: "Refuerza con frases deseguridad (“estoy aquí contigo”, “te entiendo”)"
           }
         ]
       },
@@ -1101,61 +1193,78 @@
         icono: "🧩",
         evaluacion: [
           {
-            objetivo: "Identificación del problema",
-            indicador: "El niño(a) describe con sus propias palabras la situación problemática presentada en la actividad.",
-            escala: "1 = No logrado\n2 = En proceso\n3 = Logrado\n4 = Destacado"
+            indicadores_logro: "0-12 Meses \n Exploración sensorial",
+            objetivos_observacion_nn: "1. Manipula objetos con curiosidad.\n2. Observa y repite acciones que generan efecto (sacudir, golpear).\n3. Busca objetos parcialmente ocultos.\n4. Ensaya diferentes movimientos para alcanzar un objeto.",
+            objetivos_observacion_cuidadores: "Ofrece materiales que despierten curiosidad."
           },
           {
-            objetivo: "Generación de alternativas",
-            indicador: "El niño(a) propone al menos dos soluciones posibles ante el problema planteado.",
-            escala: "1–4"
+            indicadores_logro: "13-24 meses \n Ensayo-error y anticipación",
+            objetivos_observacion_nn: "1. Prueba distintas formas de lograr algo (abrir, encajar, apilar).\n2. Imita soluciones observadas.\n3. Busca ayuda del adulto si no puede lograrlo.\n4. Muestra satisfacción al resolver un reto.",
+            objetivos_observacion_cuidadores: "Celebra el proceso más que el resultado."
           },
           {
-            objetivo: "Toma de decisiones",
-            indicador: "El niño(a) elige una solución y argumenta brevemente su elección con apoyo del facilitador.",
-            escala: "1–4"
+            indicadores_logro: "25- 36 meses \n Pensamiento Causal",
+            objetivos_observacion_nn: "1. Predice lo que pasará con sus acciones (“si empujo, cae”).\n2. Propone soluciones sencillas.\n3. Clasifica o agrupa objetos por características.\n4. Se concentra en tareas por períodos más largos.",
+            objetivos_observacion_cuidadores: "Propicia situaciones que requieran búsqueda y comparación."
+          },
+          {
+            indicadores_logro: "37 a 48 meses \n Planificación y Creatividad",
+            objetivos_observacion_nn: "1. Formula hipótesis simples (“¿y si lo hago así?”).\n2. Usa el diálogo para resolver desacuerdos o retos.\n3. Aplica estrategias aprendidas en nuevas situaciones.\n4. Resuelve pequeños conflictos con ayuda mínima del adulto.",
+            objetivos_observacion_cuidadores: "Acompaña con preguntas que estimulen el razonamiento."
           }
         ]
       },
-      movimiento1: {
-        nombre: "Movimiento y Expresión Corporal v1",
+      movimiento: {
+        nombre: "Movimiento y Expresión Corporal",
         icono: "🏃",
         evaluacion: [
           {
-            objetivo: "Coordinación motora gruesa",
-            indicador: "El niño(a) ejecuta movimientos corporales coordinados según las consignas de la actividad (saltar, correr, rodar).",
-            escala: "1 = No logrado\n2 = En proceso\n3 = Logrado\n4 = Destacado"
+            indicadores_logro: "0 A 12 MESES \n Motricidad inicial y vínculo corporal",
+            objetivos_observacion_nn: "1. Se mueve activamente en respuesta a sonidos.\n2. Se calma o sonríe con el balanceo.\n3. Explora su cuerpo y el del cuidador con las manos.\n4. Disfruta juegos corporales (palmas, cosquillas).",
+            objetivos_observacion_cuidadores: "Demuestra los movimientos al NN antes de pedírselo."
           },
           {
-            objetivo: "Conciencia corporal",
-            indicador: "El niño(a) reconoce y nombra partes de su cuerpo mientras realiza la actividad de movimiento.",
-            escala: "1–4"
+            indicadores_logro: "13-24 meses \n Exploración y equilibrio",
+            objetivos_observacion_nn: "1. Camina, salta o baila con apoyo.\n2. Imita gestos o movimientos.\n3. Participa en rondas sencillas.\n4. Usa el cuerpo para expresar alegría o sorpresa.",
+            objetivos_observacion_cuidadores: "Anima y acompaña con gestos o música."
           },
           {
-            objetivo: "Expresión corporal creativa",
-            indicador: "El niño(a) utiliza su cuerpo para expresar ideas, emociones o personajes de forma espontánea durante la sesión.",
-            escala: "1–4"
+            indicadores_logro: "24 - 36 meses \n COORDINACIÓN Y RITMO",
+            objetivos_observacion_nn: "1. Coordina movimientos con música.\n2. Controla mejor su cuerpo al correr o girar.\n3. Reconoce partes del cuerpo y su función.\n4. Disfruta actividades grupales de movimiento.",
+            objetivos_observacion_cuidadores: "Adecúa el espacio, retirando obstáculos."
+          },
+          {
+            indicadores_logro: "37 a 48 meses \n Autonomía motriz y expresión corporal",
+            objetivos_observacion_nn: "1. Realiza secuencias motoras con ritmo.\n2. Representa emociones o personajes.\n3. Adapta su fuerza o velocidad al juego.\n4. Participa activamente en danzas o dramatizaciones.",
+            objetivos_observacion_cuidadores: "Participa activamente de las canciones, tambores o ritmos para facilitar la secuencia."
           }
         ]
       },
-      movimiento2: {
-        nombre: "Movimiento y Expresión Corporal v2",
-        icono: "🤸",
+
+
+      comunicacion: {
+        nombre: "Comunicación y Lenguaje",
+        icono: "🗣️",
         evaluacion: [
           {
-            objetivo: "Equilibrio y postura",
-            indicador: "El niño(a) mantiene equilibrio en posiciones estáticas y dinámicas propuestas en la actividad.",
-            escala: "1 = No logrado\n2 = En proceso\n3 = Logrado\n4 = Destacado"
+            indicadores_logro: "0-12 Meses \n VOCALIZACION Y RESPUESTA AFECTIVA",
+            objetivos_observacion_nn: "1. Busca la mirada del cuidador.\n2. Balbucea o emite sonidos cuando le hablan.\n3. Sonríe o se calma al escuchar su voz.\n4. Responde con gestos o movimientos.",
+            objetivos_observacion_cuidadores: "Se coloca frente al niño y lo mira a los ojos."
           },
           {
-            objetivo: "Ritmo y coordinación",
-            indicador: "El niño(a) sigue el ritmo propuesto (palmadas, música, consignas) coordinando movimientos de manos y pies.",
-            escala: "1–4"
+            indicadores_logro: "13 - 24 MESES \n LENGUAJE GESTUAL Y PRIMERAS PALABRAS",
+            objetivos_observacion_nn: "1. Usa gestos o palabras simples para comunicarse.\n2. Imita sonidos o palabras.\n3. Responde a llamados o instrucciones cortas.\n4. Señala o nombra objetos.",
+            objetivos_observacion_cuidadores: "Acompaña con voz suave, pausada y expresiva."
           },
           {
-            objetivo: "Interacción en movimiento",
-            indicador: "El niño(a) participa en actividades de movimiento grupal respetando espacio y turno de sus pares.",
-            escala: "1–4"
+            indicadores_logro: "25 - 36 MESES \n EXPRESION VERBAL Y DIALOGO BREVE",
+            objetivos_observacion_nn: "1. Usa frases simples para pedir o contar algo.\n2. Inicia breves diálogos con el adulto.\n3. Se expresa a través de canciones o juegos de palabras.\n4. Comparte turnos en la conversación.",
+            objetivos_observacion_cuidadores: "Espera que el niño responda sin interrumpirlo."
+          },
+          {
+            indicadores_logro: "37 A 48 MESES \n LENGUAJE NARRATIVO Y SOCIAL",
+            objetivos_observacion_nn: "1. Relata pequeñas experiencias.\n2. Usa palabras para expresar emociones (“estoy feliz”, “no quiero”).\n3. Participa en juegos de conversación o dramatización.\n4. Escucha y responde a otros.",
+            objetivos_observacion_cuidadores: "Repite y amplía lo que el niño dice (“sí, Pedro es una pizza”)."
           }
         ]
       }
@@ -1173,6 +1282,7 @@
       document.getElementById('page-' + p).classList.add('active');
       setActiveNav(p);
       if (p === 'historial') cargarHistorial();
+      if (p === 'nueva') resetFormulario();
     }
 
     function setActiveNav(p) {
@@ -1236,15 +1346,15 @@
     function renderTablaEvaluacion() {
       const tipo = TIPOS[tipoSeleccionado];
       let html = `<thead><tr>
-    <th class="objetivo-cell">Objetivo</th>
-    <th class="indicador-cell">Indicador de Logro</th>
-    <th class="escala-cell">Escala</th>
+    <th class="indicador-cell">Indicadores de Logro</th>
+    <th class="objetivo-cell">Objetivos de Observación NN</th>
+    <th class="escala-cell">Objetivos de Observación Cuidadores</th>
   </tr></thead><tbody>`;
       tipo.evaluacion.forEach(r => {
         html += `<tr>
-      <td class="objetivo-cell">${r.objetivo}</td>
-      <td class="indicador-cell">${r.indicador}</td>
-      <td class="escala-cell" style="white-space:pre-line">${r.escala}</td>
+      <td class="indicador-cell" style="white-space:pre-line">${r.indicadores_logro}</td>
+      <td class="objetivo-cell" style="white-space:pre-line">${r.objetivos_observacion_nn}</td>
+      <td class="escala-cell" style="white-space:pre-line">${r.objetivos_observacion_cuidadores}</td>
     </tr>`;
       });
       html += '</tbody>';
@@ -1430,38 +1540,72 @@
 
     // ======================== HISTORIAL ========================
     let _todasEncuestas = [];
+    let _paginaActual = 1;
+    const _tamanoPagina = 10;
 
     async function cargarHistorial() {
       _todasEncuestas = await dbGetAll();
       _todasEncuestas.sort((a, b) => new Date(b.metadata.fecha_creacion) - new Date(a.metadata.fecha_creacion));
       document.getElementById('contador-total').textContent = `${_todasEncuestas.length} encuesta${_todasEncuestas.length !== 1 ? 's' : ''}`;
+      _paginaActual = 1;
+      renderHistorial(_todasEncuestas);
+    }
+
+    function cambiarPagina(delta) {
+      const totalPaginas = Math.max(1, Math.ceil(_todasEncuestas.length / _tamanoPagina));
+      _paginaActual = Math.min(totalPaginas, Math.max(1, _paginaActual + delta));
       renderHistorial(_todasEncuestas);
     }
 
     function renderHistorial(lista) {
       const cont = document.getElementById('lista-encuestas');
+      const pagInfo = document.getElementById('pag-info');
+      const btnPrev = document.getElementById('pag-prev');
+      const btnNext = document.getElementById('pag-next');
       if (!lista.length) {
-        cont.innerHTML = `<div class="empty-state"><div class="icon">📋</div><h3>Sin resultados</h3><p>No hay encuestas para mostrar con este filtro.</p></div>`;
+        cont.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="icon">📋</div><h3>Sin resultados</h3><p>No hay encuestas para mostrar con este filtro.</p></div></td></tr>`;
+        if (pagInfo) pagInfo.textContent = 'Pagina 0 de 0';
+        if (btnPrev) btnPrev.disabled = true;
+        if (btnNext) btnNext.disabled = true;
         return;
       }
-      cont.innerHTML = lista.map(e => {
+      const totalPaginas = Math.max(1, Math.ceil(lista.length / _tamanoPagina));
+      _paginaActual = Math.min(totalPaginas, Math.max(1, _paginaActual));
+      const inicio = (_paginaActual - 1) * _tamanoPagina;
+      const fin = inicio + _tamanoPagina;
+      const paginaLista = lista.slice(inicio, fin);
+      cont.innerHTML = paginaLista.map(e => {
         const fecha = new Date(e.metadata.fecha_creacion).toLocaleDateString('es-CR', { day: '2-digit', month: 'long', year: 'numeric' });
         const tipo = TIPOS[e.metadata.tipo_anexo];
+        const comunidad = e.datos_generales.comunidad || 'Sin comunidad';
+        const asistentes = e.datos_generales.beneficiarios_asistentes;
+        const ninos = e.seguimiento_individual.length;
+        const agente = e.agente_comunitario.nombre || '—';
         return `
-    <div class="encuesta-card">
-      <div class="encuesta-info">
-        <div class="encuesta-id">${e.id}</div>
-        <div class="encuesta-titulo">${tipo ? tipo.icono : ''} ${e.metadata.nombre_tipo} — ${e.datos_generales.comunidad || 'Sin comunidad'}</div>
-        <div class="encuesta-meta">${fecha} · ${e.datos_generales.beneficiarios_asistentes} asistentes · ${e.seguimiento_individual.length} niños registrados · ${e.agente_comunitario.nombre || '—'}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+    <tr>
+      <td>
+        <div class="historial-id">${e.id}</div>
+      </td>
+      <td>
+        <div><strong>${tipo ? tipo.icono : ''} ${e.metadata.nombre_tipo}</strong></div>
+        <div class="historial-meta">${comunidad}</div>
+      </td>
+      <td>${fecha}</td>
+      <td>
+        <div class="historial-meta">${asistentes} asistentes · ${ninos} niños registrados</div>
+        <div class="historial-meta">Agente: ${agente}</div>
+      </td>
+      <td>
         <div class="encuesta-acciones">
           <button class="btn btn-primary" onclick="editarEncuesta('${e.id}')">✏️ Editar</button>
-          <button class="btn btn-secondary" onclick="descargarUna('${e.id}')">↓ Archivo de exportacion</button>
+          <button class="btn btn-secondary" onclick="descargarUna('${e.id}')">↓ Descargar</button>
         </div>
-      </div>
-    </div>`;
+      </td>
+    </tr>`;
       }).join('');
+      if (pagInfo) pagInfo.textContent = `Pagina ${_paginaActual} de ${totalPaginas}`;
+      if (btnPrev) btnPrev.disabled = _paginaActual <= 1;
+      if (btnNext) btnNext.disabled = _paginaActual >= totalPaginas;
     }
 
     function actualizarEstadoExportacion() {

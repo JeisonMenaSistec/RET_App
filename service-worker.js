@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mi-app-v1.7';
+const CACHE_NAME = 'mi-app-v1.8';
 const URLS_A_CACHEAR = [
   './',
   './index.html',
