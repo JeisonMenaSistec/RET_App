@@ -75,6 +75,20 @@
       letter-spacing: 1px;
     }
 
+    .logo-ret {
+      width: 50px;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
+    }
+
+    .logo-sistec {
+      width: 50px;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
+    }
+
     header h1 {
       font-size: 17px;
       font-weight: 600;
@@ -846,15 +860,16 @@
 
   <header>
     <div class="header-logo">
-      <div class="logo-badge">RET · UNICEF</div>
+      <img src="retlogo.png" alt="RET UNICEF" class="logo-ret">
+      <img src="sisteclogo.png" alt="Sistec" class="logo-sistec">
       <div>
-        <h1>ANEXO 16 — Cuaderno Viajero</h1>
+        <h1>Cuaderno Viajero</h1>
         <p>Seguimiento de Encuentros</p>
       </div>
     </div>
     <div class="header-nav">
-      <button class="nav-btn active" onclick="showPage('nueva')">+ Nueva Encuesta</button>
-      <button class="nav-btn" onclick="showPage('historial')">Historial</button>
+      <button class="nav-btn active" onclick="showPage('nueva')">📋 Nueva Encuesta</button>
+      <button class="nav-btn" onclick="showPage('historial')">📂 Historial</button>
       <button class="nav-btn" onclick="location.href='index.html'">↩︎ Menú</button>
     </div>
   </header>
@@ -1450,6 +1465,17 @@
     }
 
     // ======================== GUARDAR ========================
+    function normalizarTexto(valor) {
+      if (valor === undefined || valor === null) return '';
+      return String(valor).trim();
+    }
+
+    function normalizarNumero(valor) {
+      if (Number.isFinite(valor)) return valor;
+      const num = parseInt(valor, 10);
+      return Number.isFinite(num) ? num : 0;
+    }
+
     async function guardarEncuesta() {
       const comunidad = document.getElementById('comunidad').value.trim();
       const fecha = document.getElementById('fecha_encuentro').value;
@@ -1481,18 +1507,18 @@
           numero_caminadores_19_48_meses: parseInt(document.getElementById('caminadores').value) || 0
         },
         seguimiento_individual: filasSeguimiento.map(f => ({
-          nombre_nino: f.nombre,
-          edad_meses: f.edad_meses,
-          obj1: f.obj1,
-          obj2: f.obj2,
-          obj3: f.obj3,
-          obj4: f.obj4,
-          objetivo_observacion_cuidador: f.objetivo_observacion_cuidador
+          nombre_nino: normalizarTexto(f.nombre),
+          edad_meses: normalizarNumero(f.edad_meses),
+          obj1: normalizarTexto(f.obj1),
+          obj2: normalizarTexto(f.obj2),
+          obj3: normalizarTexto(f.obj3),
+          obj4: normalizarTexto(f.obj4),
+          objetivo_observacion_cuidador: normalizarTexto(f.objetivo_observacion_cuidador)
         })),
-        observaciones_cualitativas_discapacidad_inclusion: document.getElementById('observaciones_cualitativas').value.trim(),
+        observaciones_cualitativas_discapacidad_inclusion: normalizarTexto(document.getElementById('observaciones_cualitativas').value),
         agente_comunitario: {
           nombre: encuestador_nombre,
-          cedula: document.getElementById('encuestador_cedula').value.trim()
+          cedula: normalizarTexto(document.getElementById('encuestador_cedula').value)
         }
       };
 

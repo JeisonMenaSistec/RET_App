@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <title>Anexo 21 — Encuesta de Satisfacción</title>
+  <title>Encuesta de Satisfacción</title>
   <style>
     :root {
       --verde: #1a5c3a;
@@ -83,6 +83,20 @@
       padding: 5px 10px;
       border-radius: 6px;
       letter-spacing: 1px;
+    }
+
+    .logo-ret {
+      width: 50px;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
+    }
+
+    .logo-sistec {
+      width: 50px;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
     }
 
     #nav h1 {
@@ -809,6 +823,20 @@
       margin-left: auto;
     }
 
+    .lista-paginacion {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .lista-paginacion .info {
+      font-size: 12px;
+      color: var(--gris-claro);
+      font-family: var(--font-mono);
+    }
+
     /* INPUT FILE */
     #input-importar {
       display: none;
@@ -885,15 +913,16 @@
   <!-- NAVBAR -->
   <div id="nav">
     <div class="header-logo">
-      <div class="logo-badge">RET · UNICEF</div>
+      <img src="retlogo.png" alt="RET UNICEF" class="logo-ret">
+      <img src="sisteclogo.png" alt="Sistec" class="logo-sistec">
       <div>
-        <h1>ANEXO 21 — Encuesta de Satisfacción</h1>
+        <h1>Encuesta de Satisfacción</h1>
         <p>Formulario principal</p>
       </div>
     </div>
     <div class="nav-actions">
-      <button class="nav-btn activo" data-view="nueva" onclick="irVista('nueva')">Nueva</button>
-      <button class="nav-btn" data-view="lista" onclick="irVista('lista')">Historial</button>
+      <button class="nav-btn activo" data-view="nueva" onclick="irVista('nueva')">📋 Nueva Encuesta</button>
+      <button class="nav-btn" data-view="lista" onclick="irVista('lista')">📂 Historial</button>
       <button class="nav-btn" onclick="location.href='index.html'">↩︎ Menú</button>
     </div>
   </div>
@@ -901,20 +930,18 @@
   <!-- VISTA: NUEVA ENCUESTA -->
   <div class="vista activa" id="v-nueva">
     <div class="enc-header">
-      <div class="org">MIDES · UNICEF · Fundación Atenas</div>
       <h1>ENCUESTA DE SATISFACCIÓN — Modalidad Comunitaria con Enfoque de Interculturalidad e Inclusión</h1>
       <div class="descripcion">
-        Este formulario recibe retroalimentación sobre el servicio en la modalidad comunitaria implementada por
-        MIDES-UNICEF por medio del socio implementador Fundación Atenas. Solicitar a los usuarios del Entorno Protector
+        Solicitar a los usuarios del Entorno Protector
         que completen esta encuesta de satisfacción. <strong>Una encuesta por cada usuario.</strong>
       </div>
     </div>
 
-    <div class="instrucciones">
+    <!-- <div class="instrucciones">
       <strong>Instrucciones para el encuestador:</strong> Entregue la Tablet al usuario para que escoja la mejor opción.
       Si el usuario no sabe usar la Tablet o no puede leer, lea las preguntas en voz alta. Por favor, califica cada
       afirmación utilizando la siguiente escala.
-    </div>
+    </div> -->
 
     <div class="nivel-badge">
       <svg width="16" height="16" viewBox="0 0 16 16">
@@ -1128,6 +1155,7 @@
         <span class="cuenta" id="cuenta-encuestas">0 encuestas guardadas</span>
       </div>
       <div id="lista-encuestas"></div>
+      <div class="lista-paginacion" id="lista-paginacion"></div>
     </div>
 
     <div class="card" id="seccion-importar" style="display:none;">
@@ -1203,6 +1231,15 @@
       });
     }
 
+    function obtenerUnaDB(id) {
+      return new Promise((res, rej) => {
+        const tx = db.transaction(STORE, 'readonly');
+        const req = tx.objectStore(STORE).get(id);
+        req.onsuccess = () => res(req.result);
+        req.onerror = e => rej(e);
+      });
+    }
+
     function eliminarDeDB(id) {
       return new Promise((res, rej) => {
         const tx = db.transaction(STORE, 'readwrite');
@@ -1215,6 +1252,9 @@
     // ================== ESTADO ==================
     const respuestas = { 1: null, 2: null, 3: null, 4: null, 5: null };
     let encuestaEnEdicion = null;
+    const LIST_PAGE_SIZE = 20;
+    let listaPagina = 1;
+    let listaCache = [];
 
     // ================== ESCALA ==================
     function seleccionarEscala(grupo, valor) {
@@ -1356,11 +1396,26 @@
 
       if (!todas.length) {
         cont.innerHTML = `<div class="vacio"><div class="icono">📋</div><p>No hay encuestas guardadas aún.</p></div>`;
+        document.getElementById('lista-paginacion').innerHTML = '';
         return;
       }
 
-      todas.sort((a, b) => new Date(b.fecha_registro) - new Date(a.fecha_registro));
-      cont.innerHTML = todas.map(enc => `
+      listaCache = [...todas].sort((a, b) => new Date(b.fecha_registro) - new Date(a.fecha_registro));
+      listaPagina = 1;
+      renderListaPagina();
+    }
+
+    function renderListaPagina() {
+      const cont = document.getElementById('lista-encuestas');
+      const pag = document.getElementById('lista-paginacion');
+      const total = listaCache.length;
+      const totalPages = Math.max(1, Math.ceil(total / LIST_PAGE_SIZE));
+      if (listaPagina > totalPages) listaPagina = totalPages;
+
+      const start = (listaPagina - 1) * LIST_PAGE_SIZE;
+      const pageItems = listaCache.slice(start, start + LIST_PAGE_SIZE);
+
+      cont.innerHTML = pageItems.map(enc => `
     <div class="enc-item">
       <div class="enc-item-id">${enc.encuesta_id}</div>
       <div class="enc-item-info">
@@ -1373,6 +1428,21 @@
       </div>
     </div>
   `).join('');
+
+      const prevDisabled = listaPagina <= 1 ? 'disabled' : '';
+      const nextDisabled = listaPagina >= totalPages ? 'disabled' : '';
+      pag.innerHTML = `
+    <button class="btn btn-secundario" ${prevDisabled} onclick="cambiarPagina(-1)">◀ Anterior</button>
+    <span class="info">Pagina ${listaPagina} de ${totalPages} · ${total} encuesta${total !== 1 ? 's' : ''}</span>
+    <button class="btn btn-secundario" ${nextDisabled} onclick="cambiarPagina(1)">Siguiente ▶</button>
+  `;
+    }
+
+    function cambiarPagina(delta) {
+      listaPagina += delta;
+      renderListaPagina();
+      const cont = document.getElementById('lista-encuestas');
+      if (cont) cont.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // ================== VER ENCUESTA ==================
@@ -1386,8 +1456,7 @@
     ];
 
     async function verEncuesta(id) {
-      const todas = await obtenerTodasDB();
-      const enc = todas.find(e => e.encuesta_id === id);
+      const enc = await obtenerUnaDB(id);
       if (!enc) return;
 
       const campos = [
@@ -1450,8 +1519,7 @@
 
     // ================== DESCARGAR UNA ==================
     async function descargarUna(id) {
-      const todas = await obtenerTodasDB();
-      const enc = todas.find(e => e.encuesta_id === id);
+      const enc = await obtenerUnaDB(id);
       if (enc) {
         const payload = { total: 1, exportado: new Date().toISOString(), anexo: 21, A21: [enc] };
         descargarJSON(payload, `a21_ind_${id}.json`);

@@ -93,6 +93,20 @@
       font-family: var(--font-mono);
     }
 
+    #header-logo .logo-ret {
+      width: 50px;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
+    }
+
+    #header-logo .logo-sistec {
+      width: 50px;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
+    }
+
     #header-title {
       flex: 1;
     }
@@ -131,44 +145,10 @@
       color: var(--verde);
     }
 
-    /* ===================== NAV TABS ===================== */
-    #main-nav {
-      display: flex;
-      background: rgba(255, 255, 255, 0.12);
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    #main-nav::-webkit-scrollbar {
-      display: none;
-    }
-
-    .nav-tab {
-      flex: 1;
-      min-width: 120px;
-      padding: 12px 16px;
-      background: transparent;
-      border: none;
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: center;
-      border-bottom: 3px solid transparent;
-      transition: var(--transicion);
-      white-space: nowrap;
-      font-family: var(--font-cuerpo);
-    }
-
-    .nav-tab:hover {
-      color: white;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .nav-tab.active {
-      color: white;
-      border-bottom-color: var(--naranja-claro);
-      background: rgba(255, 255, 255, 0.15);
+    #header-actions .btn.active {
+      background: white;
+      color: var(--verde);
+      border-color: white;
     }
 
     /* ===================== MAIN LAYOUT ===================== */
@@ -736,12 +716,6 @@
       background: var(--gris-bg);
     }
 
-    .survey-checkbox {
-      width: 22px;
-      height: 22px;
-      cursor: pointer;
-      accent-color: var(--verde);
-    }
 
     .survey-info {
       flex: 1;
@@ -800,9 +774,34 @@
     }
 
     .survey-actions {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 6px;
+      justify-items: stretch;
+      min-width: 220px;
+    }
+
+    .list-toolbar {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .list-toolbar-row {
+      display: flex;
+      gap: 10px;
       flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .list-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 12px;
+      color: var(--gris);
+      font-size: 0.9rem;
     }
 
     /* ===================== MODAL ===================== */
@@ -1153,21 +1152,19 @@
   <div id="header">
     <div id="header-top">
       <div id="header-logo">
-        <div class="badge">RET · UNICEF</div>
+        <img src="retlogo.png" alt="RET UNICEF" class="logo-ret">
+        <img src="sisteclogo.png" alt="Sistec" class="logo-sistec">
       </div>
       <div id="header-title">
         <h1>ANEXO 17</h1>
         <p>INSTRUMENTO DE SEGUIMIENTO A LA IMPLEMENTACIÓN</p>
       </div>
       <div id="header-actions">
-        <!-- <button class="btn btn-secondary btn-sm" onclick="showImport()">📥 Importar</button> -->
+        <button class="btn btn-secondary btn-sm active" id="btn-nav-home" onclick="showView('home')">🏠 Inicio</button>
+        <button class="btn btn-secondary btn-sm" id="btn-nav-nueva" onclick="showView('nueva')">📋 Nueva Encuesta</button>
+        <button class="btn btn-secondary btn-sm" id="btn-nav-lista" onclick="showView('lista')">📂 Historial</button>
         <button class="btn btn-secondary btn-sm" onclick="location.href='index.html'">↩︎ Menú</button>
       </div>
-    </div>
-    <div id="main-nav">
-      <button class="nav-tab active" onclick="showView('home')">🏠 Inicio</button>
-      <button class="nav-tab" onclick="showView('nueva')">➕ Nueva Encuesta</button>
-      <button class="nav-tab" onclick="showView('lista')">📋 Historial</button>
     </div>
   </div>
 
@@ -1298,7 +1295,7 @@
               <button class="btn btn-primary" type="button" onclick="openCamera('p1')">📷 Tomar Foto</button>
               <button class="btn btn-secondary" type="button"
                 onclick="document.getElementById('p1_file_input').click()">🖼️ Seleccionar del Dispositivo</button>
-              <input type="file" id="p1_file_input" accept="image/*" multiple style="display:none"
+              <input type="file" id="p1_file_input" accept="image/*" style="display:none"
                 onchange="handleFileSelect(event,'p1')">
             </div>
             <div class="foto-grid" id="p1_fotos_grid"></div>
@@ -1319,32 +1316,22 @@
           <div class="card-header naranja"><span class="icon">📊</span> APÉNDICE 1 – PARTE 2: SEGUIMIENTO A LA
             IMPLEMENTACIÓN</div>
           <div class="card-body">
-            <div class="seccion-titulo"><span class="seccion-numero naranja">1</span> DATOS GENERALES</div>
-            <div class="form-row">
-              <div class="form-group"><label class="form-label naranja">NOMBRE DE PROMOTORA COMUNITARIA
-                  (PCPI)</label><input type="text" class="form-input" id="p2_nombre_pcpi"
-                  placeholder="Nombre completo..."></div>
-              <div class="form-group"><label class="form-label naranja">FECHA</label><input type="date"
-                  class="form-input" id="p2_fecha"></div>
-            </div>
-            <div class="form-row">
-              <div class="form-group"><label class="form-label naranja">GRUPO DE NIÑOS</label><input type="text"
-                  class="form-input" id="p2_grupo_ninos" placeholder="Identificación del grupo..."></div>
-              <div class="form-group"><label class="form-label naranja">COMUNIDAD</label><input type="text"
-                  class="form-input" id="p2_comunidad" placeholder="Nombre de la comunidad..."></div>
-            </div>
-
-            <div class="seccion-titulo"><span class="seccion-numero naranja">2</span> CATEGORÍA (Evaluación por niveles)
+            <div class="seccion-titulo"><span class="seccion-numero naranja">1</span> CATEGORÍA (Evaluación por niveles)
             </div>
             <p style="font-size:13px;color:var(--gris);margin-bottom:16px;">Para cada categoría, seleccione el nivel
               alcanzado y justifique con argumentos y citas textuales del registro de encuentros.</p>
 
             <!-- CATEGORÍA 1 -->
             <div class="subseccion naranja" style="margin-bottom:20px">
-              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 1: PLANEACIÓN E IMPLEMENTACIÓN DEL
-                ENCUENTRO COMUNITARIO</div>
-              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Evalúa la capacidad de la agente
-                comunitaria para planificar y ejecutar los encuentros con la familia y los niños.</p>
+              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 1: Vínculo con los niños y sus
+                familias</div>
+              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Esta categoría hace referencia a las formas
+                en las que el agente comunitario se vincula con los niños y sus familias durante
+                el desarrollo de los encuentros comunitarios. El vínculo se propicia y se hace visible a través de las
+                palabras, los gestos y en
+                general, en la manera en la que el agente comunitario se dispone para interactuar con los participantes
+                del encuentro,
+                atender sus necesidades y otorgarles un lugar como interlocutores válidos.</p>
               <table class="categoria-tabla">
                 <thead>
                   <tr>
@@ -1355,18 +1342,33 @@
                 <tbody>
                   <tr>
                     <td><span class="nivel-badge nivel-inicial">Inicial</span></td>
-                    <td>La agente sigue el plan de encuentro de manera literal, sin adaptaciones. El encuentro presenta
-                      dificultades en el manejo del tiempo o la secuencia de actividades.</td>
+                    <td>El agente comunitario usa su discurso, acciones y gestos
+                      para dar instrucciones generales para que los niños, niñas y
+                      sus familias participen en las actividades propuestas, es
+                      sensible y se muestra accesible para apoyar a las familias
+                      con algún integrante con discapacidad.</td>
                   </tr>
                   <tr>
                     <td><span class="nivel-badge nivel-intermedio">Intermedio</span></td>
-                    <td>La agente implementa el plan con algunas adaptaciones pertinentes al contexto. Maneja
-                      adecuadamente el tiempo y la secuencia.</td>
+                    <td>El agente comunitario usa su discurso, acciones y gestos
+                      para dar las instrucciones necesarias para que los niños y
+                      niñas y sus familias participen en las actividades propuestas.
+                      Posteriormente se acerca a cada familia para ampliar la
+                      información y adecuar las instrucciones si es necesario. es
+                      sensible y maneja herramientas para el abordaje de
+                      personas con discapacidad.</td>
                   </tr>
                   <tr>
                     <td><span class="nivel-badge nivel-avanzado">Avanzado</span></td>
-                    <td>La agente implementa el plan con adaptaciones contextuales pertinentes, enriquece las
-                      actividades y gestiona con fluidez el tiempo y la participación.</td>
+                    <td>El agente comunitario usa su discurso, acciones y gestos
+                      para dar las instrucciones necesarias para que los niños,
+                      niñasy sus familias participen en las actividades propuestas.
+                      Durante la explicación involucra a las familias por medio
+                      de preguntas y recuperando las opiniones que enriquezcan
+                      la experiencia. Posteriormente se acerca a cada familia para
+                      ampliar la información y adecuar las instrucciones si es
+                      necesario. Es sensible, maneja herramientas y desarrolla el
+                      encuentro con comunicación aumentativa alternativa.</td>
                   </tr>
                 </tbody>
               </table>
@@ -1392,10 +1394,14 @@
 
             <!-- CATEGORÍA 2 -->
             <div class="subseccion naranja" style="margin-bottom:20px">
-              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 2: VÍNCULO Y RELACIONES CON LAS
-                FAMILIAS</div>
-              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Evalúa la calidad de las relaciones que
-                establece la agente comunitaria con las familias participantes.</p>
+              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 2: Estructura del Encuentro</div>
+              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Esta categoría tiene como propósito
+                identificar la manera en la que el agente comunitario organiza los encuentros. Esta
+                organización parte de la formulación explícita de unos objetivos que dan lugar a la articulación entre
+                los diferentes momentos
+                desarrollados en el encuentro (Experiencia inicial, experiencia principal y experiencia de cierre). Cada
+                momento debe tener preguntas y
+                consignas claras y acordes con los objetivos ya mencionados.</p>
               <table class="categoria-tabla">
                 <thead>
                   <tr>
@@ -1406,18 +1412,30 @@
                 <tbody>
                   <tr>
                     <td><span class="nivel-badge nivel-inicial">Inicial</span></td>
-                    <td>La agente mantiene una relación distante o formal con las familias. La interacción se limita al
-                      desarrollo de las actividades planificadas.</td>
+                    <td>El agente comunitario propone durante en el encuentro
+                      diferentes actividades que no están articuladas entre sí
+                      y no responden a un objetivo previamente establecido.
+                      Las preguntas y consignas formuladas a los
+                      participantes son poco claras. No anticipa ni utiliza el
+                      tablero interactivo.</td>
                   </tr>
                   <tr>
                     <td><span class="nivel-badge nivel-intermedio">Intermedio</span></td>
-                    <td>La agente muestra disposición para conectar con las familias, reconoce sus particularidades y
-                      establece vínculos de confianza básicos.</td>
+                    <td>El agente comunitario formula el objetivo del
+                      encuentro, pero las actividades desarrolladas no
+                      guardan relación con este. Las preguntas y las
+                      consignas formuladas a los participantes son poco
+                      claras. Anticipa y utiliza el tablero con dificultad.</td>
                   </tr>
                   <tr>
                     <td><span class="nivel-badge nivel-avanzado">Avanzado</span></td>
-                    <td>La agente construye relaciones genuinas basadas en la confianza y el reconocimiento mutuo.
-                      Adapta su comunicación a las necesidades de cada familia.</td>
+                    <td>El claro el objetivo del encuentro y las actividades
+                      desarrolladas en los diferentes momentos están
+                      articuladas. Las preguntas y las consignas formuladas a
+                      los participantes son claras. Anticipa está claro con el
+                      uso del tablero y lo utiliza como recurso esencial para
+                      comunicación con enfoque de accesibilidad en el
+                      encuentro.</td>
                   </tr>
                 </tbody>
               </table>
@@ -1443,10 +1461,14 @@
 
             <!-- CATEGORÍA 3 -->
             <div class="subseccion naranja" style="margin-bottom:20px">
-              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 3: ACOMPAÑAMIENTO AL DESARROLLO
-                INFANTIL</div>
-              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Evalúa la capacidad de la agente para
-                observar, registrar y responder a las necesidades de desarrollo de los niños y niñas.</p>
+              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 3: Uso de Recursos</div>
+              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Esta categoría hace referencia a los
+                recursos simbólicos (cuentos, poemas, canciones, arrullos, retahílas, etc.) y materiales
+                que el agente comunitario usa en los encuentros. Se espera que los recursos usados sean pertinentes de
+                acuerdo con los
+                objetivos propuestos, el momento de vida de los niños y sean cercanos al contexto familiar, social y
+                cultural de los niños y
+                sus familias.</p>
               <table class="categoria-tabla">
                 <thead>
                   <tr>
@@ -1457,18 +1479,31 @@
                 <tbody>
                   <tr>
                     <td><span class="nivel-badge nivel-inicial">Inicial</span></td>
-                    <td>La agente identifica de manera general el desarrollo de los niños pero sin especificidad. No
-                      diferencia entre niños o necesidades particulares.</td>
+                    <td>Los recursos simbólicos y materiales usados por el
+                      agente comunitario no tienen relación con la
+                      experiencia, ni adecuaciones para personas con
+                      discapacidad que se quiere propiciar durante el
+                      encuentro. No son adecuados para el momento de
+                      vida de los niños ni se relacionan con sus contextos
+                      cercanos. </td>
                   </tr>
                   <tr>
                     <td><span class="nivel-badge nivel-intermedio">Intermedio</span></td>
-                    <td>La agente observa y registra con cierta especificidad el desarrollo de los niños. Identifica
-                      algunas particularidades y necesidades individuales.</td>
+                    <td>Los recursos simbólicos y materiales usados por el
+                      agente comunitario tienen relación con la
+                      experiencia y un enfoque inclusivo propiciado
+                      durante el encuentro. Sin embargo, no son
+                      adecuados para el momento de vida de los niños ni
+                      se relacionan con sus contextos cercanos.</td>
                   </tr>
                   <tr>
                     <td><span class="nivel-badge nivel-avanzado">Avanzado</span></td>
-                    <td>La agente realiza observaciones precisas sobre el desarrollo de cada niño, registra con detalle
-                      y adapta sus estrategias para responder a necesidades específicas.</td>
+                    <td>Los recursos simbólicos y materiales usados por el
+                      agente comunitario tienen relación con la
+                      experiencia que se quiere propiciar durante el
+                      encuentro. Son adecuados con enfoque inclusivo
+                      para el momento de vida de los niños y se
+                      relacionan con sus contextos cercanos.</td>
                   </tr>
                 </tbody>
               </table>
@@ -1494,10 +1529,14 @@
 
             <!-- CATEGORÍA 4 -->
             <div class="subseccion naranja" style="margin-bottom:20px">
-              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 4: REFLEXIÓN Y APRENDIZAJE
-                CONTINUO</div>
-              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Evalúa la capacidad de la agente para
-                reflexionar sobre su propia práctica y mejorar continuamente.</p>
+              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 4: Implementación de las prácticas
+                pedagógicas integrales</div>
+              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Esta categoría hace referencia a la
+                capacidad de la agente comunitaria para aplicar de manera adecuada, planificada y
+                contextualizada las actividades pedagógicas durante los encuentros con niños y cuidadores, asegurando
+                una experiencia
+                educativa de calidad, centrada en el desarrollo integral, el juego, la interacción afectiva y el respeto
+                por la diversidad.</p>
               <table class="categoria-tabla">
                 <thead>
                   <tr>
@@ -1508,18 +1547,34 @@
                 <tbody>
                   <tr>
                     <td><span class="nivel-badge nivel-inicial">Inicial</span></td>
-                    <td>La agente describe lo que hizo durante el encuentro sin reflexión crítica. No identifica
-                      aspectos de mejora o los reconoce de manera muy general.</td>
+                    <td>El promotor muestra dificultades para adaptar los
+                      encuentros pedagógicos a las necesidades de los
+                      niños y niñas con discapacidad, limitando su
+                      participación y aprendizaje. Se evidencia poca o
+                      ninguna consideración del tiempo para cuidadores o
+                      flexibilidad en la participación.</td>
                   </tr>
                   <tr>
                     <td><span class="nivel-badge nivel-intermedio">Intermedio</span></td>
-                    <td>La agente identifica aciertos y aspectos de mejora en su práctica. Reflexiona sobre situaciones
-                      específicas y propone algunas estrategias de cambio.</td>
+                    <td>El promotor realiza adaptaciones a los encuentros
+                      pedagógicos para incluir a niños y niñas con
+                      discapacidad, aunque algunas pueden ser
+                      superficiales o no considerar completamente las
+                      necesidades individuales. Se evidencia alguna
+                      consideración del tiempo para cuidadores y cierta
+                      flexibilidad en la participación.</td>
                   </tr>
                   <tr>
                     <td><span class="nivel-badge nivel-avanzado">Avanzado</span></td>
-                    <td>La agente realiza una reflexión profunda sobre su práctica, identifica patrones, propone
-                      estrategias de mejora concretas y las implementa en encuentros posteriores.</td>
+                    <td>El promotor planifica los encuentros pedagógicos
+                      demostrando una comprensión profunda de las
+                      necesidades individuales de los niños y niñas con
+                      discapacidad, realizando adaptaciones sensibles en
+                      la duración, las actividades, los materiales y los espacios para asegurar su participación y
+                      aprendizaje en igualdad de condiciones. Se
+                      evidencia la consideración del tiempo necesario
+                      para la orientación de cuidadores y la flexibilidad
+                      para pausas según la tolerancia de cada niño/a.</td>
                   </tr>
                 </tbody>
               </table>
@@ -1545,10 +1600,13 @@
 
             <!-- CATEGORÍA 5 -->
             <div class="subseccion naranja" style="margin-bottom:20px">
-              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 5: ARTICULACIÓN CON LA COMUNIDAD Y
-                LAS FAMILIAS</div>
-              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Evalúa la capacidad de la agente para
-                movilizar recursos comunitarios y fortalecer las redes de apoyo familiar.</p>
+              <div class="subseccion-titulo naranja" style="font-size:14px">CATEGORÍA 5: Caracterización y seguimiento a
+                los niños y sus familias.</div>
+              <p style="font-size:12px;color:var(--gris);margin-bottom:10px">Esta categoría hace referencia a las
+                estrategias que el agente comunitario implementa para hacer seguimiento a la evaluación
+                del desarrollo infantil. Lo anterior implica realizar informes de seguimiento de los niños y niñas y el
+                involucramiento de las
+                familias, el uso de instrumentos como la Escala de Parentalidad.</p>
               <table class="categoria-tabla">
                 <thead>
                   <tr>
@@ -1559,18 +1617,25 @@
                 <tbody>
                   <tr>
                     <td><span class="nivel-badge nivel-inicial">Inicial</span></td>
-                    <td>La agente trabaja de manera aislada. No gestiona vínculos entre las familias ni con la comunidad
-                      más amplia.</td>
+                    <td>El agente comunitario no hace uso de los recursos dispuestos
+                      ni las adecuaciones para hacer seguimiento y evaluación al
+                      desarrollo infantil.
+                    </td>
                   </tr>
                   <tr>
                     <td><span class="nivel-badge nivel-intermedio">Intermedio</span></td>
-                    <td>La agente identifica recursos comunitarios y ocasionalmente los moviliza. Propicia algunos
-                      vínculos entre las familias participantes.</td>
+                    <td>El agente comunitario hace uso de los recursos dispuestos y
+                      adecuaciones para hacer seguimiento y evaluación al
+                      desarrollo infantil, pero no tiene en cuenta la información
+                      recogida para planear y orientar los encuentros
+                      comunitarios.</td>
                   </tr>
                   <tr>
                     <td><span class="nivel-badge nivel-avanzado">Avanzado</span></td>
-                    <td>La agente gestiona activamente vínculos con la comunidad, moviliza recursos de manera
-                      sistemática y promueve redes de apoyo sólidas entre las familias.</td>
+                    <td>El agente comunitario hace uso de los recursos dispuestos y
+                      adecuaciones para hacer seguimiento y evaluación al
+                      desarrollo infantil. A partir de la información recogida,
+                      planea y orienta los encuentros comunitarios.</td>
                   </tr>
                 </tbody>
               </table>
@@ -1716,26 +1781,17 @@
 
     <!-- ===== VIEW: LISTA ===== -->
     <div id="view-lista" class="view">
-      <div class="toolbar">
-        <button class="btn btn-primary" onclick="startNuevaEncuesta('apendice1')">➕ Nueva</button>
-        <div class="toolbar-spacer"></div>
-        <button class="btn btn-secondary btn-sm" onclick="toggleSelectAll()">☑️ Seleccionar Todo</button>
-        <button class="btn btn-naranja btn-sm" onclick="downloadSelected()">⬇️ Descargar Seleccionados</button>
-        <button class="btn btn-rojo btn-sm" onclick="deleteSelected()">🗑️ Eliminar Seleccionados</button>
-        <button class="btn btn-rojo btn-sm" onclick="deleteAllSurveys()">🧹 Borrar todas</button>
-      </div>
-
       <!-- Filtros -->
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center">
+      <div class="list-toolbar">
+        <div class="list-toolbar-row">
         <select class="form-select" style="max-width:180px" onchange="filterList()" id="filter-tipo">
           <option value="">Todos los tipos</option>
           <option value="apendice1">Apéndice 1</option>
           <option value="apendiceA">Apéndice A</option>
         </select>
-        <input type="text" class="form-input" style="max-width:220px" placeholder="🔍 Buscar..." oninput="filterList()"
-          id="filter-search">
         <button class="btn btn-secondary btn-sm" onclick="downloadAll()">⬇️ Descargar Todas</button>
-        <span class="badge badge-gris" id="status-exportacion">Ultima exportacion: —</span>
+        <button class="btn btn-rojo btn-sm" onclick="deleteAllSurveys()">🧹 Eliminar todas</button>
+        </div>
       </div>
 
       <div id="survey-list-container">
@@ -1744,6 +1800,11 @@
           <h3>No hay encuestas registradas</h3>
           <p>Comience creando una nueva encuesta.</p>
         </div>
+      </div>
+      <div class="list-pagination" id="list-pagination">
+        <button class="btn btn-secondary btn-sm" id="list-prev" onclick="changeListPage(-1)">← Anterior</button>
+        <span id="list-page-info">1 / 1</span>
+        <button class="btn btn-secondary btn-sm" id="list-next" onclick="changeListPage(1)">Siguiente →</button>
       </div>
     </div>
 
@@ -1789,7 +1850,8 @@
         <div class="import-drop" id="import-drop" onclick="document.getElementById('import-file').click()">
           <div class="icon">📂</div>
           <p style="font-size:15px;font-weight:600">Toque para seleccionar archivo de exportacion</p>
-          <p style="font-size:12px;margin-top:6px;color:var(--gris-claro)">Formato: archivo de exportacion de esta app</p>
+          <p style="font-size:12px;margin-top:6px;color:var(--gris-claro)">Formato: archivo de exportacion de esta app
+          </p>
         </div>
         <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
         <div id="import-preview" style="margin-top:16px;display:none"></div>
@@ -1810,7 +1872,7 @@
     // DB CONFIG
     // =====================================================
     const DB_NAME = 'Anexo17DB';
-    const DB_VERSION = 1;
+    const DB_VERSION = 2;
     const STORE = 'encuestas';
     let db;
     let currentCamera = null;
@@ -1819,6 +1881,12 @@
     let currentApendice = 'apendice1';
     let modelRowCount = 0;
     let importData = null;
+    const LIST_PAGE_SIZE = 20;
+    const PHOTO_MAX_WIDTH = 720;
+    const PHOTO_QUALITY = 0.7;
+    let listPage = 1;
+    let listAllCache = [];
+    let listFilteredCache = [];
 
     const EXPORT_STATUS_KEY = 'anexo17_last_export_all';
 
@@ -1830,11 +1898,23 @@
         const req = indexedDB.open(DB_NAME, DB_VERSION);
         req.onupgradeneeded = e => {
           const d = e.target.result;
+          let store;
           if (!d.objectStoreNames.contains(STORE)) {
-            const store = d.createObjectStore(STORE, { keyPath: 'id' });
+            store = d.createObjectStore(STORE, { keyPath: 'id' });
+          } else {
+            store = e.target.transaction.objectStore(STORE);
+          }
+          if (!store.indexNames.contains('tipo')) {
             store.createIndex('tipo', 'tipo', { unique: false });
+          }
+          if (!store.indexNames.contains('fecha_creacion')) {
             store.createIndex('fecha_creacion', 'fecha_creacion', { unique: false });
+          }
+          if (!store.indexNames.contains('eliminado')) {
             store.createIndex('eliminado', 'eliminado', { unique: false });
+          }
+          if (!store.indexNames.contains('tipo_eliminado')) {
+            store.createIndex('tipo_eliminado', ['tipo', 'eliminado'], { unique: false });
           }
         };
         req.onsuccess = e => { db = e.target.result; resolve(db); };
@@ -1866,6 +1946,57 @@
       });
     }
 
+    function dbListRecords() {
+      return new Promise((resolve, reject) => {
+        const results = [];
+        const tx = db.transaction(STORE, 'readonly');
+        const req = tx.objectStore(STORE).openCursor();
+        req.onsuccess = e => {
+          const cursor = e.target.result;
+          if (!cursor) {
+            resolve(results);
+            return;
+          }
+          const r = cursor.value;
+          results.push({
+            id: r.id,
+            tipo: r.tipo,
+            tipo_etiqueta: r.tipo_etiqueta,
+            titulo_display: r.titulo_display,
+            fecha_display: r.fecha_display,
+            fecha_creacion: r.fecha_creacion,
+            eliminado: r.eliminado
+          });
+          cursor.continue();
+        };
+        req.onerror = e => reject(e);
+      });
+    }
+
+    function dbCountStats() {
+      return new Promise((resolve, reject) => {
+        let total = 0;
+        let ap1 = 0;
+        let apA = 0;
+        const tx = db.transaction(STORE, 'readonly');
+        const index = tx.objectStore(STORE).index('eliminado');
+        const req = index.openCursor(IDBKeyRange.only(false));
+        req.onsuccess = e => {
+          const cursor = e.target.result;
+          if (!cursor) {
+            resolve({ total, ap1, apA });
+            return;
+          }
+          const r = cursor.value;
+          total++;
+          if (r.tipo === 'apendice1') ap1++;
+          if (r.tipo === 'apendiceA') apA++;
+          cursor.continue();
+        };
+        req.onerror = e => reject(e);
+      });
+    }
+
     // =====================================================
     // ID GENERATOR
     // =====================================================
@@ -1890,11 +2021,10 @@
     // =====================================================
     function showView(v) {
       document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
       document.getElementById('view-' + v).classList.add('active');
-      const tabs = document.querySelectorAll('.nav-tab');
-      const map = { home: 0, nueva: 1, lista: 2 };
-      if (map[v] !== undefined) tabs[map[v]].classList.add('active');
+      document.getElementById('btn-nav-home').classList.toggle('active', v === 'home');
+      document.getElementById('btn-nav-nueva').classList.toggle('active', v === 'nueva');
+      document.getElementById('btn-nav-lista').classList.toggle('active', v === 'lista');
       if (v === 'lista') loadSurveyList();
       if (v === 'home') loadStats();
     }
@@ -1966,12 +2096,6 @@
           },
           // PARTE 2
           parte_2: {
-            datos_generales: {
-              nombre_promotora_pcpi: getVal('p2_nombre_pcpi'),
-              fecha: getVal('p2_fecha'),
-              grupo_ninos: getVal('p2_grupo_ninos'),
-              comunidad: getVal('p2_comunidad')
-            },
             categorias: {
               categoria_1_planeacion_implementacion: {
                 nivel: getRadio('cat1_nivel'),
@@ -2157,15 +2281,9 @@
         (p1.registro_fotografico || []).forEach(src => addPhotoToGrid(src, 'p1'));
 
         const p2 = rec.parte_2 || {};
-        const dg2 = p2.datos_generales || {};
         const cats = p2.categorias || {};
         const llp = p2.lecciones_aprendidas_buenas_practicas || {};
         const qs2 = p2.quien_realiza_seguimiento || {};
-
-        setVal('p2_nombre_pcpi', dg2.nombre_promotora_pcpi);
-        setVal('p2_fecha', dg2.fecha);
-        setVal('p2_grupo_ninos', dg2.grupo_ninos);
-        setVal('p2_comunidad', dg2.comunidad);
 
         for (let i = 1; i <= 5; i++) {
           const keys = ['categoria_1_planeacion_implementacion', 'categoria_2_vinculo_relaciones_familias', 'categoria_3_acompanamiento_desarrollo_infantil', 'categoria_4_reflexion_aprendizaje_continuo', 'categoria_5_articulacion_comunidad_familias'];
@@ -2208,22 +2326,30 @@
     // SURVEY LIST
     // =====================================================
     async function loadSurveyList() {
-      const all = await dbGetAll();
-      renderList(all);
+      const all = await dbListRecords();
+      listAllCache = all;
+      applyListFilter();
     }
 
-    function renderList(records) {
+    function renderListPage(records) {
       const container = document.getElementById('survey-list-container');
-      const visible = records.filter(r => !r.eliminado);
+      const pagination = document.getElementById('list-pagination');
+      const total = records.length;
 
-      if (!visible.length) {
+      if (!total) {
         container.innerHTML = `<div class="empty-state"><div class="icon">📋</div><h3>No hay encuestas</h3><p>Cree una nueva encuesta para comenzar.</p></div>`;
+        if (pagination) pagination.style.display = 'none';
         return;
       }
 
-      container.innerHTML = visible.map(r => `
+      if (pagination) pagination.style.display = 'flex';
+      const totalPages = Math.max(1, Math.ceil(total / LIST_PAGE_SIZE));
+      listPage = Math.min(Math.max(1, listPage), totalPages);
+      const start = (listPage - 1) * LIST_PAGE_SIZE;
+      const pageItems = records.slice(start, start + LIST_PAGE_SIZE);
+
+      container.innerHTML = pageItems.map(r => `
     <div class="survey-item" id="item-${r.id}">
-      <input type="checkbox" class="survey-checkbox" id="chk-${r.id}" value="${r.id}">
       <div class="survey-info">
         <h3>${r.titulo_display || 'Sin título'}</h3>
         <p>${r.tipo_etiqueta || r.tipo} &nbsp;·&nbsp; ${r.fecha_display || r.fecha_creacion?.split('T')[0] || ''}</p>
@@ -2236,23 +2362,38 @@
         <button class="btn btn-secondary btn-sm" onclick="verEncuesta('${r.id}')">👁️ Ver</button>
         <button class="btn btn-primary btn-sm" onclick="editarEncuesta('${r.id}')">✏️ Editar</button>
         <button class="btn btn-naranja btn-sm" onclick="downloadJSON(null,'${r.id}')">⬇️ Descargar</button>
-        <button class="btn btn-rojo btn-sm" onclick="softDelete('${r.id}')">🗑️</button>
+        <button class="btn btn-rojo btn-sm" onclick="softDelete('${r.id}')">🗑️ Eliminar</button>
       </div>
     </div>
   `).join('');
+
+      const info = document.getElementById('list-page-info');
+      const prev = document.getElementById('list-prev');
+      const next = document.getElementById('list-next');
+      if (info) info.textContent = `${listPage} / ${totalPages}`;
+      if (prev) prev.disabled = listPage <= 1;
+      if (next) next.disabled = listPage >= totalPages;
     }
 
     async function filterList() {
+      listAllCache = await dbListRecords();
+      applyListFilter();
+    }
+
+    function applyListFilter() {
       const tipo = document.getElementById('filter-tipo').value;
-      const search = document.getElementById('filter-search').value.toLowerCase();
-      const all = await dbGetAll();
-      const filtered = all.filter(r => {
+      listFilteredCache = listAllCache.filter(r => {
         if (r.eliminado) return false;
         if (tipo && r.tipo !== tipo) return false;
-        if (search && !`${r.titulo_display} ${r.tipo_etiqueta} ${r.fecha_display}`.toLowerCase().includes(search)) return false;
         return true;
       });
-      renderList(filtered);
+      listPage = 1;
+      renderListPage(listFilteredCache);
+    }
+
+    function changeListPage(delta) {
+      listPage += delta;
+      renderListPage(listFilteredCache);
     }
 
     // =====================================================
@@ -2268,12 +2409,28 @@
       html += `<b>Tipo:</b> ${rec.tipo_etiqueta}<br>`;
       html += `<b>Creado:</b> ${rec.fecha_creacion}<br>`;
       html += `</div>`;
-      html += `<pre style="white-space:pre-wrap;font-size:11px;background:#f5f5f5;padding:12px;border-radius:8px;overflow:auto;max-height:60vh">${JSON.stringify(rec, null, 2)}</pre>`;
+      html += `<div class="toolbar" style="justify-content:flex-end;margin:0 0 10px">`;
+      html += `<button class="btn btn-secondary btn-sm" onclick="toggleJsonPreview('${rec.id}')">📄 Ver JSON completo</button>`;
+      html += `</div>`;
+      html += `<div id="json-preview" data-loaded="false" style="display:none"></div>`;
       html += `</div>`;
 
       document.getElementById('modal-view-title').textContent = rec.titulo_display || 'Encuesta';
       document.getElementById('modal-view-body').innerHTML = html;
       document.getElementById('modal-view').classList.add('visible');
+    }
+
+    async function toggleJsonPreview(id) {
+      const container = document.getElementById('json-preview');
+      if (!container) return;
+      if (container.dataset.loaded !== 'true') {
+        const rec = await dbGet(id);
+        if (!rec) return;
+        const json = escapeHtml(JSON.stringify(rec, null, 2));
+        container.innerHTML = `<pre style="white-space:pre-wrap;font-size:11px;background:#f5f5f5;padding:12px;border-radius:8px;overflow:auto;max-height:60vh">${json}</pre>`;
+        container.dataset.loaded = 'true';
+      }
+      container.style.display = container.style.display === 'none' ? 'block' : 'none';
     }
 
     // =====================================================
@@ -2313,21 +2470,6 @@
       setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
     }
 
-    async function downloadSelected() {
-      const ids = getCheckedIds();
-      if (!ids.length) { showToast('Seleccione al menos una encuesta', 'error'); return; }
-      const records = await Promise.all(ids.map(id => dbGet(id)));
-      if (ids.length === 1) { downloadJSON(records[0]); return; }
-      const payload = buildExportPayload(records);
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `a17_exportacion_${getTimestampCompact()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
-    }
 
     async function downloadAll() {
       const all = (await dbGetAll()).filter(r => !r.eliminado);
@@ -2361,21 +2503,6 @@
       });
     }
 
-    async function deleteSelected() {
-      const ids = getCheckedIds();
-      if (!ids.length) { showToast('Seleccione al menos una encuesta', 'error'); return; }
-      confirmAction(`¿Eliminar ${ids.length} encuesta(s)?`, 'Serán marcadas como eliminadas.', async () => {
-        for (const id of ids) {
-          const rec = await dbGet(id);
-          rec.eliminado = true;
-          rec.fecha_eliminacion = new Date().toISOString();
-          await dbPut(rec);
-        }
-        showToast(`${ids.length} encuestas eliminadas`, 'success');
-        loadSurveyList();
-        loadStats();
-      });
-    }
 
     async function deleteAllSurveys() {
       const all = await dbGetAll();
@@ -2397,14 +2524,13 @@
     // STATS
     // =====================================================
     async function loadStats() {
-      const all = await dbGetAll();
-      const active = all.filter(r => !r.eliminado);
-      document.getElementById('stat-total').textContent = active.length;
-      document.getElementById('stat-p1').textContent = active.filter(r => r.tipo === 'apendice1').length;
-      document.getElementById('stat-pa').textContent = active.filter(r => r.tipo === 'apendiceA').length;
-      document.getElementById('count-ap1').textContent = active.filter(r => r.tipo === 'apendice1').length;
-      document.getElementById('count-apA').textContent = active.filter(r => r.tipo === 'apendiceA').length;
-      document.getElementById('count-all').textContent = active.length;
+      const stats = await dbCountStats();
+      document.getElementById('stat-total').textContent = stats.total;
+      document.getElementById('stat-p1').textContent = stats.ap1;
+      document.getElementById('stat-pa').textContent = stats.apA;
+      document.getElementById('count-ap1').textContent = stats.ap1;
+      document.getElementById('count-apA').textContent = stats.apA;
+      document.getElementById('count-all').textContent = stats.total;
     }
 
     function updateExportStatus() {
@@ -2422,16 +2548,6 @@
     // =====================================================
     // SELECT HELPERS
     // =====================================================
-    function getCheckedIds() {
-      return Array.from(document.querySelectorAll('.survey-checkbox:checked')).map(el => el.value);
-    }
-
-    function toggleSelectAll() {
-      const checkboxes = document.querySelectorAll('.survey-checkbox');
-      const allChecked = Array.from(checkboxes).every(c => c.checked);
-      checkboxes.forEach(c => c.checked = !allChecked);
-    }
-
     // =====================================================
     // RESET FORM
     // =====================================================
@@ -2518,48 +2634,72 @@
     }
 
     function capturePhoto() {
+      if (!canAddPhoto(currentCameraTarget)) return;
       const video = document.getElementById('camera-video');
       const canvas = document.createElement('canvas');
       // Reduce size while keeping quality
-      const maxW = 800;
+      const maxW = PHOTO_MAX_WIDTH;
       const scale = Math.min(1, maxW / video.videoWidth);
       canvas.width = video.videoWidth * scale;
       canvas.height = video.videoHeight * scale;
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+      const dataUrl = canvas.toDataURL('image/jpeg', PHOTO_QUALITY);
       addPhotoToGrid(dataUrl, currentCameraTarget);
       showToast('📷 Foto capturada', 'success');
     }
 
     function handleFileSelect(event, prefix) {
-      const files = Array.from(event.target.files);
-      files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-          // Resize
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const maxW = 800;
-            const scale = Math.min(1, maxW / img.width);
-            canvas.width = img.width * scale;
-            canvas.height = img.height * scale;
-            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-            addPhotoToGrid(canvas.toDataURL('image/jpeg', 0.75), prefix);
-          };
-          img.src = e.target.result;
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!canAddPhoto(prefix)) { event.target.value = ''; return; }
+      const reader = new FileReader();
+      reader.onload = e => {
+        // Resize
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const maxW = PHOTO_MAX_WIDTH;
+          const scale = Math.min(1, maxW / img.width);
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+          addPhotoToGrid(canvas.toDataURL('image/jpeg', PHOTO_QUALITY), prefix);
         };
-        reader.readAsDataURL(file);
-      });
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
       event.target.value = '';
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     function addPhotoToGrid(src, prefix) {
       const grid = document.getElementById(prefix + '_fotos_grid');
+      if (grid.querySelector('img')) {
+        showToast('Solo se permite 1 foto. Elimine la actual para subir otra.', 'error');
+        return;
+      }
       const div = document.createElement('div');
       div.className = 'foto-item';
       div.innerHTML = `<img src="${src}"><button class="foto-delete" onclick="this.parentElement.remove()">✕</button>`;
       grid.appendChild(div);
+    }
+
+    function canAddPhoto(prefix) {
+      const grid = document.getElementById(prefix + '_fotos_grid');
+      if (!grid) return true;
+      if (grid.querySelector('img')) {
+        showToast('Solo se permite 1 foto. Elimine la actual para subir otra.', 'error');
+        return false;
+      }
+      return true;
     }
 
     // =====================================================
@@ -2645,45 +2785,13 @@
     // =====================================================
     function setDefaultFechas() {
       const today = new Date().toISOString().split('T')[0];
-      const ids = ['p1_fecha', 'p2_fecha', 'p2_fecha_hoy', 'pa_fecha_sesion'];
+      const ids = ['p1_fecha', 'p2_fecha_hoy', 'pa_fecha_sesion'];
       ids.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = today;
       });
     }
 
-    // =====================================================
-    // APÉNDICE 1: MIRROR DATOS GENERALES (PARTE 1 <-> PARTE 2)
-    // =====================================================
-    function setupApendice1Mirroring() {
-      const pairs = [
-        ['p1_nombre_pcpi', 'p2_nombre_pcpi'],
-        ['p1_fecha', 'p2_fecha'],
-        ['p1_grupo_ninos', 'p2_grupo_ninos'],
-        ['p1_comunidad', 'p2_comunidad']
-      ];
-
-      const bindPair = (aId, bId) => {
-        const a = document.getElementById(aId);
-        const b = document.getElementById(bId);
-        if (!a || !b) return;
-
-        const sync = (src, dst) => {
-          if (dst.value !== src.value) dst.value = src.value;
-        };
-
-        // One-time harmonize when one side is empty
-        if (a.value && !b.value) sync(a, b);
-        else if (b.value && !a.value) sync(b, a);
-
-        ['input', 'change'].forEach(evt => {
-          a.addEventListener(evt, () => sync(a, b));
-          b.addEventListener(evt, () => sync(b, a));
-        });
-      };
-
-      pairs.forEach(([aId, bId]) => bindPair(aId, bId));
-    }
 
     // =====================================================
     // INIT
@@ -2691,7 +2799,6 @@
     initDB().then(() => {
       loadStats();
       setDefaultFechas();
-      setupApendice1Mirroring();
       updateExportStatus();
     });
 

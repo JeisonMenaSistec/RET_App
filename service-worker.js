@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mi-app-v1.8';
+const CACHE_NAME = 'mi-app-v1.9';
 const URLS_A_CACHEAR = [
   './',
   './index.html',
@@ -9,7 +9,9 @@ const URLS_A_CACHEAR = [
   './anexo21.html',
   './manifest.webmanifest',
   './logo192.jpg',
-  './logo512.jpg'
+  './logo512.jpg',
+  './sisteclogo.png',
+  './retlogo.png'
 ];
 
 self.addEventListener('install', (event) => {

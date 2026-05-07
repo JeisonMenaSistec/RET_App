@@ -60,6 +60,7 @@
             background: conic-gradient(from 180deg, #f8e3cf, #e7f2ea, #f8e3cf);
             border-radius: 50%;
             opacity: 0.55;
+            z-index: -1;
         }
 
         .header {
@@ -67,16 +68,27 @@
             align-items: center;
             gap: 16px;
             margin-bottom: 24px;
+            text-align: center;
+            justify-content: center;
         }
 
-        .badge {
-            background: var(--verde);
-            color: var(--blanco);
-            font-weight: 700;
-            letter-spacing: 1px;
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 12px;
+        .logo-strip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            background: #0f2b22;
+            border-radius: 14px;
+            padding: 10px 16px;
+            margin-bottom: 18px;
+            box-shadow: var(--sombra-suave);
+        }
+
+        .logo-strip img {
+            width: 100px;
+            height: auto;
+            object-fit: contain;
+            display: inline-block;
         }
         
         h1 {
@@ -167,12 +179,25 @@
             .container { padding: 28px; }
             h1 { font-size: 22px; }
         }
+
+        .footer {
+            margin-top: 22px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            color: #6b6b6b;
+            font-size: 12px;
+            text-align: center;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo-strip">
+            <img src="retlogo.png" alt="RET UNICEF">
+            <img src="sisteclogo.png" alt="Sistec">
+        </div>
         <div class="header">
-            <div class="badge">RET</div>
             <div>
                 <h1>Menú RET</h1>
                 <div class="subtitle">Acceso rápido a los anexos y formularios principales</div>
@@ -186,6 +211,7 @@
             <button onclick="location.href='./anexo20.html'"><span class="icon">👪</span><span><strong>Escala de parentalidad</strong><span>Formulario principal</span></span></button>
             <button onclick="location.href='./anexo21.html'"><span class="icon">✅</span><span><strong>Encuesta de Satisfacción</strong><span>Formulario principal</span></span></button>
         </div>
+        <div class="footer">Software desarrollado por Sistec de Costa Rica 2026 para RET Internacional</div>
     </div>
     <script>
         if ('serviceWorker' in navigator) {

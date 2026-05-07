@@ -92,6 +92,20 @@
       letter-spacing: 1px;
     }
 
+    .logo-ret {
+      width: 50px;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
+    }
+
+    .logo-sistec {
+      width: 50px;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
+    }
+
     #header h1 {
       font-size: 17px;
       font-weight: 600;
@@ -832,18 +846,19 @@
 
         <div id="header">
           <div class="header-logo">
-            <div class="logo-badge">RET · UNICEF</div>
+            <img src="retlogo.png" alt="RET UNICEF" class="logo-ret">
+            <img src="sisteclogo.png" alt="Sistec" class="logo-sistec">
             <div>
-              <h1>ANEXO 20 — Escala de parentalidad</h1>
+              <h1>Escala de parentalidad</h1>
               <p>Formulario principal</p>
             </div>
           </div>
           <div id="header-actions">
             <button class="hdr-btn active" id="btn-nav-form" onclick="startNewSurvey()">
-              Nueva
+              📋 Nueva Encuesta
             </button>
             <button class="hdr-btn" id="btn-nav-list" onclick="navTo('list')">
-              Historial<span id="survey-count">0</span>
+              📂 Historial<span id="survey-count">0</span>
             </button>
             <button class="hdr-btn" onclick="location.href='index.html'">↩︎ Menú</button>
           </div>
@@ -1104,8 +1119,7 @@
         <div id="form-footer">
           <div id="form-id-display">ID: —</div>
           <div id="form-footer-btns">
-            <button class="btn btn-secondary" onclick="saveDraft()">💾 Guardar borrador</button>
-            <button class="btn btn-primary" onclick="submitSurvey()">✅ Guardar y Descargar</button>
+            <button class="btn btn-primary" id="btn-save-submit" onclick="submitSurvey()">✅ Guardar y Descargar</button>
           </div>
         </div>
       </div><!-- /view-form -->
@@ -1271,7 +1285,8 @@
     function dbSave(data) {
       return new Promise((resolve, reject) => {
         const tx = db.transaction('encuestas', 'readwrite');
-        tx.objectStore('encuestas').put(data).onsuccess = () => resolve();
+        tx.objectStore('encuestas').put(data);
+        tx.oncomplete = () => resolve();
         tx.onerror = () => reject(tx.error);
       });
     }
@@ -1400,7 +1415,7 @@
         formulario: 'ANEXO 20 - ESCALA DE PARENTALIDAD POSITIVA E2P',
         organizacion: 'RET-UNICEF',
         region: 'Panama',
-        fecha_creacion: new Date().toISOString(),
+        fecha_creacion: (currentSurveyData && currentSurveyData.fecha_creacion) || new Date().toISOString(),
         estado: 'completo',
 
         // --- Sección 1: Cuidador ---
@@ -1563,6 +1578,7 @@
       currentSurveyId = null;
       currentSurveyData = null;
       navTo('form');
+      updateFormFooterButtons();
       document.getElementById('f_fecha_aplicacion').value = new Date().toISOString().slice(0, 10);
       updateProgress();
       document.getElementById('view-form').scrollTop = 0;
@@ -1571,16 +1587,6 @@
     // ═══════════════════════════════════════════════════════
     // SAVE DRAFT
     // ═══════════════════════════════════════════════════════
-    async function saveDraft() {
-      const data = collectFormData();
-      data.estado = 'borrador';
-      // currentSurveyId is already set inside collectFormData()
-      document.getElementById('form-id-display').textContent = `ID: ${data.survey_id}`;
-      await dbSave(data);
-      updateCount();
-      showToast('Borrador guardado ✓', 'success');
-    }
-
     // ═══════════════════════════════════════════════════════
     // SUBMIT
     // ═══════════════════════════════════════════════════════
@@ -1607,6 +1613,7 @@
       currentSurveyMode = 'new';
       currentSurveyId = null;
       currentSurveyData = null;
+      updateFormFooterButtons();
       document.getElementById('f_fecha_aplicacion').value = new Date().toISOString().slice(0, 10);
       updateProgress();
     }
@@ -1627,11 +1634,18 @@
         currentSurveyId = null;
         currentSurveyMode = 'new';
         document.getElementById('form-id-display').textContent = 'ID: —';
+        updateFormFooterButtons();
         // Set today
         document.getElementById('f_fecha_aplicacion').value = new Date().toISOString().slice(0, 10);
         updateProgress();
         showToast('Formulario limpiado', 'success');
       });
+    }
+
+    function updateFormFooterButtons() {
+      const saveSubmitBtn = document.getElementById('btn-save-submit');
+      const hide = currentSurveyMode === 'view';
+      if (saveSubmitBtn) saveSubmitBtn.style.display = hide ? 'none' : '';
     }
 
     // ═══════════════════════════════════════════════════════
@@ -1771,6 +1785,7 @@
         currentSurveyData = data;
         fillForm(data);
         currentSurveyMode = 'edit';
+        updateFormFooterButtons();
         document.getElementById('view-form').scrollTop = 0;
         showToast('Encuesta cargada para edición ✓', 'success');
       }, 50);
@@ -1788,6 +1803,7 @@
         currentSurveyData = data;
         fillForm(data);
         currentSurveyMode = 'view';
+        updateFormFooterButtons();
         document.getElementById('view-form').scrollTop = 0;
         showToast('Modo visualización (solo lectura)', 'success');
       }, 50);
@@ -1873,6 +1889,7 @@
       // Set today's date
       document.getElementById('f_fecha_aplicacion').value = new Date().toISOString().slice(0, 10);
       updateProgress();
+      updateFormFooterButtons();
       // Remove invalid on input
       document.querySelectorAll('input, select').forEach(el => {
         el.addEventListener('input', () => el.classList.remove('invalid'));

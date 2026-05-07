@@ -84,6 +84,20 @@
       letter-spacing: 1px;
     }
 
+    .logo-ret {
+      width: 50px;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
+    }
+
+    .logo-sistec {
+      width: 50px;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
+    }
+
     #app-header h1 {
       font-size: 17px;
       font-weight: 600;
@@ -115,6 +129,12 @@
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
+    }
+
+    .nav-btn.active {
+      background: white;
+      color: var(--verde);
+      border-color: white;
     }
 
     .nav-btn:hover {
@@ -784,27 +804,30 @@
       margin: 3px 3px 3px 0;
     }
 
-    /* ===== IMPORT ZONE ===== */
-    .import-zone {
-      border: 2.5px dashed var(--azul-claro);
-      border-radius: var(--radio);
-      padding: 40px;
-      text-align: center;
-      background: var(--azul-bg);
+    .surveys-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 12px;
+      color: var(--gris);
+      font-size: 0.9rem;
+    }
+
+    .surveys-pagination .page-btn {
+      background: var(--blanco);
+      color: var(--verde);
+      border: 1.5px solid var(--verde-claro);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.85rem;
       cursor: pointer;
-      position: relative;
       transition: var(--transicion);
     }
 
-    .import-zone:hover {
-      border-color: var(--azul);
-    }
-
-    .import-zone input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
+    .surveys-pagination .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     hr.field-divider {
@@ -819,21 +842,18 @@
 
   <div id="app-header">
     <div class="logo-area">
-      <div class="logo-badge">RET · UNICEF</div>
+      <img src="retlogo.png" alt="RET UNICEF" class="logo-ret">
+      <img src="sisteclogo.png" alt="Sistec" class="logo-sistec">
       <div>
-        <h1>ANEXO 8 — Caracterización</h1>
+        <h1>Caracterización</h1>
         <p>Formulario principal</p>
       </div>
     </div>
     <div class="header-nav">
+      <button class="nav-btn active" id="header-btn-nueva" onclick="showTab('nueva')">📋 Nueva Encuesta</button>
+      <button class="nav-btn" id="header-btn-encuestas" onclick="showTab('encuestas')">📂 Historial</button>
       <button class="nav-btn" onclick="location.href='index.html'">↩︎ Menú</button>
     </div>
-  </div>
-
-  <div id="nav-tabs">
-    <button class="nav-tab active" onclick="showTab('nueva')">📋 Nueva Encuesta</button>
-    <button class="nav-tab" onclick="showTab('encuestas')">📂 Historial</button>
-    <button class="nav-tab" onclick="showTab('importar')">📥 Importar</button>
   </div>
 
   <!-- ===== TAB: NUEVA ENCUESTA ===== -->
@@ -908,25 +928,13 @@
       <strong style="color:var(--verde);font-size:1rem;">📂 Encuestas Registradas</strong>
       <span class="spacer"></span>
       <button class="btn-azul" onclick="downloadAllSurveys()">⬇️ Descargar Todas</button>
+      <button class="btn-danger" onclick="deleteAllSurveys()">🗑 Eliminar Todas</button>
     </div>
     <div id="surveys-list"></div>
-  </div>
-
-  <!-- ===== TAB: IMPORTAR ===== -->
-  <div class="view" id="tab-importar">
-    <div class="form-card">
-      <div class="section-header">
-        <div class="section-number">📥</div>
-        <div class="section-title">Importar Encuesta desde archivo de exportacion</div>
-      </div>
-      <div class="import-zone" id="import-zone">
-        <input type="file" accept=".json" onchange="importJSON(event)">
-        <div style="font-size:2.5rem;margin-bottom:10px;">📂</div>
-        <p style="font-weight:600;color:var(--azul);margin-bottom:6px;">Toque para seleccionar archivo de exportacion
-        </p>
-        <p style="color:var(--gris);font-size:0.85rem;">Compatible con el formato de descarga de esta aplicación</p>
-      </div>
-      <div id="import-result" style="margin-top:16px;"></div>
+    <div class="surveys-pagination" id="surveys-pagination">
+      <button class="page-btn" id="surveys-prev" onclick="changeSurveysPage(-1)">← Anterior</button>
+      <span id="surveys-page-info">1 / 1</span>
+      <button class="page-btn" id="surveys-next" onclick="changeSurveysPage(1)">Siguiente →</button>
     </div>
   </div>
 
@@ -1001,12 +1009,27 @@
       });
     }
 
+    function deleteAllSurveys() {
+      if (!confirm('¿Eliminar todas las encuestas? Esta acción no se puede deshacer.')) return;
+      const tx = db.transaction('surveys', 'readwrite');
+      tx.objectStore('surveys').clear();
+      tx.oncomplete = () => {
+        showToast('Encuestas eliminadas', 'error');
+        renderSurveysList();
+      };
+      tx.onerror = () => showToast('Error al eliminar', 'error');
+    }
+
     // =============================================
     // STATE
     // =============================================
     let currentSurvey = {};
     let currentSection = 0;
     let editingId = null;
+    let isRestoring = false;
+    const SURVEYS_PAGE_SIZE = 20;
+    let surveysCache = [];
+    let surveysPage = 1;
 
     // =============================================
     // UNIQUE ID
@@ -1040,10 +1063,9 @@
     // =============================================
     function showTab(tab) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
       document.getElementById('tab-' + tab).classList.add('active');
-      const idx = ['nueva', 'encuestas', 'importar'].indexOf(tab);
-      document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+      document.getElementById('header-btn-nueva').classList.toggle('active', tab === 'nueva');
+      document.getElementById('header-btn-encuestas').classList.toggle('active', tab === 'encuestas');
       if (tab === 'encuestas') renderSurveysList();
     }
 
@@ -1089,16 +1111,28 @@
       { id: 's8', title: '8. Quien Realiza la Encuesta', num: '8' },
     ];
 
-    function fieldText(key, label, placeholder = '') {
-      return `<div class="field-group">
+    function fieldText(key, label, placeholder = '', wrapperId = '') {
+      const wrapperAttr = wrapperId ? ` id="${wrapperId}"` : '';
+      return `<div class="field-group"${wrapperAttr}>
     <label class="field-label">${label}</label>
     <input class="field-input" type="text" placeholder="${placeholder || label}" data-key="${key}" oninput="saveField(this)">
   </div>`;
     }
-    function fieldNum(key, label) {
+    function fieldSelect(key, label, options) {
+      const opts = options.map(o => `<option value="${o}">${o}</option>`).join('');
       return `<div class="field-group">
     <label class="field-label">${label}</label>
-    <input class="field-input" type="number" min="0" placeholder="0" data-key="${key}" oninput="saveField(this)">
+    <select class="field-input" data-key="${key}" onchange="saveField(this)">
+      <option value="">Seleccione...</option>
+      ${opts}
+    </select>
+  </div>`;
+    }
+    function fieldNum(key, label, opts = {}) {
+      const readonlyAttr = opts.readonly ? ' readonly' : '';
+      return `<div class="field-group">
+    <label class="field-label">${label}</label>
+    <input class="field-input" type="number" min="0" placeholder="0" data-key="${key}" oninput="saveField(this)"${readonlyAttr}>
   </div>`;
     }
     function fieldDate(key, label) {
@@ -1107,34 +1141,37 @@
     <input class="field-input" type="date" data-key="${key}" onchange="saveField(this)">
   </div>`;
     }
-    function fieldRadio(key, label, options, extraKey = '', extraLabel = '') {
+    function fieldRadio(key, label, options, extraKey = '', extraLabel = '', wrapperId = '') {
+      const wrapperAttr = wrapperId ? ` id="${wrapperId}"` : '';
       let btns = options.map(o => `<button type="button" class="option-btn" data-key="${key}" data-value="${o}" onclick="selectOption(this)">${o}</button>`).join('');
       let extra = extraKey ? `<div class="inline-extra" id="extra-${key}">
     <input class="field-input" type="text" placeholder="${extraLabel || 'Especifique...'}" data-key="${extraKey}" oninput="saveField(this)" style="margin-top:0">
   </div>` : '';
-      return `<div class="field-group">
+      return `<div class="field-group"${wrapperAttr}>
     <label class="field-label">${label}</label>
     <div class="options-grid">${btns}</div>
     ${extra}
   </div>`;
     }
-    function fieldRadioList(key, label, options, extraKey = '', extraLabel = '') {
+    function fieldRadioList(key, label, options, extraKey = '', extraLabel = '', wrapperId = '') {
+      const wrapperAttr = wrapperId ? ` id="${wrapperId}"` : '';
       let btns = options.map(o => `<button type="button" class="option-btn" data-key="${key}" data-value="${o}" onclick="selectOption(this)">${o}</button>`).join('');
       let extra = extraKey ? `<div class="inline-extra" id="extra-${key}">
     <input class="field-input" type="text" placeholder="${extraLabel || 'Especifique...'}" data-key="${extraKey}" oninput="saveField(this)" style="margin-top:0">
   </div>` : '';
-      return `<div class="field-group">
+      return `<div class="field-group"${wrapperAttr}>
     <label class="field-label">${label}</label>
     <div class="options-list">${btns}</div>
     ${extra}
   </div>`;
     }
-    function fieldCheckbox(key, label, options, extraKey = '', extraLabel = '') {
+    function fieldCheckbox(key, label, options, extraKey = '', extraLabel = '', wrapperId = '') {
+      const wrapperAttr = wrapperId ? ` id="${wrapperId}"` : '';
       let btns = options.map(o => `<button type="button" class="option-btn multi" data-key="${key}" data-value="${o}" onclick="toggleOption(this)">${o}</button>`).join('');
       let extra = extraKey ? `<div class="inline-extra" id="extra-${key}">
     <input class="field-input" type="text" placeholder="${extraLabel || 'Especifique...'}" data-key="${extraKey}" oninput="saveField(this)" style="margin-top:0">
   </div>` : '';
-      return `<div class="field-group">
+      return `<div class="field-group"${wrapperAttr}>
     <label class="field-label">${label} <span style="font-size:0.75rem;color:var(--gris);font-weight:400;">(Puede seleccionar varias)</span></label>
     <div class="options-grid">${btns}</div>
     ${extra}
@@ -1158,33 +1195,40 @@
 
         case 's2': return `
       ${fieldRadioList('s2_grupo_etareo', 'Marque el grupo etáreo de la persona a caracterizar', ['Niño/a 0-6 MESES', 'Niño/a 7-24 MESES', 'Niño/a 25-36 MESES', 'Niño/a 36-47 MESES', 'Niño/a de 0 a 5 años con discapacidad', 'Niño/a 4-8 AÑOS', 'Niño/a 9-18 AÑOS', 'Adulto', 'Adulto con discapacidad'])}
+      ${subsec('2.1 Relacion con el Jefe de Hogar')}
+      ${fieldRadioList('s2_relacion_jefe_hogar', 'Relacion con el Jefe de Hogar', ['Jefe del hogar', 'Padre/Madre', 'Tio(a)', 'Amigo(a)', 'Esposo/ Pareja', 'Suegro/a', 'Sobrino(a)', 'Padrastro', 'Hijo(a)', 'Hermano(a)', 'Nieto(a)', 'Madrastra', 'Yerno(a)', 'Cuñado(a)', 'Bisnieto(a)', 'Hijastro(a)'])}
       ${subsec('2.2. Datos del Encuestado')}
       ${fieldText('s2_nombre_apellidos', 'Nombre y Apellidos')}
-      ${fieldText('s2_nombre_cuidador', 'Nombre y apellido del cuidador principal')}
-      ${fieldRadio('s2_registro_civil', '¿La persona está registrada en el Registro Civil de Panamá u otro país?', ['Sí', 'No'], 's2_registro_civil_donde', '¿Dónde?')}
-      ${fieldText('s2_tipo_documento', 'Tipo de documento de identidad')}
-      ${fieldText('s2_otro_tipo_documento', 'Otro tipo de documento')}
+      ${fieldText('s2_nombre_cuidador', 'Nombre y apellido del cuidador principal', '', 'field-s2_nombre_cuidador')}
+      ${fieldRadio('s2_cuidador_discapacidad', 'El/la Cuidadora presenta alguna condición de discapacidad', ['Si', 'No'], '', '', 'field-s2_cuidador_discapacidad')}
+      ${fieldRadio('s2_cuidador_certificacion', 'Cuenta con certificación de su discapacidad emitida por SENADIS?', ['Si', 'No'], '', '', 'field-s2_cuidador_certificacion')}
+      ${fieldText('s2_cuidador_no_certificacion_razon', 'En caso de marca No; Porque no tiene la certificación', '', 'field-s2_cuidador_no_certificacion_razon')}
+      ${fieldRadioList('s2_cuidador_tipo_discapacidad', 'Tipo de Discapacidad', ['Física', 'Intelectual', 'Visual', 'Auditival', 'Múltiple', 'Mental'], '', '', 'field-s2_cuidador_tipo_discapacidad')}
+      ${fieldRadioList('s2_cuidador_grupo_etnico', 'Grupo Étnico del/la Cuidador/a', ['Población indígena', 'Población afrodescendiente', 'Otro'], 's2_cuidador_grupo_etnico_otro', 'Cual', 'field-s2_cuidador_grupo_etnico')}
+      ${fieldText('s2_cuidador_grupo_etnico_obs', 'Observaciones (Grupo Étnico del/la Cuidador/a)', '', 'field-s2_cuidador_grupo_etnico_obs')}
+      ${fieldRadio('s2_registro_civil', '¿La persona está registrada en el Registro Civil de Panamá?', ['Sí', 'No', 'Otro'], 's2_registro_civil_donde', 'Nombre del país')}
+      ${fieldSelect('s2_tipo_documento', 'Tipo de documento de identidad', ['Cedula', 'Pasaporte', 'Otro'])}
       ${fieldText('s2_num_documento', 'N° de Documento')}
       ${fieldDate('s2_fecha_nacimiento', 'Fecha de Nacimiento')}
-      ${fieldNum('s2_edad', 'Edad')}
+      ${fieldNum('s2_edad', 'Edad', { readonly: true })}
       ${fieldText('s2_pais_nacimiento', 'País de Nacimiento')}
       ${fieldRadio('s2_genero', 'Género', ['Masculino', 'Femenino', 'Otro'], 's2_genero_otro', 'Especifique género')}
-      ${fieldRadio('s2_embarazada', '¿Está embarazada en este momento? (Solo aplica para género Femenino)', ['Sí', 'No'])}
-      ${fieldRadioList('s2_estado_civil', 'Estado Civil', ['Casado(a)', 'Unido(a)', 'Separado(a)', 'Divorciado(a)', 'Soltero(a)', 'No aplica'])}
-      ${fieldRadio('s2_sabe_leer', '¿Sabe Leer y Escribir?', ['Sí', 'No'])}
-      ${fieldRadioList('s2_ultimo_anio', 'Último año aprobado', ['Pre Kinder', 'Kinder', 'Primer año', 'Segundo grado', 'Tercer grado', 'Cuarto grado', 'Quinto grado', 'Sexto grado', 'Séptimo grado', 'Octavo grado', 'Noveno grado', 'Décimo grado', 'Undécimo grado', 'Duodécimo'])}
-      ${fieldRadio('s2_estudia', '¿Actualmente estudia?', ['Sí', 'No'])}
+      ${fieldRadio('s2_embarazada', '¿Está embarazada en este momento? (Solo aplica para género Femenino)', ['Sí', 'No'], '', '', 'field-s2_embarazada')}
+      ${fieldRadioList('s2_estado_civil', 'Estado Civil', ['Casado(a)', 'Unido(a)', 'Separado(a)', 'Divorciado(a)', 'Soltero(a)', 'No aplica'], '', '', 'field-s2_estado_civil')}
+      ${fieldRadio('s2_sabe_leer', '¿Sabe Leer y Escribir?', ['Sí', 'No'], '', '', 'field-s2_sabe_leer')}
+      ${fieldRadioList('s2_ultimo_anio', 'Último año aprobado', ['Pre Kinder', 'Kinder', 'Primer año', 'Segundo grado', 'Tercer grado', 'Cuarto grado', 'Quinto grado', 'Sexto grado', 'Séptimo grado', 'Octavo grado', 'Noveno grado', 'Décimo grado', 'Undécimo grado', 'Duodécimo', 'Universidad'], '', '', 'field-s2_ultimo_anio')}
+      ${fieldRadio('s2_estudia', '¿Actualmente estudia?', ['Sí', 'No'], '', '', 'field-s2_estudia')}
       ${fieldRadio('s2_trabaja', '¿Actualmente trabaja?', ['Sí', 'No'])}
-      ${fieldText('s2_situacion_laboral', '¿Qué tipo de situación laboral presenta?')}
+      ${fieldText('s2_situacion_laboral', '¿Qué tipo de situación laboral presenta?', '', 'field-s2_situacion_laboral')}
       ${fieldNum('s2_ingreso_mensual', 'Ingreso mensual promedio en dólares (USD)')}
-      ${fieldCheckbox('s2_programas_gobierno', '¿Alguien en el hogar es beneficiario de algún programa del gobierno?', ['Bono Solidario por la pandemia', 'Becas por méritos académicos', 'SENAPAN (Bono Compra Alimentos)', 'PASE-U (Beca Universal)', 'Red de Oportunidades', 'Ángel Guardián', '120 a los 65', 'Ninguno'])}
-      ${fieldText('s2_observacion', 'Observaciones')}`;
+      ${fieldCheckbox('s2_programas_gobierno', '¿Alguien en el hogar es beneficiario de algún programa del gobierno?', ['Bono Solidario por la pandemia', 'Becas por méritos académicos', 'SENAPAN (Bono Compra Alimentos)', 'PASE-U (Beca Universal)', 'Red de Oportunidades', 'Ángel Guardián', '120 a los 65', 'Ninguno'], '', '', 'field-s2_programas_gobierno')}
+      ${fieldText('s2_observacion', 'Observaciones', '', 'field-s2_observacion')}`;
 
         case 's3': return `
-      ${fieldRadio('s3_discapacidad', '¿El niño/a tiene discapacidad?', ['Sí', 'No'])}
-      ${fieldRadio('s3_tipo_discapacidad', 'Tipo de discapacidad', ['Física', 'Intelectual', 'Visual', 'Auditiva', 'Múltiple', 'Otra'], 's3_tipo_discapacidad_otra', '¿Cuál?')}
-      ${fieldRadio('s3_certificacion_senadis', '¿Tiene certificación de discapacidad emitida por SENADIS?', ['Sí', 'No'])}
-      ${fieldText('s3_sin_certificacion_razon', 'En caso de No, ¿por qué no tiene la certificación?')}
+      ${fieldRadio('s3_discapacidad', '¿El niño/a tiene discapacidad?', ['Sí', 'No'], '', '', 'field-s3_discapacidad')}
+      ${fieldRadio('s3_tipo_discapacidad', 'Tipo de discapacidad', ['Física', 'Intelectual', 'Visual', 'Auditiva', 'Múltiple', 'Otra'], 's3_tipo_discapacidad_otra', '¿Cuál?', 'field-s3_tipo_discapacidad')}
+      ${fieldRadio('s3_certificacion_senadis', '¿Tiene certificación de discapacidad emitida por SENADIS?', ['Sí', 'No'], '', '', 'field-s3_certificacion_senadis')}
+      ${fieldText('s3_sin_certificacion_razon', 'En caso de No, ¿por qué no tiene la certificación?', '', 'field-s3_sin_certificacion_razon')}
       ${fieldRadio('s3_grupo_etnico', 'Grupo étnico del niño/a', ['Población indígena', 'Población afrodescendiente', 'Otro'], 's3_grupo_etnico_otro', '¿Cuál?')}
       ${fieldText('s3_observaciones', 'Observaciones')}`;
 
@@ -1397,6 +1441,9 @@
       if (!existing && !currentSurvey.s1_fecha) {
         currentSurvey.s1_fecha = getTodayInputValue();
       }
+      if (!existing && !currentSurvey.s8_fecha) {
+        currentSurvey.s8_fecha = getTodayInputValue();
+      }
       currentSection = 0;
       document.getElementById('welcome-screen').style.display = 'none';
       document.getElementById('progress-container').classList.add('visible');
@@ -1407,6 +1454,72 @@
     function renderSection() {
       const sec = SECTIONS[currentSection];
       updateProgress();
+      if (sec.id.startsWith('s3') && sec.id !== 's3_4' && sec.id !== 's3_5' && sec.id !== 's3_6' && sec.id !== 's3_7' && !isChild0to8Group(currentSurvey.s2_grupo_etareo)) {
+        const html = `
+    <div class="form-card">
+      <div class="section-header">
+        <div class="section-number">${sec.num}</div>
+        <div class="section-title">${sec.title}</div>
+      </div>
+      <div class="subsection-desc" style="margin-top:0">
+        Esta seccion solo aplica a ninos/as de 0 a 8 anos. No aplica para el grupo seleccionado. Por favor, continue con la siguiente seccion.
+      </div>
+      <div class="nav-buttons">
+        ${currentSection > 0 ? `<button class="btn-secondary" onclick="goSection(-1)">← Anterior</button>` : '<div></div>'}
+        ${currentSection < SECTIONS.length - 1
+          ? `<button class="btn-primary" onclick="goSection(1)">Continuar →</button>`
+          : `<button class="btn-primary" style="background:linear-gradient(135deg,var(--naranja-claro),var(--naranja));" onclick="finalizeSurvey()">✅ Finalizar y Guardar</button>`}
+      </div>
+    </div>`;
+        document.getElementById('form-container').innerHTML = html;
+        window.scrollTo(0, 0);
+        return;
+      }
+
+      if ((sec.id === 's3_4' || sec.id === 's3_5' || sec.id === 's3_6' || sec.id === 's3_7' || sec.id === 's4' || sec.id === 's4_1' || sec.id === 's4_2' || sec.id === 's7') && !isAdultGroup(currentSurvey.s2_grupo_etareo)) {
+        const html = `
+    <div class="form-card">
+      <div class="section-header">
+        <div class="section-number">${sec.num}</div>
+        <div class="section-title">${sec.title}</div>
+      </div>
+      <div class="subsection-desc" style="margin-top:0">
+        Esta seccion solo aplica a adultos. No aplica para el grupo seleccionado. Por favor, continue con la siguiente seccion.
+      </div>
+      <div class="nav-buttons">
+        ${currentSection > 0 ? `<button class="btn-secondary" onclick="goSection(-1)">← Anterior</button>` : '<div></div>'}
+        ${currentSection < SECTIONS.length - 1
+          ? `<button class="btn-primary" onclick="goSection(1)">Continuar →</button>`
+          : `<button class="btn-primary" style="background:linear-gradient(135deg,var(--naranja-claro),var(--naranja));" onclick="finalizeSurvey()">✅ Finalizar y Guardar</button>`}
+      </div>
+    </div>`;
+        document.getElementById('form-container').innerHTML = html;
+        window.scrollTo(0, 0);
+        return;
+      }
+
+      if ((sec.id === 's5' || sec.id === 's5_1' || sec.id === 's5_2' || sec.id === 's6') && currentSurvey.s2_embarazada !== 'Sí') {
+        const html = `
+    <div class="form-card">
+      <div class="section-header">
+        <div class="section-number">${sec.num}</div>
+        <div class="section-title">${sec.title}</div>
+      </div>
+      <div class="subsection-desc" style="margin-top:0">
+        Esta seccion solo aplica si la persona esta embarazada. No aplica para el grupo seleccionado. Por favor, continue con la siguiente seccion.
+      </div>
+      <div class="nav-buttons">
+        ${currentSection > 0 ? `<button class="btn-secondary" onclick="goSection(-1)">← Anterior</button>` : '<div></div>'}
+        ${currentSection < SECTIONS.length - 1
+          ? `<button class="btn-primary" onclick="goSection(1)">Continuar →</button>`
+          : `<button class="btn-primary" style="background:linear-gradient(135deg,var(--naranja-claro),var(--naranja));" onclick="finalizeSurvey()">✅ Finalizar y Guardar</button>`}
+      </div>
+    </div>`;
+        document.getElementById('form-container').innerHTML = html;
+        window.scrollTo(0, 0);
+        return;
+      }
+
       const html = `
     <div class="form-card">
       <div class="section-header">
@@ -1445,6 +1558,9 @@
     // =============================================
     function saveField(el) {
       currentSurvey[el.dataset.key] = el.value;
+      if (el.dataset.key === 's2_fecha_nacimiento') {
+        updateAgeFromNacimiento(el.value);
+      }
     }
 
     function selectOption(btn) {
@@ -1460,6 +1576,18 @@
         const needsExtra = ['Otro', 'Otra', 'Otros', 'Otros motivos', 'Otras'].some(x => val.includes(x));
         extraDiv.classList.toggle('visible', needsExtra);
       }
+      if (key === 's2_grupo_etareo') updateCuidadorVisibility();
+      if (key === 's2_genero' || key === 's2_grupo_etareo') updateEmbarazadaVisibility();
+      if (key === 's2_embarazada' || key === 's2_genero' || key === 's2_grupo_etareo') updateGestanteSectionsApplicability();
+      if (key === 's2_grupo_etareo') updateEstadoCivilVisibility();
+      if (key === 's2_trabaja') updateSituacionLaboralVisibility();
+      if (key === 's2_cuidador_discapacidad' || key === 's2_cuidador_certificacion') updateCuidadorDiscapacidadVisibility();
+      if (key === 's2_grupo_etareo') updateCuidadorEtniaVisibility();
+      if (key === 's2_grupo_etareo') updateEducacionVisibility();
+      if (key === 's2_grupo_etareo') updateAdultOnlyVisibility();
+      if (key === 's2_grupo_etareo') updateS3Applicability();
+      if (key === 's2_grupo_etareo') updateAdultSectionsApplicability();
+      if (key === 's3_discapacidad' || key === 's3_certificacion_senadis') updateS3DiscapacidadVisibility();
     }
 
     function toggleOption(btn) {
@@ -1475,6 +1603,9 @@
     }
 
     function restoreValues() {
+      if (isRestoring) return;
+      isRestoring = true;
+      try {
       // restore text/date/number inputs
       document.querySelectorAll('.field-input[data-key]').forEach(el => {
         const v = currentSurvey[el.dataset.key];
@@ -1501,6 +1632,296 @@
       const mapaPreview = document.getElementById('mapa-preview');
       if (mapaPreview && currentSurvey.s4_2_mapa_base64) {
         mapaPreview.innerHTML = `<img src="${currentSurvey.s4_2_mapa_base64}" alt="Mapa">`;
+      }
+      if (currentSurvey.s2_fecha_nacimiento) {
+        updateAgeFromNacimiento(currentSurvey.s2_fecha_nacimiento);
+      }
+      updateCuidadorVisibility();
+      updateEmbarazadaVisibility();
+      updateEstadoCivilVisibility();
+      updateSituacionLaboralVisibility();
+      updateCuidadorDiscapacidadVisibility();
+      updateCuidadorEtniaVisibility();
+      updateEducacionVisibility();
+      updateAdultOnlyVisibility();
+      updateS3DiscapacidadVisibility();
+      updateAdultSectionsApplicability();
+      updateGestanteSectionsApplicability();
+      } finally {
+        isRestoring = false;
+      }
+    }
+
+    function isChild0to8Group(grupo) {
+      return [
+        'Niño/a 0-6 MESES',
+        'Niño/a 7-24 MESES',
+        'Niño/a 25-36 MESES',
+        'Niño/a 36-47 MESES',
+        'Niño/a de 0 a 5 años con discapacidad',
+        'Niño/a 4-8 AÑOS'
+      ].includes(grupo || '');
+    }
+
+    function isAdultGroup(grupo) {
+      return ['Adulto', 'Adulto con discapacidad'].includes(grupo || '');
+    }
+
+    function updateS3Applicability() {
+      const grupo = currentSurvey.s2_grupo_etareo;
+      const childApplicable = isChild0to8Group(grupo);
+      const adultApplicable = isAdultGroup(grupo);
+
+      if (!childApplicable) {
+        Object.keys(currentSurvey).forEach(key => {
+          if (key === 's3_4' || key.startsWith('s3_4_')) return;
+          if (key === 's3_5' || key.startsWith('s3_5_')) return;
+          if (key.startsWith('s3_')) delete currentSurvey[key];
+        });
+      }
+
+      if (!adultApplicable) {
+        Object.keys(currentSurvey).forEach(key => {
+          if (key === 's3_4' || key.startsWith('s3_4_') || key === 's3_5' || key.startsWith('s3_5_') || key === 's3_6' || key.startsWith('s3_6_') || key === 's3_7' || key.startsWith('s3_7_')) delete currentSurvey[key];
+        });
+      }
+
+      if (!isRestoring && SECTIONS[currentSection] && SECTIONS[currentSection].id.startsWith('s3')) {
+        renderSection();
+      }
+    }
+
+    function updateAdultSectionsApplicability() {
+      const adultApplicable = isAdultGroup(currentSurvey.s2_grupo_etareo);
+      if (!adultApplicable) {
+        Object.keys(currentSurvey).forEach(key => {
+          if (key.startsWith('s4_') || key === 's4') delete currentSurvey[key];
+          if (key.startsWith('s7_') || key === 's7') delete currentSurvey[key];
+        });
+      }
+      if (!isRestoring && SECTIONS[currentSection] && (SECTIONS[currentSection].id === 's4' || SECTIONS[currentSection].id === 's4_1' || SECTIONS[currentSection].id === 's4_2' || SECTIONS[currentSection].id === 's7')) {
+        renderSection();
+      }
+    }
+
+    function updateGestanteSectionsApplicability() {
+      const isGestante = currentSurvey.s2_embarazada === 'Sí';
+      if (!isGestante) {
+        Object.keys(currentSurvey).forEach(key => {
+          if (key === 's5' || key.startsWith('s5_') || key === 's6' || key.startsWith('s6_')) delete currentSurvey[key];
+        });
+      }
+      if (!isRestoring && SECTIONS[currentSection] && (SECTIONS[currentSection].id === 's5' || SECTIONS[currentSection].id === 's5_1' || SECTIONS[currentSection].id === 's5_2' || SECTIONS[currentSection].id === 's6')) {
+        renderSection();
+      }
+    }
+
+    function updateS3DiscapacidadVisibility() {
+      const tipoWrap = document.getElementById('field-s3_tipo_discapacidad');
+      const certWrap = document.getElementById('field-s3_certificacion_senadis');
+      const noCertWrap = document.getElementById('field-s3_sin_certificacion_razon');
+      if (!tipoWrap || !certWrap || !noCertWrap) return;
+
+      const discapacidad = currentSurvey.s3_discapacidad || '';
+      const hasDiscapacidad = discapacidad === 'Sí';
+
+      tipoWrap.style.display = hasDiscapacidad ? '' : 'none';
+      certWrap.style.display = hasDiscapacidad ? '' : 'none';
+
+      if (!hasDiscapacidad) {
+        tipoWrap.querySelectorAll('.option-btn.selected').forEach(btn => btn.classList.remove('selected'));
+        certWrap.querySelectorAll('.option-btn.selected').forEach(btn => btn.classList.remove('selected'));
+        const extra = document.querySelector('#extra-s3_tipo_discapacidad input');
+        if (extra) extra.value = '';
+        delete currentSurvey.s3_tipo_discapacidad;
+        delete currentSurvey.s3_tipo_discapacidad_otra;
+        delete currentSurvey.s3_certificacion_senadis;
+      }
+
+      const certificacion = currentSurvey.s3_certificacion_senadis || '';
+      const showNoCert = hasDiscapacidad && certificacion === 'No';
+      noCertWrap.style.display = showNoCert ? '' : 'none';
+      if (!showNoCert) {
+        const input = noCertWrap.querySelector('input[data-key="s3_sin_certificacion_razon"]');
+        if (input) input.value = '';
+        delete currentSurvey.s3_sin_certificacion_razon;
+      }
+    }
+
+    function updateSituacionLaboralVisibility() {
+      const wrapper = document.getElementById('field-s2_situacion_laboral');
+      if (!wrapper) return;
+      const trabaja = currentSurvey.s2_trabaja || '';
+      const shouldShow = trabaja === 'No';
+      wrapper.style.display = shouldShow ? '' : 'none';
+      if (!shouldShow) {
+        const input = wrapper.querySelector('input[data-key="s2_situacion_laboral"]');
+        if (input) input.value = '';
+        delete currentSurvey.s2_situacion_laboral;
+      }
+    }
+
+    function calculateAgeFromDate(dateStr) {
+      if (!dateStr) return '';
+      const dob = new Date(`${dateStr}T00:00:00`);
+      if (Number.isNaN(dob.getTime())) return '';
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age -= 1;
+      }
+      return age >= 0 ? age : '';
+    }
+
+    function updateAgeFromNacimiento(dateStr) {
+      const age = calculateAgeFromDate(dateStr);
+      const ageInput = document.querySelector('input[data-key="s2_edad"]');
+      if (ageInput) ageInput.value = age !== '' ? String(age) : '';
+      if (age === '') {
+        delete currentSurvey.s2_edad;
+      } else {
+        currentSurvey.s2_edad = String(age);
+      }
+    }
+
+    function updateCuidadorVisibility() {
+      const wrapper = document.getElementById('field-s2_nombre_cuidador');
+      if (!wrapper) return;
+      const val = currentSurvey.s2_grupo_etareo || '';
+      const allowed = [
+        'Niño/a 0-6 MESES',
+        'Niño/a 7-24 MESES',
+        'Niño/a 25-36 MESES',
+        'Niño/a 36-47 MESES',
+        'Niño/a de 0 a 5 años con discapacidad',
+        'Niño/a 4-8 AÑOS'
+      ];
+      const shouldShow = allowed.includes(val);
+      wrapper.style.display = shouldShow ? '' : 'none';
+      if (!shouldShow) {
+        const input = wrapper.querySelector('input[data-key="s2_nombre_cuidador"]');
+        if (input) input.value = '';
+        delete currentSurvey.s2_nombre_cuidador;
+      }
+    }
+
+    function updateEmbarazadaVisibility() {
+      const wrapper = document.getElementById('field-s2_embarazada');
+      if (!wrapper) return;
+      const genero = currentSurvey.s2_genero || '';
+      const grupo = currentSurvey.s2_grupo_etareo || '';
+      const isAdult = grupo === 'Adulto' || grupo === 'Adulto con discapacidad';
+      const shouldShow = genero === 'Femenino' && isAdult;
+      wrapper.style.display = shouldShow ? '' : 'none';
+      if (!shouldShow) {
+        wrapper.querySelectorAll('.option-btn.selected').forEach(btn => btn.classList.remove('selected'));
+        delete currentSurvey.s2_embarazada;
+      }
+      updateGestanteSectionsApplicability();
+    }
+
+    function updateEstadoCivilVisibility() {
+      const wrapper = document.getElementById('field-s2_estado_civil');
+      if (!wrapper) return;
+      const grupo = currentSurvey.s2_grupo_etareo || '';
+      const isAdult = grupo === 'Adulto' || grupo === 'Adulto con discapacidad';
+      wrapper.style.display = isAdult ? '' : 'none';
+      if (!isAdult) {
+        wrapper.querySelectorAll('.option-btn.selected').forEach(btn => btn.classList.remove('selected'));
+        delete currentSurvey.s2_estado_civil;
+      }
+    }
+
+    function updateCuidadorDiscapacidadVisibility() {
+      const discapacidadWrap = document.getElementById('field-s2_cuidador_discapacidad');
+      const certWrap = document.getElementById('field-s2_cuidador_certificacion');
+      const noCertWrap = document.getElementById('field-s2_cuidador_no_certificacion_razon');
+      const tipoWrap = document.getElementById('field-s2_cuidador_tipo_discapacidad');
+
+      if (discapacidadWrap) discapacidadWrap.style.display = '';
+
+      const discapacidad = currentSurvey.s2_cuidador_discapacidad || '';
+      const hasDiscapacidad = discapacidad === 'Si';
+
+      if (certWrap) certWrap.style.display = hasDiscapacidad ? '' : 'none';
+      if (!hasDiscapacidad) {
+        if (certWrap) certWrap.querySelectorAll('.option-btn.selected').forEach(btn => btn.classList.remove('selected'));
+        delete currentSurvey.s2_cuidador_certificacion;
+      }
+
+      const certificacion = currentSurvey.s2_cuidador_certificacion || '';
+      const showNoCert = hasDiscapacidad && certificacion === 'No';
+      const showTipo = hasDiscapacidad && certificacion === 'Si';
+
+      if (noCertWrap) noCertWrap.style.display = showNoCert ? '' : 'none';
+      if (!showNoCert) {
+        const input = noCertWrap ? noCertWrap.querySelector('input[data-key="s2_cuidador_no_certificacion_razon"]') : null;
+        if (input) input.value = '';
+        delete currentSurvey.s2_cuidador_no_certificacion_razon;
+      }
+
+      if (tipoWrap) tipoWrap.style.display = showTipo ? '' : 'none';
+      if (!showTipo) {
+        if (tipoWrap) tipoWrap.querySelectorAll('.option-btn.selected').forEach(btn => btn.classList.remove('selected'));
+        delete currentSurvey.s2_cuidador_tipo_discapacidad;
+      }
+    }
+
+    function updateCuidadorEtniaVisibility() {
+      const grupoWrap = document.getElementById('field-s2_cuidador_grupo_etnico');
+      const obsWrap = document.getElementById('field-s2_cuidador_grupo_etnico_obs');
+      if (!grupoWrap || !obsWrap) return;
+      const grupo = currentSurvey.s2_grupo_etareo || '';
+      const isAdult = grupo === 'Adulto' || grupo === 'Adulto con discapacidad';
+      grupoWrap.style.display = isAdult ? '' : 'none';
+      obsWrap.style.display = isAdult ? '' : 'none';
+      if (!isAdult) {
+        grupoWrap.querySelectorAll('.option-btn.selected').forEach(btn => btn.classList.remove('selected'));
+        delete currentSurvey.s2_cuidador_grupo_etnico;
+        const inputOtro = document.querySelector('#extra-s2_cuidador_grupo_etnico input');
+        if (inputOtro) inputOtro.value = '';
+        delete currentSurvey.s2_cuidador_grupo_etnico_otro;
+        const obsInput = obsWrap.querySelector('input[data-key="s2_cuidador_grupo_etnico_obs"]');
+        if (obsInput) obsInput.value = '';
+        delete currentSurvey.s2_cuidador_grupo_etnico_obs;
+      }
+    }
+
+    function updateEducacionVisibility() {
+      const ultimoWrap = document.getElementById('field-s2_ultimo_anio');
+      const estudiaWrap = document.getElementById('field-s2_estudia');
+      const sabeLeerWrap = document.getElementById('field-s2_sabe_leer');
+      if (!ultimoWrap || !estudiaWrap || !sabeLeerWrap) return;
+      const grupo = currentSurvey.s2_grupo_etareo || '';
+      const show = ['Niño/a 4-8 AÑOS', 'Niño/a 9-18 AÑOS', 'Adulto', 'Adulto con discapacidad'].includes(grupo);
+      ultimoWrap.style.display = show ? '' : 'none';
+      estudiaWrap.style.display = show ? '' : 'none';
+      sabeLeerWrap.style.display = show ? '' : 'none';
+      if (!show) {
+        ultimoWrap.querySelectorAll('.option-btn.selected').forEach(btn => btn.classList.remove('selected'));
+        estudiaWrap.querySelectorAll('.option-btn.selected').forEach(btn => btn.classList.remove('selected'));
+        sabeLeerWrap.querySelectorAll('.option-btn.selected').forEach(btn => btn.classList.remove('selected'));
+        delete currentSurvey.s2_ultimo_anio;
+        delete currentSurvey.s2_estudia;
+        delete currentSurvey.s2_sabe_leer;
+      }
+    }
+
+    function updateAdultOnlyVisibility() {
+      const programasWrap = document.getElementById('field-s2_programas_gobierno');
+      const obsWrap = document.getElementById('field-s2_observacion');
+      if (!programasWrap || !obsWrap) return;
+      const grupo = currentSurvey.s2_grupo_etareo || '';
+      const isAdult = grupo === 'Adulto' || grupo === 'Adulto con discapacidad';
+      programasWrap.style.display = isAdult ? '' : 'none';
+      obsWrap.style.display = isAdult ? '' : 'none';
+      if (!isAdult) {
+        programasWrap.querySelectorAll('.option-btn.selected').forEach(btn => btn.classList.remove('selected'));
+        delete currentSurvey.s2_programas_gobierno;
+        const obsInput = obsWrap.querySelector('input[data-key="s2_observacion"]');
+        if (obsInput) obsInput.value = '';
+        delete currentSurvey.s2_observacion;
       }
     }
 
@@ -1565,8 +1986,34 @@
     // =============================================
     // DOWNLOAD JSON
     // =============================================
+    let allQuestionKeysCache = null;
+
+    function getAllQuestionKeys() {
+      if (allQuestionKeysCache) return allQuestionKeysCache;
+      const keys = new Set();
+      const temp = document.createElement('div');
+      SECTIONS.forEach(sec => {
+        temp.innerHTML = getSectionHTML(sec.id);
+        temp.querySelectorAll('[data-key]').forEach(el => {
+          const key = el.dataset.key;
+          if (key) keys.add(key);
+        });
+      });
+      allQuestionKeysCache = Array.from(keys);
+      return allQuestionKeysCache;
+    }
+
+    function buildExportSurvey(data) {
+      const normalized = { ...data };
+      getAllQuestionKeys().forEach(key => {
+        if (!(key in normalized)) normalized[key] = '';
+      });
+      return normalized;
+    }
+
     function downloadJSON(data) {
-      const payload = { total: 1, exportado: new Date().toISOString(), anexo: 8, A8: [data] };
+      const normalized = buildExportSurvey(data);
+      const payload = { total: 1, exportado: new Date().toISOString(), anexo: 8, A8: [normalized] };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1579,7 +2026,8 @@
     async function downloadAllSurveys() {
       const all = await getAllSurveys();
       if (!all.length) { showToast('No hay encuestas guardadas', 'error'); return; }
-      const payload = { total: all.length, exportado: new Date().toISOString(), anexo: 8, A8: all };
+      const normalizedAll = all.map(buildExportSurvey);
+      const payload = { total: normalizedAll.length, exportado: new Date().toISOString(), anexo: 8, A8: normalizedAll };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1590,19 +2038,46 @@
       showToast(`✅ ${all.length} encuestas descargadas`, 'success');
     }
 
+    async function downloadSurveyById(id) {
+      const all = await getAllSurveys();
+      const s = all.find(x => x.encuesta_id === id);
+      if (!s) {
+        showToast('Encuesta no encontrada', 'error');
+        return;
+      }
+      downloadJSON(s);
+    }
+
     // =============================================
     // SURVEYS LIST
     // =============================================
     async function renderSurveysList() {
       const all = await getAllSurveys();
-      const container = document.getElementById('surveys-list');
-      if (!all.length) {
-        container.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>No hay encuestas registradas aún.</p></div>`;
-        return;
-      }
       // newest first
       all.sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
-      container.innerHTML = all.map(s => {
+      surveysCache = all;
+      surveysPage = 1;
+      renderSurveysPage();
+    }
+
+    function renderSurveysPage() {
+      const container = document.getElementById('surveys-list');
+      const pagination = document.getElementById('surveys-pagination');
+      const total = surveysCache.length;
+      if (!total) {
+        container.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>No hay encuestas registradas aún.</p></div>`;
+        if (pagination) pagination.style.display = 'none';
+        return;
+      }
+      if (pagination) pagination.style.display = 'flex';
+
+      const totalPages = Math.max(1, Math.ceil(total / SURVEYS_PAGE_SIZE));
+      surveysPage = Math.min(Math.max(1, surveysPage), totalPages);
+
+      const start = (surveysPage - 1) * SURVEYS_PAGE_SIZE;
+      const pageItems = surveysCache.slice(start, start + SURVEYS_PAGE_SIZE);
+
+      container.innerHTML = pageItems.map(s => {
         const nombre = s.s2_nombre_apellidos || s.s8_nombre || 'Sin nombre';
         const fecha = s.s1_fecha || (s.fecha_creacion ? s.fecha_creacion.substr(0, 10) : '—');
         const comunidad = s.s1_comunidad || '—';
@@ -1615,11 +2090,23 @@
       <div class="survey-actions">
         <button class="btn-sm verde" onclick="viewSurvey('${s.encuesta_id}')">👁 Ver</button>
         <button class="btn-sm naranja" onclick="editSurvey('${s.encuesta_id}')">✏️ Editar</button>
-        <button class="btn-sm azul" onclick="downloadJSON(${JSON.stringify(s).replace(/</g, '\\u003c')})">⬇️ Archivo de exportacion</button>
+        <button class="btn-sm azul" onclick="downloadSurveyById('${s.encuesta_id}')">⬇️ Archivo de exportacion</button>
         <button class="btn-sm rojo" onclick="confirmDelete('${s.encuesta_id}')">🗑 Eliminar</button>
       </div>
     </div>`;
       }).join('');
+
+      const info = document.getElementById('surveys-page-info');
+      const prev = document.getElementById('surveys-prev');
+      const next = document.getElementById('surveys-next');
+      if (info) info.textContent = `${surveysPage} / ${totalPages}`;
+      if (prev) prev.disabled = surveysPage <= 1;
+      if (next) next.disabled = surveysPage >= totalPages;
+    }
+
+    function changeSurveysPage(delta) {
+      surveysPage += delta;
+      renderSurveysPage();
     }
 
     // =============================================
@@ -1667,44 +2154,6 @@
         showToast('Encuesta eliminada', 'error');
         renderSurveysList();
       };
-    }
-
-    // =============================================
-    // IMPORT JSON
-    // =============================================
-    function importJSON(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = async e => {
-        try {
-          let data = JSON.parse(e.target.result);
-          // can be single or array
-          if (!Array.isArray(data)) data = [data];
-          let count = 0;
-          for (const item of data) {
-            if (!item.encuesta_id) item.encuesta_id = generateId();
-            if (!item.formulario) item.formulario = 'ANEXO_8';
-            item.fecha_importacion = new Date().toISOString();
-            await saveSurvey(item);
-            count++;
-          }
-          document.getElementById('import-result').innerHTML = `
-        <div style="background:var(--verde-bg);border:1.5px solid var(--verde-claro);border-radius:var(--radio);padding:16px;color:var(--verde);">
-          ✅ <strong>${count} encuesta(s) importada(s) exitosamente.</strong>
-        </div>`;
-          showToast(`✅ ${count} encuesta(s) importada(s)`, 'success');
-        } catch (err) {
-          document.getElementById('import-result').innerHTML = `
-        <div style="background:var(--rojo-bg);border:1.5px solid var(--rojo);border-radius:var(--radio);padding:16px;color:var(--rojo);">
-          ❌ Error al leer el archivo JSON. Verifique el formato.
-        </div>`;
-          showToast('Error al importar', 'error');
-        }
-      };
-      reader.readAsText(file);
-      // reset input
-      event.target.value = '';
     }
 
     // =============================================
